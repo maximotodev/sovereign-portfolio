@@ -1,78 +1,43 @@
+import { Metadata } from "next";
 import { BentoGrid, BentoItem } from "@/components/BentoGrid";
-import { Button } from "@/components/ui/button";
-import {
-  Cpu,
-  Bitcoin,
-  Terminal,
-  Network,
-  Code2,
-  Server,
-  Shield,
-} from "lucide-react";
-import { Icons } from "@/components/Icons";
+import { Cpu, Server, Shield, Code2, Terminal } from "lucide-react";
 import AIChat from "@/components/AIChat";
 import NostrFeed from "@/components/NostrFeed";
 import NodeStatus from "@/components/NodeStatus";
-import TipModal from "@/components/TipModal";
+
+// New Component Imports
+import { Header } from "@/components/layout/Header";
+import { Hero } from "@/components/layout/Hero";
+
+// 3. OPTIMIZATION: Metadata for SEO
+export const metadata: Metadata = {
+  title: "הַלְּלוּ יָהּ | Sovereign Engineer",
+  description:
+    "Full Stack Portfolio featuring Bitcoin, Nostr, and AI integrations.",
+  openGraph: {
+    title: "Maximoto.dev",
+    description: "Building sovereign infrastructure.",
+    type: "website",
+    // images: ['/og-image.png'], // Add an image to your public folder later
+  },
+};
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-neutral-950 text-white selection:bg-orange-500 selection:text-white">
-      {/* Sticky Header */}
-      <header className="sticky top-0 z-50 w-full border-b border-neutral-800 bg-neutral-950/80 backdrop-blur-md">
-        <div className="max-w-7xl mx-auto px-8 h-16 flex items-center justify-between">
-          <div className="font-bold tracking-tight text-xl">
-            MAXIMOTO<span className="text-orange-500">.DEV</span>
-          </div>
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              className="border-neutral-700 bg-neutral-900 text-white hover:bg-neutral-800 hover:text-white"
-            >
-              {/* Use Icons.gitHub instead of Github */}
-              <Icons.gitHub className="mr-2 h-4 w-4" /> GitHub
-            </Button>
-            <TipModal>
-              <Button className="bg-orange-600 hover:bg-orange-700 text-white border-none">
-                <Bitcoin className="mr-2 h-4 w-4" /> Tip Sats
-              </Button>
-            </TipModal>
-          </div>
-        </div>
-      </header>
+      {/* 1. Refactored Header */}
+      <Header />
 
-      <div className="p-8 pt-12">
-        {/* Hero Section */}
-        <div className="max-w-7xl mx-auto mb-16">
-          <h1 className="text-5xl md:text-7xl font-bold tracking-tighter mb-6 bg-gradient-to-r from-white to-neutral-500 bg-clip-text text-transparent">
-            SOVEREIGN <br /> ARCHITECTURE.
-          </h1>
-          <p className="text-xl text-neutral-400 max-w-2xl leading-relaxed">
-            Full Stack Engineer building censorship-resistant applications on
-            Bitcoin, Lightning, and Nostr.
-          </p>
-          <div className="flex gap-4 mt-8">
-            <TipModal>
-              <Button className="bg-orange-600 hover:bg-orange-700 text-white font-bold px-8 py-6 rounded-lg">
-                <Bitcoin className="mr-2 h-5 w-5" /> Lightning Tip
-              </Button>
-            </TipModal>
-            <Button
-              variant="outline"
-              className="border-neutral-700 text-black hover:bg-neutral-800 px-8 py-6 rounded-lg"
-            >
-              {/* Use Icons.gitHub instead of Github */}
-              <Icons.gitHub className="mr-2 h-5 w-5" /> View Code
-            </Button>
-          </div>
-        </div>
+      <div className="p-6 md:p-8">
+        {/* 2. Refactored Hero */}
+        <Hero />
 
-        {/* The Grid */}
+        {/* The Grid (Kept logic here for now as it holds the main widgets) */}
         <BentoGrid>
-          {/* 1. AI Assistant (Tall Item) */}
+          {/* AI Assistant */}
           <BentoItem
             title="Interactive Resume"
-            description="Ask the AI about my skills, experience, and projects."
+            description="Ask the Llama-3 AI about my skills and experience."
             header={
               <div className="h-full min-h-[400px] w-full">
                 <AIChat />
@@ -82,11 +47,10 @@ export default function Home() {
             icon={<Cpu className="h-4 w-4 text-neutral-500" />}
           />
 
-          {/* 2. Node Status */}
+          {/* Node Status */}
           <BentoItem
-            title="RaspiBlitz Full Node"
-            description="Self-hosted infrastructure validating the Bitcoin blockchain."
-            // NEW: Live Component
+            title="RaspiBlitz Node"
+            description="Live Mainnet data."
             header={
               <div className="h-full w-full">
                 <NodeStatus />
@@ -96,11 +60,10 @@ export default function Home() {
             icon={<Server className="h-4 w-4 text-orange-500" />}
           />
 
-          {/* 3. Nostr Identity */}
+          {/* Nostr Identity */}
           <BentoItem
             title="Nostr Identity"
-            description="Censorship-resistant social protocol."
-            // NEW: Live Component
+            description="Censorship-resistant notes."
             header={
               <div className="h-full w-full">
                 <NostrFeed />
@@ -110,10 +73,10 @@ export default function Home() {
             icon={<Shield className="h-4 w-4 text-purple-500" />}
           />
 
-          {/* 4. Tech Stack */}
+          {/* Tech Stack */}
           <BentoItem
             title="Tech Stack"
-            description="Next.js 15, TypeScript, Rust, Docker, Tailwind."
+            description="Next.js 16, TypeScript, Rust, Docker, Tailwind."
             header={
               <div className="h-24 w-full bg-neutral-800/50 rounded-lg animate-pulse" />
             }
@@ -121,7 +84,7 @@ export default function Home() {
             icon={<Code2 className="h-4 w-4 text-blue-500" />}
           />
 
-          {/* 5. Recent Projects (Wide) */}
+          {/* Recent Projects */}
           <BentoItem
             title="Latest Project: LN-Visualizer"
             description="Real-time visualization of Lightning Network gossip traffic using Rust and WebSocket."
@@ -133,6 +96,11 @@ export default function Home() {
           />
         </BentoGrid>
       </div>
+
+      {/* Simple Footer */}
+      <footer className="py-8 text-center text-neutral-600 text-xs font-mono">
+        <p>BUILT WITH NEXT.JS • BITCOIN • NOSTR</p>
+      </footer>
     </main>
   );
 }
