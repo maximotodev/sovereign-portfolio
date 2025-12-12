@@ -29,7 +29,7 @@ export function Hero() {
         >
           <Button
             variant="outline"
-            className="border-neutral-700 text-black hover:bg-neutral-800 px-8 py-6 rounded-lg text-lg"
+            className="border-neutral-700 text-white hover:bg-neutral-800 hover:text-orange-400 px-8 py-6 rounded-lg text-lg"
           >
             <Icons.gitHub className="mr-2 h-5 w-5" /> Source Code
           </Button>
