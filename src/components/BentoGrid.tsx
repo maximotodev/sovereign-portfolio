@@ -11,8 +11,8 @@ export const BentoGrid = ({
   return (
     <div
       className={cn(
-        // CHANGED: Removed fixed auto-rows. Added distinct gap and padding.
-        "grid grid-cols-1 md:grid-cols-3 gap-6 max-w-7xl mx-auto pb-20",
+        // Ensure consistent gap and full width
+        "grid grid-cols-1 md:grid-cols-3 gap-6 w-full",
         className
       )}
     >
@@ -37,19 +37,20 @@ export const BentoItem = ({
   return (
     <div
       className={cn(
-        // CHANGED: Added glass effect, hover lift, and min-height
-        "row-span-1 rounded-xl group/bento hover:-translate-y-1 transition duration-200 shadow-xl",
-        "bg-neutral-900 border border-neutral-800 p-6 flex flex-col justify-between space-y-4",
+        "rounded-xl group/bento hover:-translate-y-1 transition duration-200 shadow-xl",
+        "bg-neutral-900 border border-neutral-800 p-6 flex flex-col justify-between space-y-4 h-full", // Added h-full
         className
       )}
     >
       {header}
-      <div className="group-hover/bento:translate-x-2 transition duration-200">
-        <div className="flex items-center gap-2 mb-2">
+      <div className="group-hover/bento:translate-x-2 transition duration-200 mt-2">
+        <div className="flex items-center gap-2 mb-1">
           {icon}
-          <div className="font-sans font-bold text-neutral-200">{title}</div>
+          <div className="font-bold text-neutral-200 font-sans text-sm tracking-wide">
+            {title}
+          </div>
         </div>
-        <div className="font-sans font-normal text-neutral-400 text-xs leading-relaxed">
+        <div className="font-normal text-neutral-400 text-xs leading-relaxed font-mono">
           {description}
         </div>
       </div>

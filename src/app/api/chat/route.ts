@@ -1,37 +1,88 @@
 import { InferenceClient } from "@huggingface/inference";
+import { createClient } from "@supabase/supabase-js";
 import { PORTFOLIO_CONTEXT } from "@/lib/context";
+import { pipeline } from "@xenova/transformers";
 
-const client = new InferenceClient(process.env.HUGGINGFACE_API_KEY);
+const hf = new InferenceClient(process.env.HUGGINGFACE_API_KEY);
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
 
 export const maxDuration = 60;
 
+// Singleton for Local Model
+let extractor: any = null;
+
+async function getExtractor() {
+  if (!extractor) {
+    extractor = await pipeline("feature-extraction", "Xenova/all-MiniLM-L6-v2");
+  }
+  return extractor;
+}
+
 export async function POST(req: Request) {
   try {
-    const { messages } = await req.json();
+    const body = await req.json();
+    const messages = body.messages || [];
+    const lastUserMessage = messages[messages.length - 1]?.content || "";
 
-    if (!process.env.HUGGINGFACE_API_KEY) {
-      return new Response("Missing API Key", { status: 500 });
+    if (!lastUserMessage) {
+      return new Response("No message provided", { status: 400 });
     }
 
-    // Construct the system prompt + user message history
-    // Llama 3 works best when we just pass the messages array directly,
-    // but we inject the System Prompt at the start.
-    const conversation = [
-      { role: "system", content: PORTFOLIO_CONTEXT },
-      ...messages.map((m: any) => ({
-        role: m.role,
-        content: m.content,
-      })),
-    ];
+    console.log(`🔍 User asked: "${lastUserMessage.substring(0, 50)}..."`);
 
-    console.log("Using Chat Completion endpoint with Llama-3-8B...");
+    let retrievedContext = "";
+
+    try {
+      // 1. Generate Embedding LOCALLY
+      const generateEmbedding = await getExtractor();
+      const output = await generateEmbedding(lastUserMessage, {
+        pooling: "mean",
+        normalize: true,
+      });
+      // @ts-ignore
+      const embedding = Array.from(output.data);
+
+      // 2. Semantic Search
+      const { data: documents } = await supabase.rpc("match_documents", {
+        query_embedding: embedding,
+        match_threshold: 0.1,
+        match_count: 2,
+      });
+
+      retrievedContext =
+        documents
+          ?.map((doc: any) => doc.content)
+          .join("\n\n")
+          .substring(0, 1500) || "";
+
+      if (documents?.length) console.log(`📚 Found ${documents.length} docs`);
+    } catch (err) {
+      console.error("Embedding/DB Error (Continuing without context):", err);
+    }
+
+    const systemPrompt = `
+    ${PORTFOLIO_CONTEXT}
+
+    === DATABASE KNOWLEDGE ===
+    ${
+      retrievedContext
+        ? retrievedContext
+        : "No specific database records found."
+    }
+    `;
 
     const stream = new ReadableStream({
       async start(controller) {
+        const conversation = [
+          { role: "system", content: systemPrompt },
+          ...messages.map((m: any) => ({ role: m.role, content: m.content })),
+        ];
+
         try {
-          // SWITCHING MODEL TO: Meta-Llama-3-8B-Instruct
-          // This model is universally supported on the Chat endpoint.
-          const streamResponse = client.chatCompletionStream({
+          const streamResponse = hf.chatCompletionStream({
             model: "meta-llama/Meta-Llama-3-8B-Instruct",
             messages: conversation,
             max_tokens: 500,
@@ -39,32 +90,29 @@ export async function POST(req: Request) {
           });
 
           for await (const chunk of streamResponse) {
-            // Chat Completion returns 'delta.content'
             const content = chunk.choices[0]?.delta?.content;
             if (content) {
               controller.enqueue(new TextEncoder().encode(content));
             }
           }
-
-          controller.close();
-        } catch (err) {
-          console.error("HF Stream Error:", err);
-          // If Llama 3 fails, fallback error message to UI
+        } catch (apiError: any) {
+          console.error("HF API Error:", apiError);
+          const errorMsg = apiError?.message || "Model busy";
           controller.enqueue(
-            new TextEncoder().encode(" [Error: Model busy, please try again]")
+            new TextEncoder().encode(
+              ` [System Error: ${errorMsg}. Please try again.]`
+            )
           );
-          controller.close();
         }
+        controller.close();
       },
     });
 
     return new Response(stream, {
-      headers: {
-        "Content-Type": "text/plain; charset=utf-8",
-      },
+      headers: { "Content-Type": "text/plain; charset=utf-8" },
     });
   } catch (error: any) {
-    console.error("Backend Error:", error);
+    console.error("Route Handler Error:", error);
     return new Response(JSON.stringify({ error: error.message }), {
       status: 500,
     });

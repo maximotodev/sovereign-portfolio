@@ -9,42 +9,30 @@
     --radius: 0.5rem;
   }
 
-  /* Force Dark Mode Default */
   body {
     @apply bg-neutral-950 text-white antialiased;
+    font-family: var(--font-space), sans-serif; /* Set default font */
   }
 
-  /* SMOOTH SCROLLING */
-  html {
-    scroll-behavior: smooth;
+  /* Force Mono font for code/data elements */
+  code,
+  pre,
+  .font-mono {
+    font-family: var(--font-mono), monospace;
   }
-}
 
-/* CYPHERPUNK SCROLLBARS */
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
-
-::-webkit-scrollbar-track {
-  background: #0a0a0a;
-  border-left: 1px solid #262626;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #262626;
-  border-radius: 0px;
-  border: 1px solid #404040;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #ea580c; /* Orange-600 hover */
-  border-color: #ea580c;
-}
-
-/* Utilities */
-@layer utilities {
-  .glass-panel {
-    @apply bg-neutral-900/50 backdrop-blur-md border border-neutral-800;
+  /* Improved Scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0a0a0a;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #ea580c;
   }
 }
