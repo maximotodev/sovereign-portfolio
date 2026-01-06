@@ -106,12 +106,13 @@ export const PROJECTS: Project[] = [
   },
   {
     id: 4,
-    title: "Mia Reynolds",
-    description: "Professional Portfolio Website for Mia Reynolds.",
-    repoUrl: "https://github.com/maximotodev/miareynolds",
-    liveUrl: "https://miareynolds.vercel.app",
-    image: "https://i.ibb.co/twDgyR0B/projects-mia-reynolds.png",
-    tags: ["Portfolio", "Design"],
+    title: "SatsRover",
+    description:
+      "A sovereign coordination layer for the Bitcoin economy. Combines global merchant discovery with cryptographic social proof (Nostr) and non-custodial spending (NIP-47).",
+    repoUrl: "https://github.com/maximotodev/sats-rover",
+    liveUrl: "https://sats-rover.vercel.app",
+    image: "https://i.ibb.co/XfscsN0y/IMG-3184.jpg",
+    tags: ["Bitcoin", "Nostr", "Maps", "NWC"],
   },
 ];
 
