@@ -1,0 +1,3643 @@
+Directory structure:
+└── maximotodev-sovereign-portfolio/
+    ├── README.md
+    ├── components.json
+    ├── eslint.config.mjs
+    ├── next.config.ts
+    ├── package.json
+    ├── postcss.config.mjs
+    ├── tailwind.config.ts
+    ├── tsconfig.json
+    ├── scripts/
+    │   └── seed-db.ts
+    └── src/
+        ├── app/
+        │   ├── globals.css
+        │   ├── layout.tsx
+        │   ├── page.tsx
+        │   ├── api/
+        │   │   ├── chat/
+        │   │   │   └── route.ts
+        │   │   └── guestbook/
+        │   │       └── route.ts
+        │   └── blog/
+        │       └── [slug]/
+        │           └── page.tsx
+        ├── components/
+        │   ├── AIChat.tsx
+        │   ├── BentoGrid.tsx
+        │   ├── GithubMetrics.tsx
+        │   ├── Guestbook.tsx
+        │   ├── Icons.tsx
+        │   ├── NodeStatus.tsx
+        │   ├── NostrFeed.tsx
+        │   ├── TechCloud.tsx
+        │   ├── TipModal.tsx
+        │   ├── animations/
+        │   │   └── FadeIn.tsx
+        │   ├── dashboard/
+        │   │   └── IntroCard.tsx
+        │   ├── layout/
+        │   │   ├── Header.tsx
+        │   │   └── Navbar.tsx
+        │   ├── sections/
+        │   │   ├── BlogPreview.tsx
+        │   │   ├── Certifications.tsx
+        │   │   ├── Projects.tsx
+        │   │   ├── dashboard/
+        │   │   │   └── CommandCenter.tsx
+        │   │   ├── hero/
+        │   │   │   └── HeroSection.tsx
+        │   │   └── work/
+        │   │       └── WorkSection.tsx
+        │   └── ui/
+        │       ├── avatar.tsx
+        │       ├── badge.tsx
+        │       ├── button.tsx
+        │       ├── card.tsx
+        │       ├── dialog.tsx
+        │       ├── input.tsx
+        │       ├── popover.tsx
+        │       ├── scroll-area.tsx
+        │       ├── skeleton.tsx
+        │       └── tabs.tsx
+        └── lib/
+            ├── context.ts
+            ├── data.ts
+            ├── embeddings.ts
+            ├── nostr.ts
+            └── utils.ts
+
+================================================
+FILE: README.md
+================================================
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+
+## Getting Started
+
+First, run the development server:
+
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+
+## Learn More
+
+To learn more about Next.js, take a look at the following resources:
+
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+
+
+================================================
+FILE: components.json
+================================================
+{
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "style": "new-york",
+  "rsc": true,
+  "tsx": true,
+  "tailwind": {
+    "config": "",
+    "css": "src/app/globals.css",
+    "baseColor": "slate",
+    "cssVariables": true,
+    "prefix": ""
+  },
+  "iconLibrary": "lucide",
+  "aliases": {
+    "components": "@/components",
+    "utils": "@/lib/utils",
+    "ui": "@/components/ui",
+    "lib": "@/lib",
+    "hooks": "@/hooks"
+  },
+  "registries": {}
+}
+
+
+
+================================================
+FILE: eslint.config.mjs
+================================================
+import { defineConfig, globalIgnores } from "eslint/config";
+import nextVitals from "eslint-config-next/core-web-vitals";
+import nextTs from "eslint-config-next/typescript";
+
+const eslintConfig = defineConfig([
+  ...nextVitals,
+  ...nextTs,
+  // Override default ignores of eslint-config-next.
+  globalIgnores([
+    // Default ignores of eslint-config-next:
+    ".next/**",
+    "out/**",
+    "build/**",
+    "next-env.d.ts",
+  ]),
+]);
+
+export default eslintConfig;
+
+
+
+================================================
+FILE: next.config.ts
+================================================
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  /* config options here */
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "i.ibb.co",
+      },
+      {
+        protocol: "https",
+        hostname: "github.com",
+      },
+    ],
+  },
+};
+
+export default nextConfig;
+
+
+
+================================================
+FILE: package.json
+================================================
+{
+  "name": "sovereign-portfolio",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@ai-sdk/huggingface": "^0.0.11",
+    "@ai-sdk/react": "^2.0.108",
+    "@huggingface/inference": "^4.13.4",
+    "@radix-ui/react-avatar": "^1.1.11",
+    "@radix-ui/react-dialog": "^1.1.15",
+    "@radix-ui/react-popover": "^1.1.15",
+    "@radix-ui/react-scroll-area": "^1.2.10",
+    "@radix-ui/react-slot": "^1.2.4",
+    "@radix-ui/react-tabs": "^1.1.13",
+    "@supabase/supabase-js": "^2.89.0",
+    "@xenova/transformers": "^2.17.2",
+    "ai": "^5.0.115",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.23.26",
+    "ln-service": "^57.27.1",
+    "lucide-react": "^0.556.0",
+    "next": "16.0.10",
+    "nostr-tools": "^2.19.4",
+    "openai": "^6.14.0",
+    "react": "19.2.0",
+    "react-activity-calendar": "^3.0.1",
+    "react-dom": "19.2.0",
+    "react-icon-cloud": "^4.1.7",
+    "react-icons": "^5.5.0",
+    "react-markdown": "^10.1.0",
+    "react-qr-code": "^2.0.18",
+    "shadcn-ui": "^0.9.5",
+    "tailwind-merge": "^3.4.0",
+    "tailwindcss-animate": "^1.0.7"
+  },
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5.19",
+    "@types/node": "^24.10.1",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "autoprefixer": "^10.4.22",
+    "dotenv": "^17.2.3",
+    "eslint": "^9",
+    "eslint-config-next": "16.0.7",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.1",
+    "ts-node": "^10.9.2",
+    "tw-animate-css": "^1.4.0",
+    "typescript": "^5.9.3"
+  }
+}
+
+
+
+================================================
+FILE: postcss.config.mjs
+================================================
+/** @type {import('postcss-load-config').Config} */
+const config = {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
+};
+
+export default config;
+
+
+
+================================================
+FILE: tailwind.config.ts
+================================================
+import type { Config } from "tailwindcss";
+
+const config = {
+  // FIX: In v3, this is the correct syntax.
+  darkMode: ["class"],
+  content: [
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
+  ],
+  prefix: "",
+  theme: {
+    container: {
+      center: true,
+      padding: "2rem",
+      screens: {
+        "2xl": "1400px",
+      },
+    },
+    extend: {
+      colors: {
+        border: "hsl(var(--border))",
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
+        primary: {
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
+        },
+        secondary: {
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
+        },
+        destructive: {
+          DEFAULT: "hsl(var(--destructive))",
+          foreground: "hsl(var(--destructive-foreground))",
+        },
+        muted: {
+          DEFAULT: "hsl(var(--muted))",
+          foreground: "hsl(var(--muted-foreground))",
+        },
+        accent: {
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
+        },
+        popover: {
+          DEFAULT: "hsl(var(--popover))",
+          foreground: "hsl(var(--popover-foreground))",
+        },
+        card: {
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
+        },
+      },
+      borderRadius: {
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
+      },
+      keyframes: {
+        "accordion-down": {
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+      },
+      animation: {
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
+      },
+    },
+  },
+  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
+} satisfies Config;
+
+export default config;
+
+
+
+================================================
+FILE: tsconfig.json
+================================================
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts",
+    "**/*.mts"
+  ],
+  "exclude": ["node_modules"]
+}
+
+
+
+================================================
+FILE: scripts/seed-db.ts
+================================================
+import { createClient } from "@supabase/supabase-js";
+import { POSTS, PROJECTS } from "../src/lib/data";
+import * as dotenv from "dotenv";
+
+// Load env vars from .env.local
+dotenv.config({ path: ".env.local" });
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+if (!supabaseUrl || !supabaseKey) {
+  throw new Error("Missing Supabase credentials in .env.local");
+}
+
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+async function seed() {
+  console.log("🌱 Starting Sovereign Seed Process (Local CPU Mode)...");
+
+  // 1. Dynamic import of the local AI library
+  const { pipeline } = await import("@xenova/transformers");
+
+  console.log("📥 Loading AI Model locally (this happens once)...");
+  // This downloads a small model (~90MB) to your machine
+  const extractor = await pipeline(
+    "feature-extraction",
+    "Xenova/all-MiniLM-L6-v2"
+  );
+
+  // Helper function: Text -> [Numbers]
+  const generateLocalEmbedding = async (text: string) => {
+    const output = await extractor(text, { pooling: "mean", normalize: true });
+    // @ts-ignore
+    return Array.from(output.data);
+  };
+
+  // 2. Process Blog Posts
+  for (const post of POSTS) {
+    console.log(`Processing Post: ${post.title}...`);
+    try {
+      const embedding = await generateLocalEmbedding(post.content);
+
+      const { error } = await supabase.from("documents").insert({
+        content: post.content,
+        metadata: { type: "blog", title: post.title, slug: post.slug },
+        embedding,
+      });
+
+      if (error) console.error("Supabase Error:", error.message);
+    } catch (e) {
+      console.error("Embedding Error:", e);
+    }
+  }
+
+  // 3. Process Projects
+  for (const project of PROJECTS) {
+    console.log(`Processing Project: ${project.title}...`);
+    const projectText = `Project: ${project.title}. Description: ${
+      project.description
+    }. Tags: ${project.tags.join(", ")}. Repo: ${project.repoUrl}`;
+
+    try {
+      const embedding = await generateLocalEmbedding(projectText);
+
+      const { error } = await supabase.from("documents").insert({
+        content: projectText,
+        metadata: {
+          type: "project",
+          title: project.title,
+          url: project.liveUrl,
+        },
+        embedding,
+      });
+
+      if (error) console.error("Supabase Error:", error.message);
+    } catch (e) {
+      console.error("Embedding Error:", e);
+    }
+  }
+
+  console.log("✅ Seeding Complete!");
+}
+
+seed().catch(console.error);
+
+
+
+================================================
+FILE: src/app/globals.css
+================================================
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --radius: 0.5rem;
+  }
+
+  body {
+    @apply bg-neutral-950 text-white antialiased;
+    font-family: var(--font-space), sans-serif; /* Set default font */
+  }
+
+  /* Force Mono font for code/data elements */
+  code,
+  pre,
+  .font-mono {
+    font-family: var(--font-mono), monospace;
+  }
+
+  /* Improved Scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0a0a0a;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #ea580c;
+  }
+}
+
+
+
+================================================
+FILE: src/app/layout.tsx
+================================================
+import type { Metadata } from "next";
+import { Space_Grotesk, JetBrains_Mono } from "next/font/google";
+import "./globals.css";
+
+// 1. Setup Professional Fonts
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-space",
+  weight: ["300", "400", "500", "600", "700"],
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+  weight: ["400", "500"],
+});
+
+export const metadata: Metadata = {
+  title: "Maximoto | Sovereign Engineer",
+  description: "Bitcoin, Nostr, AI, and Full Stack Engineering.",
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en" className="dark" data-scroll-behavior="smooth">
+      <body
+        className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} font-sans antialiased bg-neutral-950`}
+      >
+        {/* 2. Global Background Grid Texture */}
+        <div className="fixed inset-0 z-[-1] h-full w-full bg-neutral-950 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px]"></div>
+        <div className="fixed inset-0 z-[-1] bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.15),rgba(255,255,255,0))]"></div>
+
+        {children}
+      </body>
+    </html>
+  );
+}
+
+
+
+================================================
+FILE: src/app/page.tsx
+================================================
+import { Metadata } from "next";
+import { Navbar } from "@/components/layout/Navbar";
+import { Header } from "@/components/layout/Header";
+import { HeroSection } from "@/components/sections/hero/HeroSection";
+import { CommandCenter } from "@/components/sections/dashboard/CommandCenter";
+import { WorkSection } from "@/components/sections/work/WorkSection";
+import Guestbook from "@/components/Guestbook";
+import NostrFeed from "@/components/NostrFeed";
+import { Shield } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "Maximoto | Sovereign Engineer",
+  description:
+    "Full Stack Portfolio featuring Bitcoin, Nostr, and AI integrations.",
+};
+
+export default function Home() {
+  return (
+    <main className="min-h-screen bg-black selection:bg-orange-500 selection:text-white">
+      {/* Navigation Layer */}
+      <Header />
+      <Navbar />
+
+      {/* Act I: The Identity */}
+      <HeroSection />
+
+      {/* Act II: The System */}
+      <div className="relative z-10 bg-neutral-950 shadow-2xl rounded-t-[3rem] border-t border-white/5 mt-[-50px]">
+        <CommandCenter />
+
+        {/* Act III: The Work */}
+        <WorkSection />
+
+        {/* Act IV: The Connection */}
+        <section
+          id="guestbook"
+          className="py-24 max-w-7xl mx-auto px-6 scroll-mt-12"
+        >
+          <div className="grid lg:grid-cols-2 gap-12 items-start">
+            {/* Left: Guestbook UI */}
+            <div>
+              <div className="flex items-center gap-3 mb-8">
+                <div className="p-2 bg-purple-500/10 rounded-lg border border-purple-500/20">
+                  <Shield className="w-6 h-6 text-purple-500" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold text-white">
+                    Public Square
+                  </h2>
+                  <p className="text-sm text-neutral-500 font-mono">
+                    NOSTR PROTOCOL • NIP-07
+                  </p>
+                </div>
+              </div>
+              <Guestbook />
+            </div>
+
+            {/* Right: Nostr Feed & Context */}
+            <div className="space-y-8">
+              <div className="bg-neutral-900/50 border border-neutral-800 rounded-xl p-6">
+                <h3 className="text-lg font-bold text-white mb-2">
+                  Why this matters
+                </h3>
+                <p className="text-neutral-400 text-sm leading-relaxed mb-4">
+                  This guestbook is a demonstration of <b>Sovereign Data</b>.
+                  When you sign a message here, you own it. It is
+                  cryptographically signed by your keypair, not stored in a
+                  siloed database.
+                </p>
+              </div>
+
+              {/* Reuse Nostr Feed here as a "Live Updates" widget */}
+              <div className="h-64">
+                <NostrFeed />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Footer */}
+        <footer className="py-12 border-t border-neutral-900 text-center">
+          <div className="text-4xl font-bold tracking-tighter text-neutral-800 mb-4 select-none">
+            MAXIMOTO
+          </div>
+          <p className="text-neutral-600 text-xs font-mono">
+            SOVEREIGN ARCHITECTURE © {new Date().getFullYear()}
+          </p>
+        </footer>
+      </div>
+    </main>
+  );
+}
+
+
+
+================================================
+FILE: src/app/api/chat/route.ts
+================================================
+import { InferenceClient } from "@huggingface/inference";
+import { createClient } from "@supabase/supabase-js";
+import { PORTFOLIO_CONTEXT } from "@/lib/context";
+import { pipeline } from "@xenova/transformers";
+
+const hf = new InferenceClient(process.env.HUGGINGFACE_API_KEY);
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
+
+export const maxDuration = 60;
+
+// Singleton for Local Model
+let extractor: any = null;
+
+async function getExtractor() {
+  if (!extractor) {
+    extractor = await pipeline("feature-extraction", "Xenova/all-MiniLM-L6-v2");
+  }
+  return extractor;
+}
+
+export async function POST(req: Request) {
+  try {
+    const body = await req.json();
+    const messages = body.messages || [];
+    const lastUserMessage = messages[messages.length - 1]?.content || "";
+
+    if (!lastUserMessage) {
+      return new Response("No message provided", { status: 400 });
+    }
+
+    console.log(`🔍 User asked: "${lastUserMessage.substring(0, 50)}..."`);
+
+    let retrievedContext = "";
+
+    try {
+      // 1. Generate Embedding LOCALLY
+      const generateEmbedding = await getExtractor();
+      const output = await generateEmbedding(lastUserMessage, {
+        pooling: "mean",
+        normalize: true,
+      });
+      // @ts-ignore
+      const embedding = Array.from(output.data);
+
+      // 2. Semantic Search
+      const { data: documents } = await supabase.rpc("match_documents", {
+        query_embedding: embedding,
+        match_threshold: 0.1,
+        match_count: 2,
+      });
+
+      retrievedContext =
+        documents
+          ?.map((doc: any) => doc.content)
+          .join("\n\n")
+          .substring(0, 1500) || "";
+
+      if (documents?.length) console.log(`📚 Found ${documents.length} docs`);
+    } catch (err) {
+      console.error("Embedding/DB Error (Continuing without context):", err);
+    }
+
+    const systemPrompt = `
+    ${PORTFOLIO_CONTEXT}
+
+    === DATABASE KNOWLEDGE ===
+    ${
+      retrievedContext
+        ? retrievedContext
+        : "No specific database records found."
+    }
+    `;
+
+    const stream = new ReadableStream({
+      async start(controller) {
+        const conversation = [
+          { role: "system", content: systemPrompt },
+          ...messages.map((m: any) => ({ role: m.role, content: m.content })),
+        ];
+
+        try {
+          const streamResponse = hf.chatCompletionStream({
+            model: "meta-llama/Meta-Llama-3-8B-Instruct",
+            messages: conversation,
+            max_tokens: 500,
+            temperature: 0.7,
+          });
+
+          for await (const chunk of streamResponse) {
+            const content = chunk.choices[0]?.delta?.content;
+            if (content) {
+              controller.enqueue(new TextEncoder().encode(content));
+            }
+          }
+        } catch (apiError: any) {
+          console.error("HF API Error:", apiError);
+          const errorMsg = apiError?.message || "Model busy";
+          controller.enqueue(
+            new TextEncoder().encode(
+              ` [System Error: ${errorMsg}. Please try again.]`
+            )
+          );
+        }
+        controller.close();
+      },
+    });
+
+    return new Response(stream, {
+      headers: { "Content-Type": "text/plain; charset=utf-8" },
+    });
+  } catch (error: any) {
+    console.error("Route Handler Error:", error);
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+    });
+  }
+}
+
+
+
+================================================
+FILE: src/app/api/guestbook/route.ts
+================================================
+import { createClient } from "@supabase/supabase-js";
+import { NextResponse } from "next/server";
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
+
+export async function GET() {
+  try {
+    const { data, error } = await supabase
+      .from("guestbook")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(50);
+
+    if (error) throw error;
+    return NextResponse.json(data);
+  } catch (error) {
+    return NextResponse.json({ error: "Failed to fetch" }, { status: 500 });
+  }
+}
+
+export async function POST(req: Request) {
+  try {
+    const body = await req.json();
+    const { content, pubkey, nostr_event_id, signature, username, avatar } =
+      body;
+
+    if (!content || content.trim().length === 0) {
+      return NextResponse.json({ error: "Content required" }, { status: 400 });
+    }
+
+    // Prepare payload (Trust the frontend provided username/avatar)
+    const payload: any = {
+      content,
+      username: username || "Anonymous", // Use sent name, fallback to Anon
+      avatar: avatar || null,
+    };
+
+    // Add crypto proofs if present
+    if (pubkey) payload.pubkey = pubkey;
+    if (nostr_event_id) payload.nostr_event_id = nostr_event_id;
+    if (signature) payload.signature = signature;
+
+    const { error } = await supabase.from("guestbook").insert([payload]);
+
+    if (error) {
+      console.error("DB Error:", error);
+      throw error;
+    }
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    return NextResponse.json({ error: "Failed to post" }, { status: 500 });
+  }
+}
+
+
+
+================================================
+FILE: src/app/blog/[slug]/page.tsx
+================================================
+import { POSTS } from "@/lib/data";
+import { notFound } from "next/navigation";
+import ReactMarkdown from "react-markdown";
+import Link from "next/link";
+import { ArrowLeft, Calendar } from "lucide-react";
+import { Header } from "@/components/layout/Header";
+
+// This remains the same
+export async function generateStaticParams() {
+  return POSTS.map((post) => ({
+    slug: post.slug,
+  }));
+}
+
+// FIX: 'params' is now a Promise in Next.js 15/16
+type Props = {
+  params: Promise<{ slug: string }>;
+};
+
+export default async function BlogPost({ params }: Props) {
+  // 1. Await the params before accessing properties
+  const { slug } = await params;
+
+  // 2. Use the unwrapped slug
+  const post = POSTS.find((p) => p.slug === slug);
+
+  if (!post) notFound();
+
+  return (
+    <main className="min-h-screen bg-neutral-950 text-white selection:bg-orange-500 selection:text-white">
+      <Header />
+
+      <article className="max-w-3xl mx-auto px-6 py-12">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 text-sm text-neutral-500 hover:text-orange-500 mb-8 transition-colors"
+        >
+          <ArrowLeft className="w-4 h-4" /> Back to Home
+        </Link>
+
+        <header className="mb-12">
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4 text-white">
+            {post.title}
+          </h1>
+          <div className="flex items-center gap-2 text-neutral-500 font-mono text-sm">
+            <Calendar className="w-4 h-4" />
+            <time>{post.publishedDate}</time>
+          </div>
+        </header>
+
+        {/* Markdown Content */}
+        {/* We use 'prose-invert' to make typography look good on dark mode */}
+        <div className="prose prose-invert prose-orange max-w-none">
+          <ReactMarkdown>{post.content}</ReactMarkdown>
+        </div>
+      </article>
+    </main>
+  );
+}
+
+
+
+================================================
+FILE: src/components/AIChat.tsx
+================================================
+"use client";
+
+import { useState, useRef, useEffect } from "react";
+import { Send, Bot, User, Sparkles, Terminal } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
+
+type Message = {
+  id: string;
+  role: "user" | "assistant";
+  content: string;
+};
+
+export default function AIChat() {
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [input, setInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [messages]);
+
+  const sendMessage = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!input.trim() || isLoading) return;
+
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      role: "user",
+      content: input,
+    };
+    const newMessages = [...messages, userMessage];
+
+    setMessages(newMessages);
+    setInput("");
+    setIsLoading(true);
+
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: newMessages }),
+      });
+
+      if (!response.ok) throw new Error(response.statusText);
+      if (!response.body) throw new Error("No response body");
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let done = false;
+      const aiMessageId = (Date.now() + 1).toString();
+      let aiContent = "";
+
+      setMessages((prev) => [
+        ...prev,
+        { id: aiMessageId, role: "assistant", content: "" },
+      ]);
+
+      while (!done) {
+        const { value, done: doneReading } = await reader.read();
+        done = doneReading;
+        const chunkValue = decoder.decode(value, { stream: true });
+        aiContent += chunkValue;
+        setMessages((prev) =>
+          prev.map((msg) =>
+            msg.id === aiMessageId ? { ...msg, content: aiContent } : msg
+          )
+        );
+      }
+    } catch (error) {
+      console.error("Chat Error:", error);
+      // alert("Failed to connect to AI.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    // UPDATED: Full height container with glass effect
+    <div className="flex flex-col h-full min-h-[450px] w-full bg-neutral-950/80 border border-neutral-800 rounded-xl overflow-hidden relative shadow-2xl">
+      {/* Header */}
+      <div className="p-4 border-b border-neutral-800 flex items-center justify-between bg-neutral-900/90 backdrop-blur">
+        <div className="flex items-center gap-2">
+          <div className="p-1.5 bg-orange-500/10 rounded-md border border-orange-500/20">
+            <Sparkles className="w-4 h-4 text-orange-500" />
+          </div>
+          <div>
+            <span className="text-sm font-bold text-neutral-200 block">
+              AI Resume Agent
+            </span>
+            <span className="text-[10px] text-neutral-500 font-mono uppercase">
+              Llama-3-8B • Online
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Messages */}
+      <ScrollArea className="flex-1 p-4 bg-neutral-950/50" ref={scrollRef}>
+        <div className="space-y-6">
+          {messages.length === 0 && (
+            <div className="flex flex-col items-center justify-center h-40 text-center space-y-3 opacity-60">
+              <Terminal className="w-10 h-10 text-neutral-700" />
+              <p className="text-sm text-neutral-500">
+                System Ready. Ask about Diego's node.
+              </p>
+            </div>
+          )}
+          {messages.map((m) => (
+            <div
+              key={m.id}
+              className={`flex gap-3 ${
+                m.role === "user" ? "flex-row-reverse" : "flex-row"
+              }`}
+            >
+              <div
+                className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border shadow-sm ${
+                  m.role === "user"
+                    ? "bg-neutral-800 border-neutral-700"
+                    : "bg-orange-950/30 border-orange-500/30"
+                }`}
+              >
+                {m.role === "user" ? (
+                  <User className="w-4 h-4 text-neutral-400" />
+                ) : (
+                  <Bot className="w-4 h-4 text-orange-500" />
+                )}
+              </div>
+              <div
+                className={`rounded-lg p-3 text-sm max-w-[85%] leading-relaxed shadow-sm ${
+                  m.role === "user"
+                    ? "bg-neutral-800 text-white border border-neutral-700"
+                    : "bg-neutral-900/80 text-neutral-300 border border-neutral-800"
+                }`}
+              >
+                {m.content}
+              </div>
+            </div>
+          ))}
+          {isLoading && messages[messages.length - 1]?.role === "user" && (
+            <div className="flex gap-2 items-center text-neutral-500 text-xs ml-2 animate-pulse">
+              <Bot className="w-3 h-3" />
+              <span>Generating response...</span>
+            </div>
+          )}
+        </div>
+      </ScrollArea>
+
+      {/* Input */}
+      <form
+        onSubmit={sendMessage}
+        className="p-3 bg-neutral-900 border-t border-neutral-800 flex gap-2"
+      >
+        <Input
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder="Type your question..."
+          className="bg-neutral-950 border-neutral-800 text-white placeholder:text-neutral-600 focus-visible:ring-orange-500/50"
+        />
+        <Button
+          type="submit"
+          size="icon"
+          disabled={isLoading}
+          className="bg-white text-black hover:bg-neutral-200 transition-colors shadow-lg shadow-white/10"
+        >
+          <Send className="w-4 h-4" />
+        </Button>
+      </form>
+    </div>
+  );
+}
+
+
+
+================================================
+FILE: src/components/BentoGrid.tsx
+================================================
+import React from "react";
+import { cn } from "@/lib/utils";
+
+export const BentoGrid = ({
+  className,
+  children,
+}: {
+  className?: string;
+  children?: React.ReactNode;
+}) => {
+  return (
+    <div
+      className={cn(
+        // Ensure consistent gap and full width
+        "grid grid-cols-1 md:grid-cols-3 gap-6 w-full",
+        className
+      )}
+    >
+      {children}
+    </div>
+  );
+};
+
+export const BentoItem = ({
+  className,
+  title,
+  description,
+  header,
+  icon,
+}: {
+  className?: string;
+  title?: string | React.ReactNode;
+  description?: string | React.ReactNode;
+  header?: React.ReactNode;
+  icon?: React.ReactNode;
+}) => {
+  return (
+    <div
+      className={cn(
+        "rounded-xl group/bento hover:-translate-y-1 transition duration-200 shadow-xl",
+        "bg-neutral-900 border border-neutral-800 p-6 flex flex-col justify-between space-y-4 h-full", // Added h-full
+        className
+      )}
+    >
+      {header}
+      <div className="group-hover/bento:translate-x-2 transition duration-200 mt-2">
+        <div className="flex items-center gap-2 mb-1">
+          {icon}
+          <div className="font-bold text-neutral-200 font-sans text-sm tracking-wide">
+            {title}
+          </div>
+        </div>
+        <div className="font-normal text-neutral-400 text-xs leading-relaxed font-mono">
+          {description}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+
+
+================================================
+FILE: src/components/GithubMetrics.tsx
+================================================
+"use client";
+
+import { useEffect, useState } from "react";
+import { Icons } from "@/components/Icons";
+import { GitCommit, Star, GitPullRequest, Trophy } from "lucide-react";
+import { ActivityCalendar } from "react-activity-calendar";
+
+interface GithubUser {
+  public_repos: number;
+  followers: number;
+  public_gists: number;
+}
+
+type ActivityData = {
+  date: string;
+  count: number;
+  level: number;
+};
+
+export default function GithubMetrics() {
+  const [stats, setStats] = useState<GithubUser | null>(null);
+  const [stars, setStars] = useState(0);
+  const [calendarData, setCalendarData] = useState<ActivityData[]>([]);
+
+  useEffect(() => {
+    fetch("https://api.github.com/users/maximotodev")
+      .then((res) => res.json())
+      .then(setStats);
+    fetch("https://api.github.com/users/maximotodev/repos?per_page=100")
+      .then((res) => res.json())
+      .then((repos) => {
+        if (Array.isArray(repos)) {
+          const totalStars = repos.reduce(
+            (acc: number, repo: any) => acc + repo.stargazers_count,
+            0
+          );
+          setStars(totalStars);
+        }
+      });
+
+    const data = [];
+    const now = new Date();
+    for (let i = 0; i < 365; i++) {
+      const date = new Date(now);
+      date.setDate(date.getDate() - i);
+      data.push({
+        date: date.toISOString().split("T")[0],
+        count: Math.floor(Math.random() * 5),
+        level: Math.floor(Math.random() * 5),
+      });
+    }
+    setCalendarData(data.reverse());
+  }, []);
+
+  return (
+    <div className="flex flex-col h-full justify-between gap-6">
+      {/* Top Section: Header & Stats */}
+      <div className="flex flex-col lg:flex-row gap-6 lg:items-start lg:justify-between">
+        {/* Header */}
+        <div className="flex items-center gap-3">
+          <div className="p-2 bg-white/5 rounded-lg border border-white/10">
+            <Icons.gitHub className="w-5 h-5 text-white" />
+          </div>
+          <div>
+            <h3 className="font-bold text-neutral-200 text-sm">
+              Engineering Velocity
+            </h3>
+            <div className="flex items-center gap-2 mt-1">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+              </span>
+              <span className="text-[10px] font-mono text-green-500 uppercase">
+                System Active
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Stats Grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 w-full lg:w-auto">
+          <StatBox
+            icon={<Trophy className="w-3 h-3 text-yellow-500" />}
+            label="Repos"
+            value={stats?.public_repos || "-"}
+          />
+          <StatBox
+            icon={<Star className="w-3 h-3 text-orange-500" />}
+            label="Stars"
+            value={stars}
+          />
+          <StatBox
+            icon={<GitCommit className="w-3 h-3 text-blue-500" />}
+            label="Commits"
+            value="1.2k"
+          />
+          <StatBox
+            icon={<GitPullRequest className="w-3 h-3 text-purple-500" />}
+            label="PRs"
+            value="85"
+          />
+        </div>
+      </div>
+
+      {/* Bottom Section: Calendar */}
+      <div className="border-t border-neutral-800 pt-4">
+        <div className="text-[10px] text-neutral-500 mb-3 font-mono uppercase tracking-wider">
+          Contribution Activity
+        </div>
+        {/* Responsive Scroll Container */}
+        <div className="w-full overflow-x-auto pb-2 no-scrollbar mask-gradient-right">
+          {calendarData.length > 0 ? (
+            <div className="min-w-[600px] sm:min-w-0">
+              <ActivityCalendar
+                data={calendarData}
+                theme={{
+                  light: [
+                    "#171717",
+                    "#451a03",
+                    "#7c2d12",
+                    "#c2410c",
+                    "#ea580c",
+                  ],
+                  dark: ["#171717", "#262626", "#451a03", "#9a3412", "#ea580c"], // Improved contrast
+                }}
+                showColorLegend={false}
+                blockSize={10}
+                blockMargin={4}
+                fontSize={12}
+              />
+            </div>
+          ) : (
+            <div className="h-24 w-full bg-neutral-800/50 animate-pulse rounded" />
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Helper Component for Stats
+function StatBox({
+  icon,
+  label,
+  value,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: string | number;
+}) {
+  return (
+    <div className="bg-neutral-950/50 p-2 sm:p-3 rounded-lg border border-neutral-800 flex flex-col justify-center">
+      <div className="flex items-center gap-1.5 text-neutral-400 text-[10px] uppercase font-mono mb-1">
+        {icon} {label}
+      </div>
+      <div className="text-sm sm:text-base font-bold text-neutral-200">
+        {value}
+      </div>
+    </div>
+  );
+}
+
+
+
+================================================
+FILE: src/components/Guestbook.tsx
+================================================
+"use client";
+
+import { useEffect, useState, useRef } from "react";
+import {
+  Send,
+  MessageSquare,
+  User,
+  Shield,
+  Zap,
+  Lock,
+  Database,
+  Loader2,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { SimplePool, nip19, getPublicKey, finalizeEvent } from "nostr-tools";
+
+const RELAYS = [
+  "wss://relay.damus.io",
+  "wss://relay.primal.net",
+  "wss://nos.lol",
+];
+
+type Note = {
+  id: number;
+  content: string;
+  created_at: string;
+  username: string;
+  avatar?: string; // New field
+  pubkey?: string;
+};
+
+type AuthMode = "guest" | "extension" | "nsec";
+
+export default function Guestbook() {
+  const [notes, setNotes] = useState<Note[]>([]);
+  const [input, setInput] = useState("");
+  const [isSending, setIsSending] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  // Identity State
+  const [authMode, setAuthMode] = useState<AuthMode>("guest");
+  const [displayName, setDisplayName] = useState("");
+  const [nsec, setNsec] = useState("");
+  const [hasExtension, setHasExtension] = useState(false);
+
+  useEffect(() => {
+    fetchMessages();
+    setTimeout(() => {
+      if ((window as any).nostr) setHasExtension(true);
+    }, 1000);
+  }, []);
+
+  const fetchMessages = async () => {
+    try {
+      const res = await fetch("/api/guestbook");
+      if (!res.ok) return;
+      const data = await res.json();
+      if (Array.isArray(data)) setNotes(data);
+    } catch (err) {
+      console.error("Fetch error", err);
+    }
+  };
+
+  // Helper: Fetch Name/Avatar from Nostr Relays
+  const fetchNostrProfile = async (pubkey: string) => {
+    const pool = new SimplePool();
+    try {
+      const event = await pool.get(RELAYS, {
+        authors: [pubkey],
+        kinds: [0], // Metadata Event
+      });
+
+      if (event) {
+        const content = JSON.parse(event.content);
+        return {
+          name:
+            content.name ||
+            content.display_name ||
+            content.nip05 ||
+            "Nostr User",
+          avatar: content.picture || content.image || null,
+        };
+      }
+    } catch (e) {
+      console.warn("Failed to fetch Nostr profile", e);
+    }
+    return { name: "Nostr User", avatar: null };
+  };
+
+  const handleSend = async () => {
+    if (!input.trim()) return;
+
+    // Validation
+    if (authMode === "guest" && !displayName.trim()) {
+      alert("Please enter a display name.");
+      return;
+    }
+    if (authMode === "nsec" && !nsec.trim()) {
+      alert("Please enter your nsec key.");
+      return;
+    }
+
+    setIsSending(true);
+    let nostrData = null;
+    let finalUsername = authMode === "guest" ? displayName : "Anon";
+    let finalAvatar = null;
+
+    try {
+      // --- MODE: EXTENSION ---
+      if (authMode === "extension") {
+        try {
+          const nostr = (window as any).nostr;
+          if (!nostr) throw new Error("No extension");
+
+          const pubkey = await nostr.getPublicKey();
+
+          // 1. Fetch Profile Data FIRST
+          const profile = await fetchNostrProfile(pubkey);
+          finalUsername = profile.name;
+          finalAvatar = profile.avatar;
+
+          // 2. Sign Event
+          const eventTemplate = {
+            kind: 1,
+            created_at: Math.floor(Date.now() / 1000),
+            tags: [
+              ["t", "maximoto-guestbook"],
+              ["r", window.location.href],
+            ],
+            content: input,
+            pubkey,
+          };
+
+          const signedEvent = await nostr.signEvent(eventTemplate);
+          const pool = new SimplePool();
+          pool.publish(RELAYS, signedEvent);
+
+          nostrData = {
+            pubkey: signedEvent.pubkey,
+            nostr_event_id: signedEvent.id,
+            signature: signedEvent.sig,
+          };
+        } catch (e) {
+          console.warn("Extension signing failed/rejected. Using fallback.");
+          finalUsername = "Anonymous";
+        }
+      }
+
+      // --- MODE: NSEC ---
+      if (authMode === "nsec") {
+        try {
+          const { type, data: secretBytes } = nip19.decode(nsec);
+          if (type !== "nsec") throw new Error("Invalid nsec");
+
+          const secretKey = secretBytes as Uint8Array;
+          const pubkey = getPublicKey(secretKey);
+
+          // 1. Fetch Profile
+          const profile = await fetchNostrProfile(pubkey);
+          finalUsername = profile.name;
+          finalAvatar = profile.avatar;
+
+          // 2. Sign
+          const eventTemplate = {
+            kind: 1,
+            created_at: Math.floor(Date.now() / 1000),
+            tags: [["t", "maximoto-guestbook"]],
+            content: input,
+          };
+
+          const signedEvent = finalizeEvent(eventTemplate, secretKey);
+          const pool = new SimplePool();
+          pool.publish(RELAYS, signedEvent);
+
+          nostrData = {
+            pubkey: signedEvent.pubkey,
+            nostr_event_id: signedEvent.id,
+            signature: signedEvent.sig,
+          };
+          setNsec("");
+        } catch (e) {
+          alert("Invalid Private Key.");
+          setIsSending(false);
+          return;
+        }
+      }
+
+      // --- SAVE TO DB ---
+      await fetch("/api/guestbook", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          content: input,
+          username: finalUsername, // Now contains real name or Guest name
+          avatar: finalAvatar, // Now contains real avatar url
+          ...nostrData,
+        }),
+      });
+
+      setInput("");
+      fetchMessages();
+    } catch (err) {
+      console.error("Post error", err);
+    } finally {
+      setIsSending(false);
+    }
+  };
+
+  return (
+    <div className="w-full h-full min-h-[500px] bg-neutral-900/50 border border-neutral-800 rounded-xl overflow-hidden flex flex-col shadow-2xl">
+      {/* Header */}
+      <div className="p-4 border-b border-neutral-800 flex items-center justify-between bg-neutral-900/90 backdrop-blur-md">
+        <div className="flex items-center gap-2">
+          <MessageSquare className="w-4 h-4 text-orange-500" />
+          <span className="font-bold text-neutral-200 text-sm">
+            Community Ledger
+          </span>
+        </div>
+        <div className="flex items-center gap-2 text-[10px] text-neutral-500 font-mono">
+          <Database className="w-3 h-3 text-blue-500" />
+          {notes.length} SIGNALS
+        </div>
+      </div>
+
+      {/* Messages Feed */}
+      <ScrollArea className="flex-1 p-4" ref={scrollRef}>
+        <div className="space-y-4">
+          {notes.length === 0 ? (
+            <div className="flex flex-col items-center justify-center h-40 text-center opacity-50 space-y-2">
+              <MessageSquare className="w-8 h-8 text-neutral-600" />
+              <p className="text-neutral-500 text-xs">No signals yet.</p>
+            </div>
+          ) : (
+            notes.map((note) => (
+              <div
+                key={note.id}
+                className="flex gap-3 group animate-in fade-in slide-in-from-bottom-2"
+              >
+                {/* Avatar */}
+                <div
+                  className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border overflow-hidden
+                  ${
+                    note.pubkey
+                      ? "border-purple-500/30"
+                      : "border-neutral-700 bg-neutral-800"
+                  }`}
+                >
+                  {note.avatar ? (
+                    <img
+                      src={note.avatar}
+                      alt={note.username}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : note.pubkey ? (
+                    <Zap className="w-4 h-4 text-purple-400 fill-purple-400/20" />
+                  ) : (
+                    <User className="w-4 h-4 text-neutral-500" />
+                  )}
+                </div>
+
+                <div className="flex-1 space-y-1">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span
+                      className={`text-xs font-bold ${
+                        note.pubkey ? "text-purple-400" : "text-neutral-300"
+                      }`}
+                    >
+                      {note.username}
+                    </span>
+                    {note.pubkey && (
+                      <span className="text-[9px] font-mono bg-purple-500/10 text-purple-300 px-1.5 py-0.5 rounded border border-purple-500/20">
+                        VERIFIED
+                      </span>
+                    )}
+                    <span className="text-[10px] text-neutral-600 ml-auto">
+                      {new Date(note.created_at).toLocaleDateString()}
+                    </span>
+                  </div>
+                  <p className="text-sm text-neutral-400 leading-relaxed break-words">
+                    {note.content}
+                  </p>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      </ScrollArea>
+
+      {/* Auth Tabs & Inputs */}
+      <div className="bg-neutral-900 border-t border-neutral-800">
+        <Tabs
+          defaultValue="guest"
+          value={authMode}
+          onValueChange={(v) => setAuthMode(v as AuthMode)}
+          className="w-full"
+        >
+          <TabsList className="grid w-full grid-cols-3 bg-neutral-950 border-b border-neutral-800 h-9 rounded-none">
+            <TabsTrigger
+              value="guest"
+              className="text-xs data-[state=active]:bg-neutral-800 data-[state=active]:text-white"
+            >
+              Guest
+            </TabsTrigger>
+            <TabsTrigger
+              value="extension"
+              className="text-xs data-[state=active]:bg-purple-900/20 data-[state=active]:text-purple-300"
+            >
+              {hasExtension ? "Extension" : "Nostr Ext"}
+            </TabsTrigger>
+            <TabsTrigger
+              value="nsec"
+              className="text-xs data-[state=active]:bg-orange-900/20 data-[state=active]:text-orange-300"
+            >
+              Keys
+            </TabsTrigger>
+          </TabsList>
+
+          <div className="p-3">
+            <TabsContent value="guest" className="mt-0">
+              <Input
+                placeholder="Display Name (e.g. Pico)"
+                value={displayName}
+                onChange={(e) => setDisplayName(e.target.value)}
+                className="h-8 text-xs bg-neutral-950 border-neutral-800 text-white"
+              />
+            </TabsContent>
+
+            <TabsContent value="extension" className="mt-0">
+              <div className="flex items-center gap-2 text-xs text-purple-400 bg-purple-900/10 p-2 rounded border border-purple-500/20">
+                <Shield className="w-3 h-3" />
+                {hasExtension
+                  ? "Ready to sign with browser extension."
+                  : "No extension detected."}
+              </div>
+            </TabsContent>
+
+            <TabsContent value="nsec" className="mt-0 space-y-2">
+              <div className="flex items-center gap-2 text-[10px] text-orange-500">
+                <Lock className="w-3 h-3" /> Key stays in RAM only.
+              </div>
+              <Input
+                type="password"
+                placeholder="nsec1..."
+                value={nsec}
+                onChange={(e) => setNsec(e.target.value)}
+                className="h-8 text-xs font-mono bg-neutral-950 border-orange-900/30"
+              />
+            </TabsContent>
+          </div>
+        </Tabs>
+
+        {/* Send Bar */}
+        <div className="p-3 pt-0 flex gap-2">
+          <Input
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="Write your message..."
+            className="bg-neutral-950 border-neutral-800 text-white focus-visible:ring-neutral-700"
+            onKeyDown={(e) => e.key === "Enter" && handleSend()}
+          />
+          <Button
+            onClick={handleSend}
+            disabled={isSending}
+            size="icon"
+            className={`shrink-0 text-white transition-all ${
+              authMode === "guest"
+                ? "bg-neutral-700 hover:bg-neutral-600"
+                : "bg-purple-600 hover:bg-purple-700"
+            }`}
+          >
+            {isSending ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : authMode === "guest" ? (
+              <Send className="w-4 h-4" />
+            ) : (
+              <Zap className="w-4 h-4 fill-white" />
+            )}
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+
+================================================
+FILE: src/components/Icons.tsx
+================================================
+import React from "react";
+
+export const Icons = {
+  gitHub: (props: React.SVGProps<SVGSVGElement>) => (
+    <svg
+      role="img"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
+      <path d="M9 18c-4.51 2-5-2-7-2" />
+    </svg>
+  ),
+  nostr: (props: React.SVGProps<SVGSVGElement>) => (
+    <svg
+      role="img"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 14c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z" />
+      <path d="M12 6V2" />
+      <path d="M12 22v-4" />
+      <path d="M22 12h-4" />
+      <path d="M6 12H2" />
+      {/* Abstract Nostr Network nodes */}
+      <circle cx="9" cy="9" r="1" fill="currentColor" />
+      <circle cx="15" cy="15" r="1" fill="currentColor" />
+      <circle cx="15" cy="9" r="1" fill="currentColor" />
+      <circle cx="9" cy="15" r="1" fill="currentColor" />
+    </svg>
+  ),
+  lightning: (props: React.SVGProps<SVGSVGElement>) => (
+    <svg
+      role="img"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <path d="M6 16.326L13.243 2l-1.602 7.156h6.05L10.36 22l1.601-7.156H6.012z" />
+    </svg>
+  ),
+};
+
+
+
+================================================
+FILE: src/components/NodeStatus.tsx
+================================================
+"use client";
+
+import { useEffect, useState } from "react";
+import { Server, Activity, ShieldCheck } from "lucide-react";
+
+export default function NodeStatus() {
+  const [blockHeight, setBlockHeight] = useState<number>(0);
+  const [fees, setFees] = useState<number>(0);
+
+  useEffect(() => {
+    // Fetch live data from Mempool.space API
+    const fetchData = async () => {
+      try {
+        const heightRes = await fetch(
+          "https://mempool.space/api/blocks/tip/height"
+        );
+        const height = await heightRes.text();
+
+        const feesRes = await fetch(
+          "https://mempool.space/api/v1/fees/recommended"
+        );
+        const feesData = await feesRes.json();
+
+        setBlockHeight(Number(height));
+        setFees(feesData.hourFee);
+      } catch (e) {
+        console.error("Mempool API error", e);
+      }
+    };
+
+    fetchData();
+    // Refresh every 30 seconds
+    const interval = setInterval(fetchData, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="w-full h-full bg-orange-950/20 rounded-lg border border-orange-500/10 p-6 flex flex-col justify-between relative overflow-hidden">
+      {/* Pulse Effect */}
+      <div className="absolute top-0 right-0 p-3">
+        <div className="relative">
+          <div className="absolute w-3 h-3 bg-green-500 rounded-full animate-ping opacity-75"></div>
+          <div className="relative w-3 h-3 bg-green-500 rounded-full"></div>
+        </div>
+      </div>
+
+      <div>
+        <div className="flex items-center gap-2 text-orange-500 mb-1">
+          <Server size={18} />
+          <span className="text-xs font-bold uppercase tracking-widest">
+            Mainnet
+          </span>
+        </div>
+        <div className="text-xs text-orange-400/60 font-mono">
+          RaspiBlitz v1.11
+        </div>
+      </div>
+
+      <div className="space-y-4 z-10 mt-4">
+        <div>
+          <div className="text-4xl font-mono font-bold text-white tracking-tighter">
+            {blockHeight ? blockHeight.toLocaleString() : "Syncing..."}
+          </div>
+          <div className="text-[10px] text-neutral-500 uppercase font-mono mt-1">
+            Current Block Height
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-2">
+          <div className="bg-neutral-900/50 rounded p-2 border border-neutral-800">
+            <div className="flex items-center gap-1 text-[10px] text-neutral-400 mb-1">
+              <Activity size={10} /> Fees
+            </div>
+            <div className="text-sm font-mono text-orange-400">
+              {fees} sat/vB
+            </div>
+          </div>
+          <div className="bg-neutral-900/50 rounded p-2 border border-neutral-800">
+            <div className="flex items-center gap-1 text-[10px] text-neutral-400 mb-1">
+              <ShieldCheck size={10} /> Uptime
+            </div>
+            <div className="text-sm font-mono text-green-400">99.9%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+
+================================================
+FILE: src/components/NostrFeed.tsx
+================================================
+"use client";
+
+import { useEffect, useState } from "react";
+import { SimplePool } from "nostr-tools";
+import { Network, Terminal } from "lucide-react";
+
+// 1. RELAYS: The servers we ask for data
+const RELAYS = [
+  "wss://relay.damus.io",
+  "wss://relay.primal.net",
+  "wss://nos.lol",
+];
+
+// 2. PUBKEY: Use yours! (This is Jack Dorsey's hex for testing)
+// Convert your npub to hex here: https://nostrcheck.me/converter/
+const MY_PUBKEY =
+  "82341f882b6eabcd2ba7f1ef90aad961cf074af15b9ef44a09f9d2a8fbfbe6a2";
+
+export default function NostrFeed() {
+  const [content, setContent] = useState<string>("Scanning relays...");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const pool = new SimplePool();
+    let isMounted = true;
+
+    const fetchNostr = async () => {
+      try {
+        // Query for the latest Kind 1 (Text Note)
+        const event = await pool.get(RELAYS, {
+          authors: [MY_PUBKEY],
+          kinds: [1],
+        });
+
+        if (isMounted && event) {
+          setContent(event.content);
+        } else if (isMounted) {
+          setContent("No recent notes found.");
+        }
+      } catch (err) {
+        console.error("Nostr Error:", err);
+        if (isMounted) setContent("Relay connection failed.");
+      } finally {
+        if (isMounted) setLoading(false);
+        // pool.close(RELAYS); // Cleanup connection
+      }
+    };
+
+    fetchNostr();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  return (
+    <div className="h-full w-full bg-purple-900/10 border border-purple-500/20 rounded-lg p-6 flex flex-col justify-between relative overflow-hidden group">
+      {/* Decorative Background */}
+      <div className="absolute -right-4 -top-4 text-purple-500/10 group-hover:text-purple-500/20 transition-all duration-500">
+        <Network size={100} />
+      </div>
+
+      <div>
+        <div className="flex items-center gap-2 mb-3">
+          <div
+            className={`w-2 h-2 rounded-full ${
+              loading ? "bg-yellow-500 animate-pulse" : "bg-green-500"
+            }`}
+          />
+          <span className="text-xs font-mono text-purple-300 uppercase tracking-widest">
+            {loading ? "Connecting..." : "Nostr Network"}
+          </span>
+        </div>
+
+        <div className="relative z-10">
+          <p className="text-sm text-neutral-300 font-mono leading-relaxed line-clamp-3">
+            {content}
+          </p>
+        </div>
+      </div>
+
+      <div className="mt-4 flex items-center gap-2 text-[10px] text-purple-400/60 font-mono">
+        <Terminal size={12} />
+        <span>Signed via Schnorr</span>
+      </div>
+    </div>
+  );
+}
+
+
+
+================================================
+FILE: src/components/TechCloud.tsx
+================================================
+"use client";
+
+import React, { useEffect, useState } from "react";
+import {
+  Cloud,
+  fetchSimpleIcons,
+  renderSimpleIcon,
+  ICloud,
+} from "react-icon-cloud";
+
+const slugs = [
+  "typescript",
+  "javascript",
+  "react",
+  "nextdotjs",
+  "nodedotjs",
+  "python",
+  "rust",
+  "bitcoin",
+  "linux",
+  "docker",
+  "git",
+  "github",
+  "neovim",
+  "postgresql",
+  "vercel",
+  "tailwindcss",
+  "figma",
+  "android",
+  "flutter",
+  "django",
+  "amazonwebservices",
+  "nginx",
+];
+
+export default function TechCloud() {
+  const [icons, setIcons] = useState<any>(null);
+
+  useEffect(() => {
+    fetchSimpleIcons({ slugs }).then(setIcons);
+  }, []);
+
+  const renderedIcons = React.useMemo(() => {
+    if (!icons) return null;
+
+    return Object.values(icons.simpleIcons).map((icon: any) =>
+      renderSimpleIcon({
+        icon,
+        size: 42,
+        aProps: {
+          onClick: (e: any) => e.preventDefault(),
+        },
+        minContrastRatio: 2,
+        bgHex: "#000000",
+        fallbackHex: "#ffffff",
+      })
+    );
+  }, [icons]);
+
+  if (!icons) {
+    return (
+      <div className="flex items-center justify-center h-full text-neutral-500 text-xs animate-pulse font-mono">
+        Loading Grid...
+      </div>
+    );
+  }
+
+  const cloudProps: Omit<ICloud, "children"> = {
+    id: "tech-cloud",
+    containerProps: {
+      style: {
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        width: "100%",
+        paddingTop: 10,
+      },
+    },
+    options: {
+      reverse: true,
+      depth: 1,
+      wheelZoom: false,
+      imageScale: 2,
+      activeCursor: "default",
+      tooltip: "native",
+      initial: [0.1, -0.1],
+      clickToFront: 500,
+      tooltipDelay: 0,
+      outlineColour: "#0000",
+      maxSpeed: 0.03,
+      minSpeed: 0.01,
+    },
+  };
+
+  return <Cloud {...cloudProps}>{renderedIcons}</Cloud>;
+}
+
+
+
+================================================
+FILE: src/components/TipModal.tsx
+================================================
+"use client";
+
+import { useState } from "react";
+import QRCode from "react-qr-code";
+import { Copy, Check, Zap } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogDescription,
+} from "@/components/ui/dialog";
+
+// Your Address
+const MY_LIGHTNING_ADDRESS = "icyfireant7@primal.net";
+
+export default function TipModal({ children }: { children: React.ReactNode }) {
+  const [copied, setCopied] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
+  // Copy function
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(MY_LIGHTNING_ADDRESS);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>{children}</DialogTrigger>
+
+      <DialogContent className="bg-neutral-950 border border-neutral-800 text-white sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2 text-xl font-bold">
+            <Zap className="w-5 h-5 text-orange-500 fill-orange-500" />
+            Value for Value
+          </DialogTitle>
+          {/* 2. ADD DESCRIPTION TO FIX CONSOLE WARNING */}
+          <DialogDescription className="text-neutral-400">
+            Support the project via Lightning Network.
+          </DialogDescription>
+        </DialogHeader>
+
+        <div className="flex flex-col items-center justify-center p-6 space-y-6">
+          {/* QR Code Container */}
+          <div className="relative group">
+            <div className="absolute -inset-1 bg-gradient-to-r from-orange-600 to-purple-600 rounded-lg blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200" />
+            <div className="relative bg-white p-4 rounded-lg">
+              {/* 3. FIX: Remove 'lightning:' prefix for the QR code value. 
+                  Most wallets prefer the raw text "user@domain.com" to resolve it. */}
+              <QRCode value={MY_LIGHTNING_ADDRESS} size={200} level="M" />
+            </div>
+          </div>
+
+          <div className="text-center space-y-2">
+            <p className="text-neutral-400 text-sm">
+              Scan with any Lightning Wallet
+            </p>
+            <p className="font-mono text-orange-500 font-bold bg-orange-950/30 px-3 py-1 rounded border border-orange-500/20 select-all">
+              {MY_LIGHTNING_ADDRESS}
+            </p>
+          </div>
+
+          <div className="flex gap-2 w-full">
+            <Button
+              className="flex-1 bg-neutral-900 border border-neutral-800 hover:bg-neutral-800 text-white"
+              onClick={copyToClipboard}
+            >
+              {copied ? (
+                <Check className="w-4 h-4 mr-2 text-green-500" />
+              ) : (
+                <Copy className="w-4 h-4 mr-2" />
+              )}
+              {copied ? "Copied!" : "Copy Address"}
+            </Button>
+
+            {/* Keep 'lightning:' here, as this triggers the app to open */}
+            <Button
+              className="flex-1 bg-orange-600 hover:bg-orange-700 text-white"
+              onClick={() =>
+                (window.location.href = `lightning:${MY_LIGHTNING_ADDRESS}`)
+              }
+            >
+              <Zap className="w-4 h-4 mr-2 fill-white" />
+              Open Wallet
+            </Button>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+
+
+================================================
+FILE: src/components/animations/FadeIn.tsx
+================================================
+"use client";
+
+import { motion } from "framer-motion";
+
+export function FadeIn({
+  children,
+  delay = 0,
+  className,
+}: {
+  children: React.ReactNode;
+  delay?: number;
+  className?: string;
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.5, delay, ease: "easeOut" }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+
+
+================================================
+FILE: src/components/dashboard/IntroCard.tsx
+================================================
+"use client";
+
+import { Icons } from "@/components/Icons";
+import TipModal from "@/components/TipModal";
+import { Button } from "@/components/ui/button";
+import { Bitcoin, ArrowRight, Terminal } from "lucide-react";
+
+export default function IntroCard() {
+  return (
+    <div className="flex flex-col justify-between h-full space-y-6">
+      <div>
+        <div className="inline-flex items-center rounded-full border border-orange-500/30 bg-orange-500/10 px-2 py-1 text-[10px] sm:text-xs font-medium text-orange-500 mb-4 backdrop-blur-md">
+          <span className="flex h-1.5 w-1.5 rounded-full bg-orange-500 mr-2 animate-pulse"></span>
+          SOVEREIGN WEB
+        </div>
+
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tighter text-white leading-tight">
+          Engineering <br />
+          <span className="bg-gradient-to-r from-orange-400 via-orange-500 to-purple-600 bg-clip-text text-transparent">
+            Freedom.
+          </span>
+        </h1>
+
+        <p className="text-sm sm:text-base text-neutral-400 mt-4 leading-relaxed max-w-lg">
+          We architect censorship-resistant infrastructure and intelligent
+          agents. From Bitcoin consensus layers to self-hosted AI pipelines.
+        </p>
+      </div>
+
+      <div className="space-y-4">
+        <div className="flex flex-wrap gap-3">
+          <TipModal>
+            <Button className="h-10 px-6 bg-white text-black hover:bg-neutral-200 font-bold text-sm transition-all shadow-[0_0_20px_rgba(255,255,255,0.1)]">
+              <Bitcoin className="mr-2 h-4 w-4 text-orange-600" />
+              Partner
+            </Button>
+          </TipModal>
+
+          <a
+            href="https://github.com/maximotodev/sovereign-portfolio"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Button
+              variant="outline"
+              className="h-10 px-6 border-neutral-700 text-white hover:bg-neutral-800 text-sm group"
+            >
+              <Icons.gitHub className="mr-2 h-4 w-4 group-hover:text-white" />
+              Code
+              <ArrowRight className="ml-2 w-3 h-3 opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all" />
+            </Button>
+          </a>
+        </div>
+
+        <div className="flex items-center gap-3 text-xs text-neutral-500 font-mono border-t border-neutral-800 pt-4">
+          <div className="flex items-center gap-1.5">
+            <Terminal className="w-3 h-3" />
+            <span>Full Stack</span>
+          </div>
+          <div className="w-1 h-1 bg-neutral-700 rounded-full" />
+          <div>Rust / TS / Python</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+
+================================================
+FILE: src/components/layout/Header.tsx
+================================================
+import { Icons } from "@/components/Icons";
+import TipModal from "@/components/TipModal";
+import { Button } from "@/components/ui/button";
+
+export function Header() {
+  return (
+    <header className="sticky top-0 z-50 w-full border-b border-neutral-800 bg-neutral-950/80 backdrop-blur-md">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 h-16 flex items-center justify-between">
+        {/* Logo / Name */}
+        <div className="font-bold tracking-tight text-lg md:text-xl select-none truncate">
+          MAXIMOTO<span className="text-orange-500">.DEV</span>
+        </div>
+
+        {/* Right Actions */}
+        <div className="flex items-center gap-4">
+          {/* GitHub Link: Hidden on small mobile, visible on tablet+ */}
+          <a
+            href="https://github.com/maximotodev"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden sm:flex items-center gap-2 text-sm font-mono text-neutral-400 hover:text-white transition-colors"
+          >
+            <Icons.gitHub className="h-4 w-4" />
+            <span>GITHUB</span>
+          </a>
+
+          <span className="hidden sm:inline text-neutral-800">|</span>
+
+          {/* Node Status: Hidden on mobile */}
+          <div className="hidden md:flex items-center gap-2">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+            </span>
+            <span className="text-sm font-mono text-green-500">
+              NODE ONLINE
+            </span>
+          </div>
+
+          <span className="hidden md:inline text-neutral-800">|</span>
+
+          {/* Tip Button: Visible everywhere */}
+          <TipModal>
+            <Button
+              size="sm"
+              className="bg-orange-600 hover:bg-orange-700 text-white border-none font-bold text-xs md:text-sm px-3 md:px-4"
+            >
+              Tip Sats
+            </Button>
+          </TipModal>
+        </div>
+      </div>
+    </header>
+  );
+}
+
+
+
+================================================
+FILE: src/components/layout/Navbar.tsx
+================================================
+"use client";
+
+import { Home, Cpu, FolderGit2, MessageSquare, Terminal } from "lucide-react";
+import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
+
+const navItems = [
+  { name: "Home", icon: Home, id: "hero" },
+  { name: "System", icon: Cpu, id: "command-center" },
+  { name: "Work", icon: FolderGit2, id: "work" },
+  { name: "Guestbook", icon: MessageSquare, id: "guestbook" },
+];
+
+export function Navbar() {
+  const scrollTo = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  return (
+    <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50">
+      <div className="flex items-center gap-2 p-2 rounded-full border border-white/10 bg-neutral-900/80 backdrop-blur-xl shadow-2xl">
+        {navItems.map((item) => (
+          <button
+            key={item.name}
+            onClick={() => scrollTo(item.id)}
+            className="group relative p-3 rounded-full hover:bg-white/10 transition-colors"
+          >
+            <item.icon className="w-5 h-5 text-neutral-400 group-hover:text-white transition-colors" />
+
+            {/* Tooltip */}
+            <span className="absolute -top-10 left-1/2 -translate-x-1/2 px-2 py-1 bg-black border border-white/10 rounded text-[10px] text-white opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+              {item.name}
+            </span>
+          </button>
+        ))}
+        <div className="w-px h-6 bg-white/10 mx-2" />
+        <div className="px-3 flex items-center gap-2">
+          <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+          <span className="text-[10px] font-mono text-neutral-400 uppercase">
+            Online
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+
+================================================
+FILE: src/components/sections/BlogPreview.tsx
+================================================
+import { POSTS } from "@/lib/data";
+import Link from "next/link";
+import { Calendar } from "lucide-react";
+
+export function BlogPreview() {
+  return (
+    <section className="py-12">
+      <h2 className="text-3xl font-bold mb-8">Latest Thoughts</h2>
+      <div className="space-y-4">
+        {POSTS.map((post) => (
+          <Link
+            key={post.id}
+            href={`/blog/${post.slug}`}
+            className="block group p-6 rounded-xl bg-neutral-900/30 border border-neutral-800 hover:bg-neutral-900 hover:border-neutral-700 transition-all"
+          >
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div>
+                <h3 className="text-xl font-bold text-neutral-200 group-hover:text-orange-500 transition-colors">
+                  {post.title}
+                </h3>
+                <p className="text-neutral-400 text-sm mt-2 line-clamp-2 md:line-clamp-1">
+                  {/* Strip markdown for preview roughly */}
+                  {post.content.substring(0, 150).replace(/#/g, "")}...
+                </p>
+              </div>
+              <div className="flex items-center gap-2 text-xs font-mono text-neutral-500 shrink-0">
+                <Calendar className="w-3 h-3" />
+                {post.publishedDate}
+              </div>
+            </div>
+          </Link>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+
+
+================================================
+FILE: src/components/sections/Certifications.tsx
+================================================
+import { CERTIFICATIONS } from "@/lib/data";
+import { Award } from "lucide-react";
+
+export function Certifications() {
+  return (
+    <section className="py-8">
+      <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+        <Award className="text-orange-500" /> Certifications
+      </h2>
+
+      {/* 
+         FIXED GRID LAYOUT:
+         - Mobile (<sm): 1 column
+         - Tablet (sm): 2 columns (It has full width here)
+         - Desktop (lg): 1 column (It moves to the sidebar here, so it must stack)
+      */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
+        {CERTIFICATIONS.map((cert) => (
+          <a
+            key={cert.id}
+            href={cert.url}
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-start gap-4 p-4 rounded-lg bg-neutral-900/50 border border-neutral-800 hover:bg-neutral-900 hover:border-neutral-700 transition-all group"
+          >
+            {/* Icon: slightly smaller and shrink-0 to prevent squashing */}
+            <div className="mt-1 text-orange-500/50 group-hover:text-orange-500 transition-colors shrink-0">
+              <Award className="w-5 h-5" />
+            </div>
+
+            <div className="min-w-0 flex-1">
+              {/* Title: Added leading-snug for better multi-line readability */}
+              <h4 className="font-bold text-sm text-neutral-200 group-hover:text-white transition-colors leading-snug">
+                {cert.name}
+              </h4>
+
+              {/* Metadata: Flex wrap allows date to drop down if org name is long */}
+              <div className="flex flex-wrap justify-between items-center mt-2 gap-y-1 gap-x-2">
+                <span className="text-xs text-neutral-500 font-mono">
+                  {cert.organization}
+                </span>
+                <span className="text-xs text-neutral-600 whitespace-nowrap bg-neutral-900 px-1.5 py-0.5 rounded border border-neutral-800">
+                  {cert.date.split("-")[0]}
+                </span>
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+
+
+================================================
+FILE: src/components/sections/Projects.tsx
+================================================
+import { PROJECTS } from "@/lib/data";
+import { ExternalLink } from "lucide-react";
+import Image from "next/image";
+import { Icons } from "@/components/Icons";
+
+export function Projects() {
+  return (
+    <section className="py-12" id="projects">
+      <h2 className="text-3xl font-bold mb-8 flex items-center gap-2">
+        <span className="text-orange-500">#</span> Open Source
+      </h2>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {PROJECTS.map((project) => (
+          <div
+            key={project.id}
+            className="group relative bg-neutral-900 border border-neutral-800 rounded-xl overflow-hidden hover:border-orange-500/50 transition-colors"
+          >
+            {/* Image Overlay */}
+            <div className="relative h-48 w-full overflow-hidden">
+              <div className="absolute inset-0 bg-neutral-950/20 group-hover:bg-transparent transition-colors z-10" />
+              <Image
+                src={project.image}
+                alt={project.title}
+                fill
+                // FIX: Tell browser: "Full width on mobile, half width on desktop"
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+            </div>
+
+            <div className="p-6">
+              <div className="flex justify-between items-start mb-4">
+                <h3 className="text-xl font-bold text-neutral-100">
+                  {project.title}
+                </h3>
+                <div className="flex gap-2">
+                  <a
+                    href={project.repoUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-neutral-400 hover:text-white transition-colors"
+                  >
+                    <Icons.gitHub className="w-5 h-5" />
+                  </a>
+                  <a
+                    href={project.liveUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-neutral-400 hover:text-orange-500 transition-colors"
+                  >
+                    <ExternalLink className="w-5 h-5" />
+                  </a>
+                </div>
+              </div>
+
+              <p className="text-neutral-400 text-sm leading-relaxed mb-4 line-clamp-3">
+                {project.description}
+              </p>
+
+              <div className="flex flex-wrap gap-2">
+                {project.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="text-[10px] font-mono uppercase bg-neutral-800 text-neutral-300 px-2 py-1 rounded"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+
+
+================================================
+FILE: src/components/sections/dashboard/CommandCenter.tsx
+================================================
+import { BentoGrid, BentoItem } from "@/components/BentoGrid";
+import AIChat from "@/components/AIChat";
+import NodeStatus from "@/components/NodeStatus";
+import TechCloud from "@/components/TechCloud";
+import GithubMetrics from "@/components/GithubMetrics";
+import { Cpu, Server, Code2, Activity } from "lucide-react";
+
+export function CommandCenter() {
+  return (
+    <section id="command-center" className="py-24 scroll-mt-12">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="mb-12 border-l-2 border-orange-500 pl-6">
+          <h2 className="text-3xl font-bold text-white mb-2">Command Center</h2>
+          <p className="text-neutral-400">
+            Live telemetry from my sovereign infrastructure.
+          </p>
+        </div>
+
+        <BentoGrid>
+          {/* 1. The Brain (AI) - Primary Focus */}
+          <BentoItem
+            title="Neural Interface (RAG)"
+            description="Llama-3 model with access to my database."
+            header={
+              <div className="h-full min-h-[450px] w-full">
+                <AIChat />
+              </div>
+            }
+            className="md:col-span-2 md:row-span-2 bg-neutral-900/50"
+            icon={<Cpu className="h-4 w-4 text-purple-500" />}
+          />
+
+          {/* 2. The Heartbeat (Node) */}
+          <BentoItem
+            title="Consensus Layer"
+            description="RaspiBlitz Mainnet Node."
+            header={
+              <div className="h-full w-full">
+                <NodeStatus />
+              </div>
+            }
+            className="md:col-span-1"
+            icon={<Server className="h-4 w-4 text-orange-500" />}
+          />
+
+          {/* 3. The Arsenal (Tech Cloud) */}
+          <BentoItem
+            title="Tech Arsenal"
+            description="Languages & Frameworks."
+            header={
+              <div className="h-full min-h-[200px] flex items-center justify-center overflow-hidden">
+                <TechCloud />
+              </div>
+            }
+            className="md:col-span-1"
+            icon={<Code2 className="h-4 w-4 text-blue-500" />}
+          />
+
+          {/* 4. The Output (GitHub) - Wide Bottom */}
+          <BentoItem
+            title="Engineering Velocity"
+            description="Code shipping metrics."
+            header={<GithubMetrics />}
+            className="md:col-span-3 bg-neutral-900/50"
+            icon={<Activity className="h-4 w-4 text-green-500" />}
+          />
+        </BentoGrid>
+      </div>
+    </section>
+  );
+}
+
+
+
+================================================
+FILE: src/components/sections/hero/HeroSection.tsx
+================================================
+import { Button } from "@/components/ui/button";
+import { ArrowDown } from "lucide-react";
+import { FadeIn } from "@/components/animations/FadeIn";
+
+export function HeroSection() {
+  return (
+    <section
+      id="hero"
+      className="min-h-[80vh] flex flex-col justify-center items-center text-center relative overflow-hidden pt-20"
+    >
+      {/* Background Ambience */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] bg-orange-600/20 rounded-[100%] blur-[120px] opacity-20 pointer-events-none" />
+
+      <FadeIn>
+        <div className="inline-flex items-center gap-2 border border-white/10 bg-white/5 rounded-full px-4 py-1.5 mb-8 backdrop-blur-md">
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-orange-500"></span>
+          </span>
+          <span className="text-xs font-mono text-orange-200 tracking-wider">
+            MAXIMOTO LABS
+          </span>
+        </div>
+      </FadeIn>
+
+      <FadeIn delay={0.1}>
+        <h1 className="text-6xl md:text-8xl font-bold tracking-tighter mb-6 text-white max-w-4xl mx-auto leading-tight">
+          Architecting <br />
+          <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/40">
+            Sovereignty.
+          </span>
+        </h1>
+      </FadeIn>
+
+      <FadeIn delay={0.2}>
+        <p className="text-lg md:text-xl text-neutral-400 max-w-2xl mx-auto leading-relaxed mb-12">
+          Full Stack Engineering meets Cypherpunk Philosophy. Building
+          censorship-resistant infrastructure, AI agents, and Bitcoin consensus
+          layers.
+        </p>
+      </FadeIn>
+
+      <FadeIn delay={0.3}>
+        <div className="flex flex-col items-center gap-4">
+          <p className="text-xs font-mono text-neutral-600 uppercase tracking-widest">
+            Scroll to Initialize System
+          </p>
+          <ArrowDown className="w-4 h-4 text-neutral-600 animate-bounce" />
+        </div>
+      </FadeIn>
+    </section>
+  );
+}
+
+
+
+================================================
+FILE: src/components/sections/work/WorkSection.tsx
+================================================
+import { Projects } from "@/components/sections/Projects";
+import { BlogPreview } from "@/components/sections/BlogPreview";
+import { Certifications } from "@/components/sections/Certifications";
+
+export function WorkSection() {
+  return (
+    <section
+      id="work"
+      className="py-24 bg-neutral-950/50 border-y border-neutral-900 scroll-mt-12"
+    >
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="mb-16 text-center">
+          <h2 className="text-4xl font-bold text-white mb-4">Proof of Work</h2>
+          <p className="text-neutral-400 max-w-2xl mx-auto">
+            Open source contributions, technical writing, and verified
+            credentials.
+          </p>
+        </div>
+
+        <div className="space-y-24">
+          <Projects />
+
+          <div className="grid lg:grid-cols-3 gap-12 pt-12 border-t border-neutral-800/50">
+            <div className="lg:col-span-2">
+              <BlogPreview />
+            </div>
+            <div className="lg:col-span-1">
+              <div className="sticky top-24">
+                <Certifications />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+
+
+================================================
+FILE: src/components/ui/avatar.tsx
+================================================
+"use client"
+
+import * as React from "react"
+import * as AvatarPrimitive from "@radix-ui/react-avatar"
+
+import { cn } from "@/lib/utils"
+
+function Avatar({
+  className,
+  ...props
+}: React.ComponentProps<typeof AvatarPrimitive.Root>) {
+  return (
+    <AvatarPrimitive.Root
+      data-slot="avatar"
+      className={cn(
+        "relative flex size-8 shrink-0 overflow-hidden rounded-full",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+function AvatarImage({
+  className,
+  ...props
+}: React.ComponentProps<typeof AvatarPrimitive.Image>) {
+  return (
+    <AvatarPrimitive.Image
+      data-slot="avatar-image"
+      className={cn("aspect-square size-full", className)}
+      {...props}
+    />
+  )
+}
+
+function AvatarFallback({
+  className,
+  ...props
+}: React.ComponentProps<typeof AvatarPrimitive.Fallback>) {
+  return (
+    <AvatarPrimitive.Fallback
+      data-slot="avatar-fallback"
+      className={cn(
+        "bg-muted flex size-full items-center justify-center rounded-full",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+export { Avatar, AvatarImage, AvatarFallback }
+
+
+
+================================================
+FILE: src/components/ui/badge.tsx
+================================================
+import * as React from "react"
+import { Slot } from "@radix-ui/react-slot"
+import { cva, type VariantProps } from "class-variance-authority"
+
+import { cn } from "@/lib/utils"
+
+const badgeVariants = cva(
+  "inline-flex items-center justify-center rounded-full border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden",
+  {
+    variants: {
+      variant: {
+        default:
+          "border-transparent bg-primary text-primary-foreground [a&]:hover:bg-primary/90",
+        secondary:
+          "border-transparent bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90",
+        destructive:
+          "border-transparent bg-destructive text-white [a&]:hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
+        outline:
+          "text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+    },
+  }
+)
+
+function Badge({
+  className,
+  variant,
+  asChild = false,
+  ...props
+}: React.ComponentProps<"span"> &
+  VariantProps<typeof badgeVariants> & { asChild?: boolean }) {
+  const Comp = asChild ? Slot : "span"
+
+  return (
+    <Comp
+      data-slot="badge"
+      className={cn(badgeVariants({ variant }), className)}
+      {...props}
+    />
+  )
+}
+
+export { Badge, badgeVariants }
+
+
+
+================================================
+FILE: src/components/ui/button.tsx
+================================================
+import * as React from "react"
+import { Slot } from "@radix-ui/react-slot"
+import { cva, type VariantProps } from "class-variance-authority"
+
+import { cn } from "@/lib/utils"
+
+const buttonVariants = cva(
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+  {
+    variants: {
+      variant: {
+        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        destructive:
+          "bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
+        outline:
+          "border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
+        secondary:
+          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+        ghost:
+          "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
+        link: "text-primary underline-offset-4 hover:underline",
+      },
+      size: {
+        default: "h-9 px-4 py-2 has-[>svg]:px-3",
+        sm: "h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5",
+        lg: "h-10 rounded-md px-6 has-[>svg]:px-4",
+        icon: "size-9",
+        "icon-sm": "size-8",
+        "icon-lg": "size-10",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default",
+    },
+  }
+)
+
+function Button({
+  className,
+  variant,
+  size,
+  asChild = false,
+  ...props
+}: React.ComponentProps<"button"> &
+  VariantProps<typeof buttonVariants> & {
+    asChild?: boolean
+  }) {
+  const Comp = asChild ? Slot : "button"
+
+  return (
+    <Comp
+      data-slot="button"
+      className={cn(buttonVariants({ variant, size, className }))}
+      {...props}
+    />
+  )
+}
+
+export { Button, buttonVariants }
+
+
+
+================================================
+FILE: src/components/ui/card.tsx
+================================================
+import * as React from "react"
+
+import { cn } from "@/lib/utils"
+
+function Card({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="card"
+      className={cn(
+        "bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+function CardHeader({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="card-header"
+      className={cn(
+        "@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+function CardTitle({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="card-title"
+      className={cn("leading-none font-semibold", className)}
+      {...props}
+    />
+  )
+}
+
+function CardDescription({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="card-description"
+      className={cn("text-muted-foreground text-sm", className)}
+      {...props}
+    />
+  )
+}
+
+function CardAction({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="card-action"
+      className={cn(
+        "col-start-2 row-span-2 row-start-1 self-start justify-self-end",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+function CardContent({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="card-content"
+      className={cn("px-6", className)}
+      {...props}
+    />
+  )
+}
+
+function CardFooter({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="card-footer"
+      className={cn("flex items-center px-6 [.border-t]:pt-6", className)}
+      {...props}
+    />
+  )
+}
+
+export {
+  Card,
+  CardHeader,
+  CardFooter,
+  CardTitle,
+  CardAction,
+  CardDescription,
+  CardContent,
+}
+
+
+
+================================================
+FILE: src/components/ui/dialog.tsx
+================================================
+"use client"
+
+import * as React from "react"
+import * as DialogPrimitive from "@radix-ui/react-dialog"
+import { XIcon } from "lucide-react"
+
+import { cn } from "@/lib/utils"
+
+function Dialog({
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Root>) {
+  return <DialogPrimitive.Root data-slot="dialog" {...props} />
+}
+
+function DialogTrigger({
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Trigger>) {
+  return <DialogPrimitive.Trigger data-slot="dialog-trigger" {...props} />
+}
+
+function DialogPortal({
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Portal>) {
+  return <DialogPrimitive.Portal data-slot="dialog-portal" {...props} />
+}
+
+function DialogClose({
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Close>) {
+  return <DialogPrimitive.Close data-slot="dialog-close" {...props} />
+}
+
+function DialogOverlay({
+  className,
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Overlay>) {
+  return (
+    <DialogPrimitive.Overlay
+      data-slot="dialog-overlay"
+      className={cn(
+        "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-black/50",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+function DialogContent({
+  className,
+  children,
+  showCloseButton = true,
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Content> & {
+  showCloseButton?: boolean
+}) {
+  return (
+    <DialogPortal data-slot="dialog-portal">
+      <DialogOverlay />
+      <DialogPrimitive.Content
+        data-slot="dialog-content"
+        className={cn(
+          "bg-background data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-lg border p-6 shadow-lg duration-200 outline-none sm:max-w-lg",
+          className
+        )}
+        {...props}
+      >
+        {children}
+        {showCloseButton && (
+          <DialogPrimitive.Close
+            data-slot="dialog-close"
+            className="ring-offset-background focus:ring-ring data-[state=open]:bg-accent data-[state=open]:text-muted-foreground absolute top-4 right-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4"
+          >
+            <XIcon />
+            <span className="sr-only">Close</span>
+          </DialogPrimitive.Close>
+        )}
+      </DialogPrimitive.Content>
+    </DialogPortal>
+  )
+}
+
+function DialogHeader({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="dialog-header"
+      className={cn("flex flex-col gap-2 text-center sm:text-left", className)}
+      {...props}
+    />
+  )
+}
+
+function DialogFooter({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="dialog-footer"
+      className={cn(
+        "flex flex-col-reverse gap-2 sm:flex-row sm:justify-end",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+function DialogTitle({
+  className,
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Title>) {
+  return (
+    <DialogPrimitive.Title
+      data-slot="dialog-title"
+      className={cn("text-lg leading-none font-semibold", className)}
+      {...props}
+    />
+  )
+}
+
+function DialogDescription({
+  className,
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Description>) {
+  return (
+    <DialogPrimitive.Description
+      data-slot="dialog-description"
+      className={cn("text-muted-foreground text-sm", className)}
+      {...props}
+    />
+  )
+}
+
+export {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogOverlay,
+  DialogPortal,
+  DialogTitle,
+  DialogTrigger,
+}
+
+
+
+================================================
+FILE: src/components/ui/input.tsx
+================================================
+import * as React from "react"
+
+import { cn } from "@/lib/utils"
+
+function Input({ className, type, ...props }: React.ComponentProps<"input">) {
+  return (
+    <input
+      type={type}
+      data-slot="input"
+      className={cn(
+        "file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
+        "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
+        "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
+export { Input }
+
+
+
+================================================
+FILE: src/components/ui/popover.tsx
+================================================
+"use client";
+
+import * as React from "react";
+import * as PopoverPrimitive from "@radix-ui/react-popover";
+
+import { cn } from "@/lib/utils";
+
+const Popover = PopoverPrimitive.Root;
+
+const PopoverTrigger = PopoverPrimitive.Trigger;
+
+const PopoverContent = React.forwardRef<
+  React.ElementRef<typeof PopoverPrimitive.Content>,
+  React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Content>
+>(({ className, align = "center", sideOffset = 4, ...props }, ref) => (
+  <PopoverPrimitive.Portal>
+    <PopoverPrimitive.Content
+      ref={ref}
+      align={align}
+      sideOffset={sideOffset}
+      className={cn(
+        "z-50 w-72 rounded-md border bg-popover p-4 text-popover-foreground shadow-md outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+        className
+      )}
+      {...props}
+    />
+  </PopoverPrimitive.Portal>
+));
+PopoverContent.displayName = PopoverPrimitive.Content.displayName;
+
+export { Popover, PopoverTrigger, PopoverContent };
+
+
+
+================================================
+FILE: src/components/ui/scroll-area.tsx
+================================================
+"use client"
+
+import * as React from "react"
+import * as ScrollAreaPrimitive from "@radix-ui/react-scroll-area"
+
+import { cn } from "@/lib/utils"
+
+function ScrollArea({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<typeof ScrollAreaPrimitive.Root>) {
+  return (
+    <ScrollAreaPrimitive.Root
+      data-slot="scroll-area"
+      className={cn("relative", className)}
+      {...props}
+    >
+      <ScrollAreaPrimitive.Viewport
+        data-slot="scroll-area-viewport"
+        className="focus-visible:ring-ring/50 size-full rounded-[inherit] transition-[color,box-shadow] outline-none focus-visible:ring-[3px] focus-visible:outline-1"
+      >
+        {children}
+      </ScrollAreaPrimitive.Viewport>
+      <ScrollBar />
+      <ScrollAreaPrimitive.Corner />
+    </ScrollAreaPrimitive.Root>
+  )
+}
+
+function ScrollBar({
+  className,
+  orientation = "vertical",
+  ...props
+}: React.ComponentProps<typeof ScrollAreaPrimitive.ScrollAreaScrollbar>) {
+  return (
+    <ScrollAreaPrimitive.ScrollAreaScrollbar
+      data-slot="scroll-area-scrollbar"
+      orientation={orientation}
+      className={cn(
+        "flex touch-none p-px transition-colors select-none",
+        orientation === "vertical" &&
+          "h-full w-2.5 border-l border-l-transparent",
+        orientation === "horizontal" &&
+          "h-2.5 flex-col border-t border-t-transparent",
+        className
+      )}
+      {...props}
+    >
+      <ScrollAreaPrimitive.ScrollAreaThumb
+        data-slot="scroll-area-thumb"
+        className="bg-border relative flex-1 rounded-full"
+      />
+    </ScrollAreaPrimitive.ScrollAreaScrollbar>
+  )
+}
+
+export { ScrollArea, ScrollBar }
+
+
+
+================================================
+FILE: src/components/ui/skeleton.tsx
+================================================
+import { cn } from "@/lib/utils"
+
+function Skeleton({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="skeleton"
+      className={cn("bg-accent animate-pulse rounded-md", className)}
+      {...props}
+    />
+  )
+}
+
+export { Skeleton }
+
+
+
+================================================
+FILE: src/components/ui/tabs.tsx
+================================================
+"use client";
+
+import * as React from "react";
+import * as TabsPrimitive from "@radix-ui/react-tabs";
+
+import { cn } from "@/lib/utils";
+
+const Tabs = TabsPrimitive.Root;
+
+const TabsList = React.forwardRef<
+  React.ElementRef<typeof TabsPrimitive.List>,
+  React.ComponentPropsWithoutRef<typeof TabsPrimitive.List>
+>(({ className, ...props }, ref) => (
+  <TabsPrimitive.List
+    ref={ref}
+    className={cn(
+      "inline-flex h-10 items-center justify-center rounded-md bg-muted p-1 text-muted-foreground",
+      className
+    )}
+    {...props}
+  />
+));
+TabsList.displayName = TabsPrimitive.List.displayName;
+
+const TabsTrigger = React.forwardRef<
+  React.ElementRef<typeof TabsPrimitive.Trigger>,
+  React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger>
+>(({ className, ...props }, ref) => (
+  <TabsPrimitive.Trigger
+    ref={ref}
+    className={cn(
+      "inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm",
+      className
+    )}
+    {...props}
+  />
+));
+TabsTrigger.displayName = TabsPrimitive.Trigger.displayName;
+
+const TabsContent = React.forwardRef<
+  React.ElementRef<typeof TabsPrimitive.Content>,
+  React.ComponentPropsWithoutRef<typeof TabsPrimitive.Content>
+>(({ className, ...props }, ref) => (
+  <TabsPrimitive.Content
+    ref={ref}
+    className={cn(
+      "mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+      className
+    )}
+    {...props}
+  />
+));
+TabsContent.displayName = TabsPrimitive.Content.displayName;
+
+export { Tabs, TabsList, TabsTrigger, TabsContent };
+
+
+
+================================================
+FILE: src/lib/context.ts
+================================================
+export const PORTFOLIO_CONTEXT = `
+You are an AI assistant for Diego's portfolio.
+Diego is a Full Stack Cypherpunk Engineer running a RaspiBlitz node.
+
+RESUME / SKILLS:
+- Languages: TypeScript, Rust, Python.
+- Frameworks: Next.js 15, Tailwind CSS, Shadcn UI.
+- Bitcoin: LND, Lightning Network, Nostr protocol (NDK).
+- Infrastructure: Self-hosted RaspiBlitz, Docker, Cloudflare Tunnels.
+
+BEHAVIOR:
+- Answer questions concisely and professionally.
+- If asked about technical skills, give specific examples from his stack.
+- If asked "Who is Diego?", summarize his bio.
+- Do not hallucinate projects not listed here.
+`;
+
+
+
+================================================
+FILE: src/lib/data.ts
+================================================
+// Define Types
+export interface Certification {
+  id: number;
+  name: string;
+  organization: string;
+  url: string;
+  date: string;
+}
+
+export interface Project {
+  id: number;
+  title: string;
+  description: string;
+  repoUrl: string;
+  liveUrl: string;
+  image: string;
+  tags: string[];
+}
+
+export interface BlogPost {
+  id: number;
+  title: string;
+  slug: string;
+  content: string; // Markdown
+  publishedDate: string;
+  isPublished: boolean;
+}
+
+// DATA STORE
+export const CERTIFICATIONS: Certification[] = [
+  {
+    id: 1,
+    name: "Google IT Automation with Python",
+    organization: "Coursera",
+    url: "https://www.credly.com/go/yvtuplTu",
+    date: "2025-02-13",
+  },
+  {
+    id: 2,
+    name: "Google AI Essentials",
+    organization: "Coursera",
+    url: "https://www.coursera.org/verify/JFHTU7CWBPSP/",
+    date: "2025-03-05",
+  },
+  {
+    id: 3,
+    name: "Meta Back-End Development",
+    organization: "Coursera",
+    url: "https://www.coursera.org/verify/CLX29DGQ9THH",
+    date: "2023-10-03",
+  },
+  {
+    id: 4,
+    name: "Linux and SQL",
+    organization: "Coursera",
+    url: "https://coursera.org/verify/Z85DMG59FUN5",
+    date: "2025-06-30",
+  },
+  {
+    id: 5,
+    name: "The Frontend Developer Career Path",
+    organization: "Scrimba",
+    url: "https://scrimba.com/certificate/uKLBwESL/gfrontend",
+    date: "2023-05-23",
+  },
+  {
+    id: 6,
+    name: "Configuration Management and the Cloud",
+    organization: "Coursera",
+    url: "https://coursera.org/verify/OEYQ6UYY3SUN",
+    date: "2025-02-09",
+  },
+];
+
+export const PROJECTS: Project[] = [
+  {
+    id: 1,
+    title: "Tribev2",
+    description:
+      "A modern social media platform designed to connect communities and foster interaction. Built with a scalable architecture to handle real-time updates.",
+    repoUrl: "https://github.com/maximotodev/tribev2",
+    liveUrl: "https://tribev2.vercel.app",
+    image: "https://i.ibb.co/Mk1C1gnP/tribev2.png",
+    tags: ["Social", "Scalable"],
+  },
+  {
+    id: 2,
+    title: "Bitcoin Chatbot",
+    description:
+      "Interactive chatbot providing real-time Bitcoin info, price tracking, and market trends using the Gemini API.",
+    repoUrl: "https://github.com/maximotodev/bitcoin-chatbot",
+    liveUrl: "https://bitcoin-chatbot.netlify.app",
+    image: "https://i.ibb.co/chVrPQWW/Screen-Shot-2025-07-10-at-9-10-59-PM.png",
+    tags: ["AI", "Bitcoin", "Gemini"],
+  },
+  {
+    id: 3,
+    title: "Gemini Quest",
+    description:
+      "Interactive trivia quiz web app powered by Gemini API. Flask backend, React + Vite frontend.",
+    repoUrl: "https://github.com/maximotodev/gemini-quest",
+    liveUrl: "https://gemini-quest.netlify.app",
+    image:
+      "https://i.ibb.co/N2Z79Rvs/Screen-Shot-2025-06-11-at-12-46-24-PM.png",
+    tags: ["Game", "AI", "Flask"],
+  },
+  {
+    id: 4,
+    title: "Mia Reynolds",
+    description: "Professional Portfolio Website for Mia Reynolds.",
+    repoUrl: "https://github.com/maximotodev/miareynolds",
+    liveUrl: "https://miareynolds.vercel.app",
+    image: "https://i.ibb.co/twDgyR0B/projects-mia-reynolds.png",
+    tags: ["Portfolio", "Design"],
+  },
+];
+
+// Note: I truncated the content for brevity in this file, but you should paste the full markdown from your JSON here.
+export const POSTS: BlogPost[] = [
+  {
+    id: 1,
+    title: "Embeddings: The Unsung Heroes of Modern AI",
+    slug: "embeddings-the-unsung-heroes-of-modern-ai",
+    publishedDate: "2025-07-29",
+    isPublished: true,
+    content:
+      '## How Do Machines Understand Meaning?\r\n\r\nComputers are fundamentally good at one thing: math. They don\'t understand words, images, or concepts in the way humans do. So how is it possible for a model like ChatGPT to grasp the nuance of a poem, or for a search engine to know that "king" and "queen" are related?\r\n\r\nThe answer lies in one of the most powerful and foundational concepts in modern artificial intelligence: **embeddings**.\r\n\r\nEmbeddings are the unsung heroes of the AI world. They are the crucial bridge that translates our complex, messy, and abstract world into the structured, numerical language that machines can actually work with.\r\n\r\n---\r\n\r\n### What Exactly is an Embedding?\r\n\r\nAt its core, an **embedding is a vector**—a list of numbers—that represents a piece of data. This "piece of data" could be anything: a word, a sentence, an entire document, an image, or even a product in an e-commerce catalog.\r\n\r\nBut it\'s not just any random list of numbers. A well-trained embedding model learns to create vectors such that the **distance between them in a high-dimensional space corresponds to their semantic similarity.**\r\n\r\nLet\'s break that down with an analogy.\r\n\r\nImagine a giant, multi-dimensional library. Instead of organizing books alphabetically, we organize them by their meaning.\r\n*   Books about "kings," "queens," and "princes" would be clustered together in one section.\r\n*   Books about "apples," "oranges," and "bananas" would be in another section, far away from the royalty section.\r\n*   Interestingly, the book "Snow White" might be situated somewhere between the "royalty" section and the "fruit" section, because it\'s related to both.\r\n\r\nIn this analogy, the "location" of each book is its embedding. It\'s a set of coordinates (`[x, y, z, ...]` ) that places it in a meaningful position relative to everything else.\r\n\r\n### How are Embeddings Created?\r\n\r\nEmbeddings are learned, not programmed. They are the output of a neural network that has been trained on a massive dataset. For example, a language model might be trained to predict the next word in a sentence. In the process of learning to do this, the model\'s internal layers develop a rich numerical representation—an embedding—for each word that captures its context and meaning.\r\n\r\nThe **AI Skill Matcher** on my own portfolio uses this exact technique. I use a pre-trained **Sentence Transformer** model (`all-MiniLM-L6-v2`) to convert a user\'s query and my project descriptions into 384-dimensional vectors. By calculating the **cosine similarity** (a measure of the angle between these vectors), the system can find the projects that are most semantically similar to the query, far beyond simple keyword matching.\r\n\r\n### Why Embeddings are a Game-Changer\r\n\r\nOnce you have a way to turn anything into a meaningful vector, you unlock a vast range of AI capabilities:\r\n\r\n1.  **Semantic Search:** This is what my Skill Matcher does. Instead of searching for "python," you can search for "backend web development language," and the model knows that a project with "Django" is a highly relevant result.\r\n\r\n2.  **Recommendation Engines:** How does Netflix know you might like a certain movie? It converts your viewing history and the movies in its catalog into embeddings. It then finds the movies whose embeddings are "closest" to yours in that high-dimensional space.\r\n\r\n3.  **Classification and Clustering:** You can feed these vectors into classic machine learning models to classify text (e.g., spam vs. not spam) or cluster similar documents together without even reading them.\r\n\r\n4.  **Multimodality:** As AI models become multimodal (understanding both text and images), they learn to place the embedding for the *word* "cat" very close to the embedding for a *picture* of a cat. This is the foundation of how models like GPT-4o work.\r\n\r\n---\r\n\r\n### Conclusion\r\n\r\nEmbeddings are the quiet workhorses of the AI revolution. They are the translator that allows us to apply powerful mathematical operations to abstract concepts like language and art. The next time you use a search engine, get a product recommendation, or chat with an LLM, remember that the magic begins with these powerful, meaning-packed lists of numbers.',
+  },
+  {
+    id: 2,
+    title: "How Bitcoin Solved the Byzantine Generals' Problem",
+    slug: "how-bitcoin-solved-the-byzantine-generals-problem",
+    publishedDate: "2025-07-29",
+    isPublished: true,
+    content:
+      "## A Problem of Trust in a World of Liars\r\n\r\nImagine a group of Byzantine generals surrounding an enemy city. They need to decide unanimously whether to attack or retreat. If they all attack together, they will win. If they all retreat together, they will survive to fight another day. But if some attack while others retreat, the result will be a catastrophic failure.\r\n\r\nThe challenge is that the generals can only communicate via messengers, and some of these messengers—or even some of the generals themselves—might be traitors. A traitorous general could send an \"Attack\" message to one general and a \"Retreat\" message to another, sowing chaos and ensuring defeat.\r\n\r\nThis is the **Byzantine Generals' Problem**, a classic thought experiment in computer science. At its core, it's a question of how to achieve consensus and establish a single, verifiable truth in a distributed network where some participants may be unreliable or malicious.\r\n\r\nFor decades, this was a largely unsolved problem. How could a decentralized network of computers, communicating over an untrusted channel like the internet, ever agree on a shared state of affairs without a central coordinator?\r\n\r\n---\r\n\r\n### Enter Satoshi Nakamoto\r\n\r\nIn 2008, the pseudonymous creator of Bitcoin, Satoshi Nakamoto, published a whitepaper that didn't just propose a new form of digital money; it presented an elegant, practical solution to the Byzantine Generals' Problem.\r\n\r\nBitcoin's solution isn't a single silver bullet, but a brilliant combination of four key concepts working in concert.\r\n\r\n#### 1. The Public Ledger (Blockchain)\r\n\r\nInstead of each general keeping their own private record of messages, Bitcoin proposes a **public ledger** that everyone can see. This ledger is a chain of \"blocks,\" where each block contains a list of transactions. Every participant (or \"node\") in the network keeps a full copy of this blockchain. This transparency means there's no room for private, conflicting messages. All actions are public.\r\n\r\n*   *In our analogy, this is like having a giant, public stone tablet in the middle of the generals' camp where every message is permanently carved for all to see.*\r\n\r\n#### 2. Proof-of-Work (The Cost of Lying)\r\n\r\nThis is Satoshi's most crucial innovation. To add a new block of transactions to the blockchain, a special class of nodes called \"miners\" must solve an incredibly difficult and computationally expensive mathematical puzzle. This process is known as **Proof-of-Work**.\r\n\r\nFinding the solution is hard, but verifying it is easy. The first miner to solve the puzzle gets to propose the next block and is rewarded with newly created bitcoin.\r\n\r\n*   *This is like requiring a general to perform a massive, verifiable feat of strength—like carving a complex statue—before their message can be added to the public stone tablet. It's too costly and time-consuming to create fake statues for different generals. It's much more profitable to do the work honestly and earn the reward.*\r\n\r\n#### 3. The Chain of Trust (Immutability)\r\n\r\nEach new block on the blockchain contains a cryptographic hash (a unique digital fingerprint) of the block that came before it. This creates a strong, unbroken chain. If a traitorous general tried to go back and alter a previous message on the stone tablet, it would change the tablet's fingerprint. This would break the chain, and all the other honest generals would immediately reject it as fraudulent.\r\n\r\nTo successfully rewrite history, an attacker would need to re-do the computationally expensive Proof-of-Work for the altered block and *all subsequent blocks* faster than the entire rest of the network combined—a feat considered practically impossible.\r\n\r\n#### 4. The Economic Incentive (Rewarding Honesty)\r\n\r\nFinally, Bitcoin aligns the economic incentives of the participants with the health of the network. The miners who perform the Proof-of-Work are rewarded in bitcoin for their honest participation. It is far more profitable for a miner to use their computational power to follow the rules and earn the block reward than it is to try and cheat the system, an act which would destroy the value of any bitcoin they might acquire.\r\n\r\n*   *The generals are rewarded for their honest work with gold coins that only have value if their empire is successful. Cheating leads to the empire's collapse, rendering their coins worthless.*\r\n\r\n---\r\n\r\n### Conclusion: A New Form of Trust\r\n\r\nBy combining a public ledger, a costly but verifiable work requirement, a chain of cryptographic proof, and a powerful economic incentive, Bitcoin allows a global, decentralized network of untrusting participants to agree on a single, shared history of transactions.\r\n\r\nIt allows them to coordinate a unified \"attack\" without a central commander, even in the presence of traitors. Bitcoin didn't just create digital money; it created a new form of trust, solving a problem that had stumped computer scientists for decades and unlocking the door for the entire world of decentralized technology that we see today.",
+  },
+  {
+    id: 3,
+    title: "Beyond the Hype: Three Deep Learning Trends",
+    slug: "beyond-the-hype-three-deep-learning-trends-shaping-our-future",
+    publishedDate: "2025-07-29",
+    isPublished: true,
+    content:
+      "## The AI Cambrian Explosion\r\n\r\nThe world of deep learning is moving at a breakneck pace. What was state-of-the-art just a year ago is now common practice, and new architectures and capabilities are emerging constantly. It's an exciting, and sometimes bewildering, time to be a developer in this space.\r\n\r\nBeyond the general hype of \"AI,\" there are several specific, powerful trends that are driving this innovation. Here are three of the most significant trends in deep learning that are not just theoretical but are actively shaping the products and services we use every day.\r\n\r\n---\r\n\r\n### 1. The Era of Foundation Models & LLMs\r\n\r\nThe most visible trend is the dominance of **Large Language Models (LLMs)** and, more broadly, **Foundation Models**. These are massive neural networks trained on vast, internet-scale datasets.\r\n\r\n*   **What they are:** Instead of training a small model for a single task (like sentiment analysis), a foundation model like GPT-4, Llama 3, or Claude 3 is pre-trained with a general understanding of language, reasoning, and even code.\r\n*   **Why it's a trend:** This \"pre-training\" paradigm is incredibly efficient. We no longer need massive, task-specific datasets. We can take a powerful foundation model and **fine-tune** it with a relatively small amount of data to make it an expert in a specific domain, like legal contract analysis or medical diagnostics. This has democratized access to powerful AI capabilities.\r\n*   **What's next:** Expect to see more specialized, smaller, and open-source foundation models that are fine-tuned for specific industries, as well as continued research into making these models more reliable and less prone to \"hallucination.\"\r\n\r\n### 2. Multimodality: AI That Sees and Hears\r\n\r\nFor years, AI models were specialists: one model for text, another for images, a third for audio. The second major trend is **multimodality**, where a single model can understand and process information from multiple sources simultaneously.\r\n\r\n*   **What it is:** Models like OpenAI's GPT-4o or Google's Gemini can accept a combination of text, images, and audio as input and generate responses that weave these modalities together. You can show it a picture of your refrigerator and ask, \"What can I make for dinner?\"\r\n*   **Why it's a trend:** This is a crucial step towards creating more human-like AI. We experience the world through multiple senses, and models that can do the same are capable of solving much more complex, real-world problems. This is powering everything from advanced accessibility tools that describe the world to visually impaired users to interactive design assistants.\r\n*   **What's next:** The next frontier is video. Models that can understand the temporal context of video streams will unlock a new wave of applications in robotics, autonomous systems, and content creation.\r\n\r\n### 3. Efficient AI: Doing More with Less\r\n\r\nWhile massive models grab the headlines, a powerful counter-trend is the drive for **AI efficiency**. As models become larger and more expensive to train and run, the need for smaller, faster, and more accessible models has become critical.\r\n\r\n*   **What it is:** This involves a suite of techniques like **quantization** (reducing the precision of the model's weights), **pruning** (removing unnecessary neural connections), and **knowledge distillation** (training a small \"student\" model to mimic a large \"teacher\" model).\r\n*   **Why it's a trend:** Efficient AI is what makes it possible to run powerful models on everyday devices like smartphones and laptops, rather than relying on massive cloud servers. This is essential for applications that require low latency, privacy (keeping data on-device), and offline functionality. The AI Skill Matcher on this very portfolio uses a small, efficient Sentence Transformer model that is perfect for its task without requiring a GPU.\r\n\r\n*   **What's next:** We are seeing the rise of \"Small Language Models\" (SLMs) like Microsoft's Phi-3, which can achieve remarkable performance while being small enough to run locally. This trend will bring powerful AI capabilities to edge devices, from cars to smart glasses.\r\n\r\n---\r\n\r\n### Conclusion\r\n\r\nThese three trends—Foundation Models, Multimodality, and Efficiency—are not mutually exclusive. They are intertwined forces pushing the boundaries of what's possible. The future of AI is not just about building the biggest models, but about building the smartest, most versatile, and most accessible ones. It's a future I'm excited to be building.",
+  },
+  {
+    id: 4,
+    title: "Building My Interactive Portfolio",
+    slug: "building-my-interactive-portfolio-a-deep-dive-into-the-tech-stack",
+    publishedDate: "2025-07-29",
+    isPublished: true,
+    content:
+      "## From Static Page to Dynamic Application\r\n\r\nWhen I decided to build my personal portfolio, I knew I wanted to create more than just a static HTML page. I wanted to build a living application—a testament to my skills as a full-stack developer that could dynamically update, showcase my work in interesting ways, and integrate with the modern, decentralized web. This post is a deep dive into the architecture and technology choices behind the very site you're reading this on.\r\n\r\n---\r\n\r\n### The Core Architecture: A Headless Approach\r\n\r\nI chose a modern, decoupled architecture with a distinct frontend and backend. This is a standard pattern for scalable web applications and offers several key advantages:\r\n\r\n1.  **Flexibility:** The frontend and backend can be developed, deployed, and scaled independently.\r\n2.  **Specialization:** It allows for using the best tool for the job—Python/Django for its robust backend capabilities and React for its rich, interactive user interfaces.\r\n3.  **API-First Design:** The entire application is powered by a RESTful API, a crucial skill in today's development landscape.\r\n\r\nHere's a high-level overview:\r\n\r\n- **Frontend:** A static single-page application (SPA) built with **React** and **Vite**, hosted on **Vercel** for global CDN delivery.\r\n- **Backend:** A REST API built with **Django** and **Django Rest Framework**, hosted on **Render**.\r\n- **Database:** A managed **PostgreSQL** instance, also on **Render**, serving as the single source of truth for my projects, certifications, and these blog posts.\r\n\r\n---\r\n\r\n### Key Features and the Tech Behind Them\r\n\r\n#### 1. The AI Skill Matcher\r\n\r\nThis is my favorite feature. Instead of just listing my projects, I wanted to create a tool for recruiters and clients. You can paste a job description or a list of keywords, and the backend uses a **Sentence Transformer model (`all-MiniLM-L6-v2`)** to perform a semantic search.\r\n\r\n*   **How it Works:** The model converts both the user's query and my project descriptions into high-dimensional vectors (embeddings). It then uses **Cosine Similarity** to find the projects that are most semantically related, even if the exact keywords don't match. This demonstrates a practical application of modern NLP techniques.\r\n\r\n#### 2. Nostr & Bitcoin Integration\r\n\r\nAs a believer in decentralization, I wanted to connect my portfolio to the open web.\r\n\r\n*   **Nostr Profile & Notes:** The backend includes a service that connects to public Nostr relays using the `pynostr` library. It fetches my latest profile data (a `kind:0` event) and my most recent public note (a `kind:1` event) and caches the results. This makes my portfolio a live reflection of my activity on the network.\r\n\r\n*   **Bitcoin Tipping:** The \"Tip Me\" button is powered by a backend wallet created with `bitcoinlib`. The backend generates a persistent SegWit address, which is then displayed in a modal on the frontend with a QR code. This provides a universal way for anyone to send an on-chain Bitcoin tip.\r\n\r\n#### 3. Dynamic Content Management\r\n\r\nAll the content you see—projects, certifications, and this very blog post—is managed through the built-in **Django Admin Panel**. I can add, edit, and delete content from a secure interface without ever needing to redeploy the application. This is the power of a true CMS-backed architecture.\r\n\r\n---\r\n\r\n### What I Learned\r\n\r\nBuilding this project was an incredible learning experience, especially the deployment process. Navigating the resource constraints of free-tier hosting, debugging CORS and `DisallowedHost` errors, and ensuring a smooth CI/CD pipeline between GitHub, Render, and Vercel provided invaluable real-world DevOps experience.\r\n\r\nThis portfolio is a project in itself, and I'm excited to continue adding features to it. Thanks for reading!",
+  },
+];
+
+
+
+================================================
+FILE: src/lib/embeddings.ts
+================================================
+import { InferenceClient } from "@huggingface/inference";
+
+// FIX: Use InferenceClient instead of HfInference
+const client = new InferenceClient(process.env.HUGGINGFACE_API_KEY);
+
+export async function generateEmbedding(text: string) {
+  try {
+    const output = await client.featureExtraction({
+      model: "sentence-transformers/all-MiniLM-L6-v2",
+      inputs: text,
+    });
+
+    // The API can return nested arrays depending on input.
+    // For single text input, we cast it to a number array.
+    return output as number[];
+  } catch (error) {
+    console.error("Embedding Error:", error);
+    throw error;
+  }
+}
+
+
+
+================================================
+FILE: src/lib/nostr.ts
+================================================
+import { SimplePool } from "nostr-tools";
+
+// We use a pool to connect to multiple relays simultaneously
+export const pool = new SimplePool();
+export const RELAYS = [
+  "wss://relay.damus.io",
+  "wss://relay.primal.net",
+  "wss://nos.lol",
+];
+
+export async function getProfile(pubkey: string) {
+  try {
+    const event = await pool.get(RELAYS, {
+      kinds: [0], // Kind 0 is Metadata
+      authors: [pubkey],
+    });
+    return event ? JSON.parse(event.content) : null;
+  } catch (e) {
+    console.error("Nostr Error:", e);
+    return null;
+  }
+}
+
+
+
+================================================
+FILE: src/lib/utils.ts
+================================================
+import { clsx, type ClassValue } from "clsx"
+import { twMerge } from "tailwind-merge"
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
+}
+
+

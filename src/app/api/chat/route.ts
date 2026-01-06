@@ -1,7 +1,8 @@
 import { InferenceClient } from "@huggingface/inference";
 import { createClient } from "@supabase/supabase-js";
 import { PORTFOLIO_CONTEXT } from "@/lib/context";
-import { pipeline } from "@xenova/transformers";
+// Import dynamically to avoid build-time crashes
+// import { pipeline } from '@xenova/transformers';
 
 const hf = new InferenceClient(process.env.HUGGINGFACE_API_KEY);
 const supabase = createClient(
@@ -10,16 +11,6 @@ const supabase = createClient(
 );
 
 export const maxDuration = 60;
-
-// Singleton for Local Model
-let extractor: any = null;
-
-async function getExtractor() {
-  if (!extractor) {
-    extractor = await pipeline("feature-extraction", "Xenova/all-MiniLM-L6-v2");
-  }
-  return extractor;
-}
 
 export async function POST(req: Request) {
   try {
@@ -36,16 +27,16 @@ export async function POST(req: Request) {
     let retrievedContext = "";
 
     try {
-      // 1. Generate Embedding LOCALLY
-      const generateEmbedding = await getExtractor();
-      const output = await generateEmbedding(lastUserMessage, {
-        pooling: "mean",
-        normalize: true,
+      // STRATEGY: Try API Embedding first (Faster/Lighter for Vercel)
+      // If that fails, we skip context rather than crashing the whole app.
+
+      const embeddingOutput = await hf.featureExtraction({
+        model: "sentence-transformers/all-MiniLM-L6-v2",
+        inputs: lastUserMessage,
       });
       // @ts-ignore
-      const embedding = Array.from(output.data);
+      const embedding = Array.from(embeddingOutput);
 
-      // 2. Semantic Search
       const { data: documents } = await supabase.rpc("match_documents", {
         query_embedding: embedding,
         match_threshold: 0.1,
@@ -60,7 +51,8 @@ export async function POST(req: Request) {
 
       if (documents?.length) console.log(`📚 Found ${documents.length} docs`);
     } catch (err) {
-      console.error("Embedding/DB Error (Continuing without context):", err);
+      console.error("Embedding Error (Continuing without DB context):", err);
+      // We explicitly continue even if embedding fails
     }
 
     const systemPrompt = `
@@ -97,10 +89,9 @@ export async function POST(req: Request) {
           }
         } catch (apiError: any) {
           console.error("HF API Error:", apiError);
-          const errorMsg = apiError?.message || "Model busy";
           controller.enqueue(
             new TextEncoder().encode(
-              ` [System Error: ${errorMsg}. Please try again.]`
+              ` [System Error: Model busy. Please try again.]`
             )
           );
         }
