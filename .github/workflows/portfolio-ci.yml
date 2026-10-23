@@ -27,7 +27,7 @@ jobs:
       - name: Typecheck
         run: ./node_modules/.bin/tsc --noEmit
       - name: ESLint — remodeled portfolio sources
-        run: npx eslint src/app/page.tsx src/app/studio/page.tsx src/components/NostrJournal.tsx src/lib/nostr-publishing.ts src/lib/portfolio-data.ts src/lib/editorial-state.ts
+        run: npx eslint src/app/page.tsx src/app/studio/page.tsx src/components/NostrJournal.tsx src/lib/nostr-publishing.ts src/lib/portfolio-data.ts src/lib/editorial-state.ts src/components/editorial/AgentReview.tsx
       - name: Production build
         env:
           NEXT_TELEMETRY_DISABLED: '1'
