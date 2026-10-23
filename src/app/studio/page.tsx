@@ -1,5 +1,7 @@
 "use client";
 import { useState, useRef } from "react";
+import { AgentReview } from "@/components/editorial/AgentReview";
+import { draftSha256 } from "@/lib/editorial-state";
 import ReactMarkdown from "react-markdown";
 import { makeDraft, validateDraft, copyDraft, snapshotEqual, type EditorialSnapshot } from "@/lib/editorial-state";
 import Link from "next/link";
@@ -25,7 +27,8 @@ export default function Studio(){
  const reviewed=review!==null && snapshotEqual(draft,review) && review.approvedPubkey===IDENTITY.pubkey;
  const ready=checks.every(c=>c.valid)&&ack&&reviewed;
  function invalidate(){setReview(null);setAck(false);setReceipt(null);}
- function approveReview(){if(!checks.every(c=>c.valid)){setNotice("Complete all checks and verify your Nostr signer before reviewing.");return;}setReview({...copyDraft(draft),reviewedAt:new Date().toISOString(),approvedPubkey:IDENTITY.pubkey});setAck(false);setNotice("Review snapshot captured. Confirm and sign only if the content below is correct.");}
+ function acceptAgent(next:ReturnType<typeof makeDraft>){setTitle(next.title);setSummary(next.summary);setBody(next.content);setIdentifier(next.identifier);invalidate();setNotice("Agent proposal applied to UNSIGNED draft. You must complete a new review.");}
+ async function approveReview(){if(!checks.every(c=>c.valid)){setNotice("Complete all checks and verify your Nostr signer before reviewing.");return;}const sha256=await draftSha256(draft);setReview({...copyDraft(draft),reviewedAt:new Date().toISOString(),approvedPubkey:IDENTITY.pubkey,sha256});setAck(false);setNotice("Review snapshot captured. Confirm and sign only if the content below is correct.");}
  function exportDraft(){const blob=new Blob([JSON.stringify(draft,null,2)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=(slug||"nostr-article")+".draft.json";a.click();URL.revokeObjectURL(url);setNotice("Unsigned draft exported to local file.");}
  async function importDraft(file:File){if(file.size>150000){setNotice("Draft exceeds size limit.");return;}try{const value:unknown=JSON.parse(await file.text());if(!validateDraft(value)){setNotice("Invalid draft schema.");return;}setTitle(value.title);setIdentifier(value.identifier);setSummary(value.summary);setBody(value.content);invalidate();setNotice("Unsigned draft imported. Review and approve again before publishing.");}catch{setNotice("Could not parse draft file.");}}
  const makeEvent=(source=review)=>{if(!source)throw Error("A reviewed snapshot is required.");const now=Math.floor(Date.now()/1000);return {kind:30023,created_at:now,tags:[["d",source.identifier],["title",source.title.trim()],["summary",source.summary.trim()],["published_at",String(now)]],content:source.content};};
@@ -39,6 +42,7 @@ export default function Studio(){
    if(!signer)throw Error("NIP-07 signer not available.");
    const livePubkey=await signer.getPublicKey();
    if(livePubkey!==IDENTITY.pubkey)throw Error("Active signer does not match Maximoto's verified public key.");
+   if((await draftSha256(draft))!==review.sha256)throw Error("Reviewed draft integrity check failed.");
    const expected=makeEvent(review);
    const event=await signer.signEvent(expected);
    const sameTags=JSON.stringify(event.tags)===JSON.stringify(expected.tags);
@@ -69,12 +73,13 @@ export default function Studio(){
  </div>
  {preview&&<section style={{background:"#0e130f",border:"1px solid #465045",padding:24,marginTop:18}} aria-label="Markdown preview">
  <h3>LIVE PREVIEW · UNSIGNED</h3><div className="prose prose-invert max-w-none"><ReactMarkdown skipHtml>{body}</ReactMarkdown></div></section>}
+ <AgentReview draft={draft} onAccept={acceptAgent}/>
  <div className="cp-editor-footer"><span>{words} WORDS · {body.length.toLocaleString()} / {MAX.toLocaleString()} CHARACTERS</span><button onClick={copyEvent}><Copy size={13}/> COPY EVENT TEMPLATE</button></div>
  </div><aside className="cp-review"><div className="cp-panel-heading"><span>02 / REVIEW & AUTHORITY</span><span>DEFAULT DENY</span></div><div className="cp-studio-aside-intro"><Bot size={23}/><h2>Agentic by design.<br/><em>Human by default.</em></h2><p>Agents may suggest structure, improve readability, and propose references. They cannot bypass ownership, approval, or the signer. AI-generated text is untrusted until reviewed.</p></div><div className="cp-checks">{checks.map(c=><div key={c.label} className={c.valid?"is-good":""}>{c.valid?<CheckCircle2 size={15}/>:<span className="cp-open-circle"/>}{c.label}</div>)}</div>
  <button className="cp-connect" onClick={connect}><KeyRound size={17}/>{pubkey===IDENTITY.pubkey?"VERIFIED SIGNER CONNECTED":"VERIFY NIP-07 SIGNER"}</button>
  <p className="cp-pubkey">{pubkey?pubkey.slice(0,16)+"…"+pubkey.slice(-10):"No signer connected"}</p>
  <button className="cp-connect" style={{marginBottom:18}} onClick={approveReview} disabled={!checks.every(c=>c.valid)}>FREEZE CURRENT DRAFT FOR REVIEW</button>
- {review&&<div className="cp-note" style={{margin:"0 0 18px"}}>REVIEWED · {review.reviewedAt} · {review.title} · {review.content.length} chars. Edits invalidate approval.</div>}
+ {review&&<div className="cp-note" style={{margin:"0 0 18px"}}>REVIEWED · {review.reviewedAt} · {review.title} · SHA-256 {review.sha256.slice(0,16)}… Edits invalidate approval.</div>}
  <label className="cp-approve"><input type="checkbox" checked={ack} onChange={e=>setAck(e.target.checked)}/><span>I reviewed the frozen snapshot and explicitly authorize its public, irreversible distribution to configured Nostr relays.</span></label>
  <button className="cp-publish" disabled={!ready||busy} onClick={publish}><Send size={16}/>{busy?"PUBLISHING…":"SIGN & PUBLISH TO NOSTR"} <ArrowUpRight size={15}/></button>
  {notice&&<p className="cp-notice" role="status">{notice}</p>}
