@@ -1,92 +1,19 @@
-import { Metadata } from "next";
-import { Navbar } from "@/components/layout/Navbar";
-import { Header } from "@/components/layout/Header";
-import { HeroSection } from "@/components/sections/hero/HeroSection";
-import { CommandCenter } from "@/components/sections/dashboard/CommandCenter";
-import { WorkSection } from "@/components/sections/work/WorkSection";
-import Guestbook from "@/components/Guestbook";
-import NostrFeed from "@/components/NostrFeed";
-import { Shield } from "lucide-react";
+import Link from "next/link";
+import { ArrowDownRight,ArrowUpRight,ArrowRight,Activity,CheckCircle2,Cpu,FileCheck2,GitPullRequest,Globe2,KeyRound,LockKeyhole,Network,Radio,ShieldCheck,Terminal,Zap } from "lucide-react";
+import { EVIDENCE,IDENTITY,PRINCIPLES,VENTURES } from "@/lib/portfolio-data";
+import NostrJournal from "@/components/NostrJournal";
 
-export const metadata: Metadata = {
-  title: "Maximoto | Sovereign Engineer",
-  description:
-    "AI/ML, Bitcoin, Nostr, FIPS, and FOSS engineering. Open-source projects and verified Plebeian Apps proof of work.",
-};
-
-export default function Home() {
-  return (
-    <main className="min-h-screen bg-black selection:bg-orange-500 selection:text-white">
-      {/* Navigation Layer */}
-      <Header />
-      <Navbar />
-
-      {/* Act I: The Identity */}
-      <HeroSection />
-
-      {/* Act II: The System */}
-      <div className="relative z-10 bg-neutral-950 shadow-2xl rounded-t-[3rem] border-t border-white/5 mt-[-50px]">
-        <CommandCenter />
-
-        {/* Act III: The Work */}
-        <WorkSection />
-
-        {/* Act IV: The Connection */}
-        <section
-          id="guestbook"
-          className="py-24 max-w-7xl mx-auto px-6 scroll-mt-12"
-        >
-          <div className="grid lg:grid-cols-2 gap-12 items-start">
-            {/* Left: Guestbook UI */}
-            <div>
-              <div className="flex items-center gap-3 mb-8">
-                <div className="p-2 bg-purple-500/10 rounded-lg border border-purple-500/20">
-                  <Shield className="w-6 h-6 text-purple-500" />
-                </div>
-                <div>
-                  <h2 className="text-2xl font-bold text-white">
-                    Public Square
-                  </h2>
-                  <p className="text-sm text-neutral-500 font-mono">
-                    NOSTR PROTOCOL • NIP-07
-                  </p>
-                </div>
-              </div>
-              <Guestbook />
-            </div>
-
-            {/* Right: Nostr Feed & Context */}
-            <div className="space-y-8">
-              <div className="bg-neutral-900/50 border border-neutral-800 rounded-xl p-6">
-                <h3 className="text-lg font-bold text-white mb-2">
-                  Why this matters
-                </h3>
-                <p className="text-neutral-400 text-sm leading-relaxed mb-4">
-                  This guestbook is a demonstration of <b>Sovereign Data</b>.
-                  When you sign a message here, you own it. It is
-                  cryptographically signed by your keypair, not stored in a
-                  siloed database.
-                </p>
-              </div>
-
-              {/* Reuse Nostr Feed here as a "Live Updates" widget */}
-              <div className="h-64">
-                <NostrFeed />
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Footer */}
-        <footer className="py-12 border-t border-neutral-900 text-center">
-          <div className="text-4xl font-bold tracking-tighter text-neutral-800 mb-4 select-none">
-            MAXIMOTO
-          </div>
-          <p className="text-neutral-600 text-xs font-mono">
-            SOVEREIGN ARCHITECTURE © {new Date().getFullYear()}
-          </p>
-        </footer>
-      </div>
-    </main>
-  );
+export default function Home(){
+ return <main className="cp-root"><div className="cp-grain" aria-hidden="true"/><div className="cp-wrap">
+  <header className="cp-head"><Link href="/" className="cp-brand" aria-label="Maximoto home"><span className="cp-mark">M<span>✳</span></span><span>MAXIMOTO <small>/ SOVEREIGN SYSTEMS</small></span></Link><div className="cp-head-right"><span className="cp-head-live"><span className="cp-dot"/> BUILDING IN PUBLIC</span><a href={IDENTITY.github} target="_blank" rel="noopener noreferrer" className="cp-header-link">GITHUB <ArrowUpRight size={14}/></a><Link href="/studio" className="cp-header-cta">EDITORIAL NODE <ArrowUpRight size={14}/></Link></div></header>
+  <section className="cp-hero" id="home"><div className="cp-hero-top"><span className="cp-eyebrow"><span className="cp-dot"/> INDEPENDENT BUILDER / OPEN PROTOCOLS</span><span className="cp-hero-location">01—04 / CURRENT SIGNAL</span></div><div className="cp-hero-grid"><div><p className="cp-pretitle">AN OPEN-SOURCE ENGINEER&apos;S PUBLIC LEDGER</p><h1>Build for<br/><em>freedom.</em><br/>Prove the <span>work.</span></h1><p className="cp-hero-description">AI-native engineering meets cypherpunk conviction. I design, build, and audit <strong>Bitcoin, Nostr, FIPS, and FOSS systems</strong> with verifiable contributions and explicit trust boundaries.</p><div className="cp-hero-cta"><a href="#evidence" className="cp-primary">EXPLORE PROOF OF WORK <ArrowDownRight size={18}/></a><Link href="/studio" className="cp-secondary">OPEN NOSTR STUDIO <ArrowUpRight size={17}/></Link></div></div>
+  <div className="cp-hero-right"><div className="cp-rune" aria-hidden="true"><span className="cp-rune-orbit cp-rune-one"/><span className="cp-rune-orbit cp-rune-two"/><span className="cp-rune-core">M</span><span className="cp-rune-a">✳</span><span className="cp-rune-coordinate">3/4 · BFT</span></div><div className="cp-rune-meta"><span>NO TRUST WITHOUT VERIFICATION</span><span>↗ <span>21ST CENTURY CYPHERPUNK</span></span></div></div></div><div className="cp-hero-bottom"><div>AI / ML</div><div>BITCOIN + LIGHTNING</div><div>NOSTR + FIPS</div><div>FOSS / SECURITY</div><a href="#about">SCROLL TO INSPECT ↓</a></div></section>
+  <section className="cp-thesis" id="about"><div className="cp-thesis-label"><span>00 / THE POSITION</span><span className="cp-tiny-cross">✳</span></div><p>Software should be <em>auditable.</em> Identity should be portable. Agents should be accountable. And the work should speak <strong>for itself.</strong></p><div className="cp-thesis-footer"><span>MAXIMOTO · ENGINEER / MAINTAINER / SECURITY REVIEWER</span><a href={IDENTITY.nostr} target="_blank" rel="noopener noreferrer">NOSTR IDENTITY <ArrowUpRight size={13}/></a></div></section>
+  <section className="cp-section" id="work"><div className="cp-section-top"><span className="cp-kicker"><Network size={13}/> 01 / SELECTED SYSTEMS</span><span className="cp-muted">SHIP / AUDIT / DOCUMENT / REPEAT</span></div><div className="cp-section-intro"><div><h2>Public work.<br/><em>Open architecture.</em></h2><p>Projects at the intersection of financial sovereignty, decentralized identity, and applied AI. Protocol correctness before hype.</p></div><span className="cp-section-asterisk">✳</span></div><div className="cp-ventures">{VENTURES.map(p=><a key={p.index} className={"cp-venture "+(p.highlight?"cp-featured":"")} href={p.url} target="_blank" rel="noopener noreferrer"><div className="cp-venture-head"><span>{p.index} / {p.type}</span><ArrowUpRight size={18}/></div><div className="cp-venture-body"><div className="cp-venture-symbol">{p.highlight?"✳":p.index==="02"?"↗":"⌘"}</div><div><h3>{p.title}</h3><p>{p.text}</p></div></div><div className="cp-venture-tags">{p.tags.map(t=><span key={t}>{t}</span>)}</div></a>)}</div></section>
+  <section className="cp-section cp-evidence" id="evidence"><div className="cp-section-top"><span className="cp-kicker"><GitPullRequest size={13}/> 02 / PROOF OF WORK</span><a href="https://github.com/PlebeianApp/market/pulls?q=author%3Amaximotodev" className="cp-minilink" target="_blank" rel="noopener noreferrer">ALL CONTRIBUTIONS <ArrowUpRight size={14}/></a></div><div className="cp-section-intro"><div><h2>Don&apos;t take my <em>word.</em></h2><p>Follow the commits, PRs, architecture decisions, and reviewed changes. The source is the evidence.</p></div><span className="cp-section-asterisk">↗</span></div><div className="cp-evidence-head"><span>REFERENCE / ARTIFACT</span><span>DOMAIN</span><span>REVIEW SNAPSHOT*</span><span>INSPECT</span></div><div className="cp-evidence-list">{EVIDENCE.map(e=><a href={e.url} key={e.number} target="_blank" rel="noopener noreferrer" className="cp-evidence-row"><div className="cp-evidence-title"><span className="cp-evidence-number">#{e.number}</span><div><h3>{e.title}</h3><p>{e.detail}</p></div></div><div className="cp-evidence-area">{e.area}</div><div className="cp-evidence-status"><CheckCircle2 size={14}/>{e.status}</div><ArrowUpRight size={19}/></a>)}</div><p className="cp-evidence-foot">*STATUS AS VERIFIED ON 2026-10-22. OPEN THE SOURCE LINK FOR LIVE REVIEW STATE. EXPERIMENTAL FIPS / VALIDATOR WORK IS NOT CLAIMED AS PRODUCTION.</p></section>
+  <NostrJournal/>
+  <section className="cp-section cp-process" id="process"><div className="cp-section-top"><span className="cp-kicker"><Cpu size={13}/> 04 / THE OPERATING MODEL</span><span className="cp-muted">HUMAN GOVERNANCE / MACHINE ASSISTANCE</span></div><div className="cp-section-intro"><div><h2>Agentic speed.<br/><em>Maintainer discipline.</em></h2><p>AI helps generate options and uncover regressions. It does not become the authority for security-sensitive decisions or signing.</p></div></div><div className="cp-principles">{PRINCIPLES.map(p=><div className="cp-principle" key={p.id}><span>{p.id}</span><h3>{p.name}</h3><p>{p.detail}</p><span className="cp-principle-sigil">↗</span></div>)}</div></section>
+  <section className="cp-protocol-banner"><div><span className="cp-kicker"><KeyRound size={13}/> NOSTR-NATIVE CMS</span><h2>Write freely.<br/>Publish <em>with keys.</em></h2><p>A dedicated editorial workbench for signed, portable NIP-23 articles. Optional AI assistance never bypasses your signer, your consent, or review.</p><Link href="/studio" className="cp-primary">ENTER EDITORIAL NODE <ArrowUpRight size={18}/></Link></div><div className="cp-stack"><div><span>01</span><span><Terminal size={16}/> DRAFT & REFINE</span><CheckCircle2 size={15}/></div><div><span>02</span><span><FileCheck2 size={16}/> HUMAN REVIEW</span><CheckCircle2 size={15}/></div><div><span>03</span><span><LockKeyhole size={16}/> NIP-07 SIGNATURE</span><KeyRound size={15}/></div><div><span>04</span><span><Radio size={16}/> RELAY DISTRIBUTION</span><Globe2 size={15}/></div><p>SIGNER-BOUND · NO RAW PRIVATE KEY STORAGE</p></div></section>
+  <footer className="cp-footer"><div className="cp-footer-top"><div><span className="cp-kicker"><Zap size={13}/> BUILD SOMETHING THAT LASTS</span><h2>The future is<br/><em>permissionless.</em></h2></div><div className="cp-footer-links"><a target="_blank" rel="noopener noreferrer" href={IDENTITY.github}>GITHUB <ArrowUpRight size={17}/></a><a target="_blank" rel="noopener noreferrer" href={IDENTITY.nostr}>NOSTR / NPUB <ArrowUpRight size={17}/></a><a target="_blank" rel="noopener noreferrer" href={IDENTITY.ngit}>NGIT / GITWORKSHOP <ArrowUpRight size={17}/></a><Link href="/studio">EDITORIAL STUDIO <ArrowUpRight size={17}/></Link></div></div><div className="cp-footer-bottom"><div className="cp-footer-logo">MAXIMOTO<span>✳</span></div><div><span>AI / ML · BITCOIN · NOSTR · FIPS · FOSS</span><span>© {new Date().getFullYear()} MAXIMOTO · VERIFY EVERYTHING</span></div></div></footer>
+ </div></main>;
 }

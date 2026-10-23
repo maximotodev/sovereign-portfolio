@@ -1,0 +1,36 @@
+name: Portfolio build verification
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches:
+      - feat/cypherpunk-agentic-nostr-portfolio-2026-10
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install locked dependencies
+        run: npm ci --no-audit --no-fund
+      - name: Typecheck
+        run: ./node_modules/.bin/tsc --noEmit
+      - name: ESLint — remodeled portfolio sources
+        run: npx eslint src/app/page.tsx src/app/studio/page.tsx src/components/NostrJournal.tsx src/lib/nostr-publishing.ts src/lib/portfolio-data.ts
+      - name: Production build
+        env:
+          NEXT_TELEMETRY_DISABLED: '1'
+          NEXT_PUBLIC_SUPABASE_URL: https://example.supabase.co
+          SUPABASE_SERVICE_ROLE_KEY: ci-placeholder-never-real
+          HUGGINGFACE_API_KEY: ci-placeholder-never-real
+        run: npm run build
