@@ -26,14 +26,14 @@ export function Header() {
 
           <span className="hidden sm:inline text-neutral-800">|</span>
 
-          {/* Node Status: Hidden on mobile */}
+          {/* Public Bitcoin data link */}
           <div className="hidden md:flex items-center gap-2">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
             </span>
             <span className="text-sm font-mono text-green-500">
-              NODE ONLINE
+              BITCOIN / NOSTR
             </span>
           </div>
 
