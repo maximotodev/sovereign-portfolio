@@ -12,7 +12,7 @@ export function CommandCenter() {
         <div className="mb-12 border-l-2 border-orange-500 pl-6">
           <h2 className="text-3xl font-bold text-white mb-2">Command Center</h2>
           <p className="text-neutral-400">
-            Live telemetry from my sovereign infrastructure.
+            A practical showcase of AI tooling, public Bitcoin network data, technologies, and verifiable GitHub activity.
           </p>
         </div>
 
@@ -20,7 +20,7 @@ export function CommandCenter() {
           {/* 1. The Brain (AI) - Primary Focus */}
           <BentoItem
             title="Neural Interface (RAG)"
-            description="Llama-3 model with access to my database."
+            description="Interactive AI portfolio assistant."
             header={
               <div className="h-full min-h-[450px] w-full">
                 <AIChat />
@@ -33,7 +33,7 @@ export function CommandCenter() {
           {/* 2. The Heartbeat (Node) */}
           <BentoItem
             title="Consensus Layer"
-            description="RaspiBlitz Mainnet Node."
+            description="Public Bitcoin network information via mempool.space."
             header={
               <div className="h-full w-full">
                 <NodeStatus />
