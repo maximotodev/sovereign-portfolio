@@ -28,6 +28,8 @@ jobs:
         run: ./node_modules/.bin/tsc --noEmit
       - name: ESLint — remodeled portfolio sources
         run: npx eslint src/app/page.tsx src/app/studio/page.tsx src/components/NostrJournal.tsx src/lib/nostr-publishing.ts src/lib/portfolio-data.ts src/lib/editorial-state.ts src/components/editorial/AgentReview.tsx
+      - name: Editorial contract tests
+        run: node --experimental-strip-types --test tests/editorial-contracts.test.mjs
       - name: Production build
         env:
           NEXT_TELEMETRY_DISABLED: '1'
