@@ -93,7 +93,7 @@ export default function AIChat() {
               AI Resume Agent
             </span>
             <span className="text-[10px] text-neutral-500 font-mono uppercase">
-              Llama-3-8B • Online
+              Ask about projects and engineering
             </span>
           </div>
         </div>
@@ -106,7 +106,7 @@ export default function AIChat() {
             <div className="flex flex-col items-center justify-center h-40 text-center space-y-3 opacity-60">
               <Terminal className="w-10 h-10 text-neutral-700" />
               <p className="text-sm text-neutral-500">
-                System Ready. Ask about Diego's node.
+                Ask about Maximoto's public projects and open-source work.
               </p>
             </div>
           )}

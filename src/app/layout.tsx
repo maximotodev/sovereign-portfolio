@@ -17,7 +17,7 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: "Maximoto | Sovereign Engineer",
-  description: "Bitcoin, Nostr, AI, and Full Stack Engineering.",
+  description: "Open-source engineering across AI/ML, Bitcoin, Nostr, FIPS and FOSS. View verified Plebeian Apps contributions.",
 };
 
 export default function RootLayout({

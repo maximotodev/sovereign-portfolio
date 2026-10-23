@@ -18,7 +18,7 @@ export function HeroSection() {
             <span className="relative inline-flex rounded-full h-2 w-2 bg-orange-500"></span>
           </span>
           <span className="text-xs font-mono text-orange-200 tracking-wider">
-            MAXIMOTO LABS
+            MAXIMOTO · OPEN SOURCE
           </span>
         </div>
       </FadeIn>
@@ -34,9 +34,7 @@ export function HeroSection() {
 
       <FadeIn delay={0.2}>
         <p className="text-lg md:text-xl text-neutral-400 max-w-2xl mx-auto leading-relaxed mb-12">
-          Full Stack Engineering meets Cypherpunk Philosophy. Building
-          censorship-resistant infrastructure, AI agents, and Bitcoin consensus
-          layers.
+          Open-source engineering across AI/ML, Bitcoin, Nostr, FIPS, and FOSS. Building verifiable systems with human-reviewed security, decentralized protocols, and practical AI workflows.
         </p>
       </FadeIn>
 

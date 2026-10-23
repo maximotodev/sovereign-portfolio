@@ -75,48 +75,42 @@ export const CERTIFICATIONS: Certification[] = [
 export const PROJECTS: Project[] = [
   {
     id: 1,
-    title: "Tribev2",
-    description:
-      "A modern social media platform designed to connect communities and foster interaction. Built with a scalable architecture to handle real-time updates.",
-    repoUrl: "https://github.com/maximotodev/tribev2",
-    liveUrl: "https://tribev2.vercel.app",
-    image: "https://i.ibb.co/Mk1C1gnP/tribev2.png",
-    tags: ["Social", "Scalable"],
+    title: "Plebeian Apps — Market & Auctions",
+    description: "Open-source contributions to Bitcoin- and Nostr-native commerce: 3-of-4 BFT auction design, NIP-17 private order messaging, auction privacy and custody recovery, and deployment hardening. Follow linked PRs for evidence and implementation status.",
+    repoUrl: "https://github.com/PlebeianApp/market",
+    liveUrl: "https://github.com/PlebeianApp/market/pulls?q=author%3Amaximotodev",
+    image: "/projects/plebeian.svg",
+    tags: ["Featured", "Bitcoin", "Nostr", "CometBFT", "FOSS"],
   },
   {
     id: 2,
-    title: "Bitcoin Chatbot",
-    description:
-      "Interactive chatbot providing real-time Bitcoin info, price tracking, and market trends using the Gemini API.",
-    repoUrl: "https://github.com/maximotodev/bitcoin-chatbot",
-    liveUrl: "https://bitcoin-chatbot.netlify.app",
-    image: "https://i.ibb.co/chVrPQWW/Screen-Shot-2025-07-10-at-9-10-59-PM.png",
-    tags: ["AI", "Bitcoin", "Gemini"],
-  },
-  {
-    id: 3,
-    title: "Gemini Quest",
-    description:
-      "Interactive trivia quiz web app powered by Gemini API. Flask backend, React + Vite frontend.",
-    repoUrl: "https://github.com/maximotodev/gemini-quest",
-    liveUrl: "https://gemini-quest.netlify.app",
-    image:
-      "https://i.ibb.co/N2Z79Rvs/Screen-Shot-2025-06-11-at-12-46-24-PM.png",
-    tags: ["Game", "AI", "Flask"],
-  },
-  {
-    id: 4,
     title: "SatsRover",
-    description:
-      "A sovereign coordination layer for the Bitcoin economy. Combines global merchant discovery with cryptographic social proof (Nostr) and non-custodial spending (NIP-47).",
+    description: "An experiment in Bitcoin-native local discovery and sovereign coordination, combining location-aware UX with Nostr and NWC.",
     repoUrl: "https://github.com/maximotodev/sats-rover",
     liveUrl: "https://sats-rover.vercel.app",
     image: "https://i.ibb.co/XfscsN0y/IMG-3184.jpg",
     tags: ["Bitcoin", "Nostr", "Maps", "NWC"],
   },
+  {
+    id: 3,
+    title: "Sovereign Portfolio",
+    description: "This open-source Next.js portfolio: developer work, interactive AI tooling, and Nostr-native community features.",
+    repoUrl: "https://github.com/maximotodev/sovereign-portfolio",
+    liveUrl: "https://maximotodev.vercel.app",
+    image: "/projects/portfolio.svg",
+    tags: ["Next.js", "AI/ML", "Nostr", "FOSS"],
+  },
 ];
 
-// Note: I truncated the content for brevity in this file, but you should paste the full markdown from your JSON here.
+export const PROOF_OF_WORK = [
+  { title: "Auctions: four-validator BFT consensus", href: "https://github.com/PlebeianApp/market/pull/1407", status: "Merged", area: "Consensus" },
+  { title: "Auctions: leader-change soft-close rule", href: "https://github.com/PlebeianApp/market/pull/1411", status: "Merged", area: "Anti-sniping" },
+  { title: "NIP-17 private order transport", href: "https://github.com/PlebeianApp/market/pull/1110", status: "Merged", area: "Nostr" },
+  { title: "Private auction claims and custody recovery", href: "https://github.com/PlebeianApp/market/pull/1015", status: "Merged", area: "Security" },
+  { title: "Include dependency patches in releases", href: "https://github.com/PlebeianApp/market/pull/1410", status: "Merged", area: "DevOps" },
+  { title: "Coco v2 auction-wallet lifecycle integration", href: "https://github.com/PlebeianApp/market/pull/1387", status: "Open PR", area: "Cashu" },
+] as const;
+
 export const POSTS: BlogPost[] = [
   {
     id: 1,
