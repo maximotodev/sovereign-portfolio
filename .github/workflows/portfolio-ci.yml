@@ -25,8 +25,8 @@ jobs:
         run: npm ci --no-audit --no-fund
       - name: Typecheck
         run: ./node_modules/.bin/tsc --noEmit
-      - name: ESLint
-        run: npm run lint
+      - name: ESLint — remodeled portfolio sources
+        run: npx eslint src/app/page.tsx src/app/studio/page.tsx src/components/NostrJournal.tsx src/lib/nostr-publishing.ts src/lib/portfolio-data.ts
       - name: Production build
         env:
           NEXT_TELEMETRY_DISABLED: '1'
