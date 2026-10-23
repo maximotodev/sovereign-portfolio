@@ -5,7 +5,7 @@ import { Server, Activity, ShieldCheck } from "lucide-react";
 
 export default function NodeStatus() {
   const [blockHeight, setBlockHeight] = useState<number>(0);
-  const [fees, setFees] = useState<number>(0);
+  const [fees, setFees] = useState<number | null>(null);
 
   useEffect(() => {
     // Fetch live data from Mempool.space API
@@ -48,11 +48,11 @@ export default function NodeStatus() {
         <div className="flex items-center gap-2 text-orange-500 mb-1">
           <Server size={18} />
           <span className="text-xs font-bold uppercase tracking-widest">
-            Mainnet
+            Bitcoin network
           </span>
         </div>
         <div className="text-xs text-orange-400/60 font-mono">
-          RaspiBlitz v1.11
+          Public mempool.space data
         </div>
       </div>
 
@@ -62,7 +62,7 @@ export default function NodeStatus() {
             {blockHeight ? blockHeight.toLocaleString() : "Syncing..."}
           </div>
           <div className="text-[10px] text-neutral-500 uppercase font-mono mt-1">
-            Current Block Height
+            Public chain tip height
           </div>
         </div>
 
@@ -72,14 +72,14 @@ export default function NodeStatus() {
               <Activity size={10} /> Fees
             </div>
             <div className="text-sm font-mono text-orange-400">
-              {fees} sat/vB
+              {fees === null ? '—' : fees} sat/vB
             </div>
           </div>
           <div className="bg-neutral-900/50 rounded p-2 border border-neutral-800">
             <div className="flex items-center gap-1 text-[10px] text-neutral-400 mb-1">
-              <ShieldCheck size={10} /> Uptime
+              <ShieldCheck size={10} /> Source
             </div>
-            <div className="text-sm font-mono text-green-400">99.9%</div>
+            <div className="text-sm font-mono text-green-400">mempool.space</div>
           </div>
         </div>
       </div>
