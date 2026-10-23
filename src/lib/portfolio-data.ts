@@ -5,7 +5,9 @@ export const IDENTITY = {
   npub: "npub165ka9706vpl8phnw0w5wh89za8nnl56dajz92h6e2m9uxxvkz6wszt0gn5",
   pubkey: "d52dd2f9fa607e70de6e7ba8eb9ca2e9e73fd34dec84555f5956cbc31996169d",
   nip05: "maximotodev@maximotodev.vercel.app",
-  nostr: "https://primal.net/p/nprofile1qqsd2twjl8axqlnsmeh8h28tnj3wneel6dx7epz4tav4dj7rrxtpd8gnudt2k",
+  // Human-friendly client URL. The npub and NIP-05 remain client-independent.
+  nostr: "https://yakihonne.com/profile/maximotodev@maximotodev.vercel.app",
+  nostrProtocol: "nostr:npub165ka9706vpl8phnw0w5wh89za8nnl56dajz92h6e2m9uxxvkz6wszt0gn5",
   ngit: "https://gitworkshop.dev/npub165ka9706vpl8phnw0w5wh89za8nnl56dajz92h6e2m9uxxvkz6wszt0gn5",
 } as const;
 

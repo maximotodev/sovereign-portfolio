@@ -6,6 +6,7 @@ on:
   push:
     branches:
       - feat/cypherpunk-agentic-nostr-portfolio-2026-10
+      - refactor/editorial-yakihonne-buzz-plan-2026-10
   workflow_dispatch:
 
 permissions:
@@ -26,7 +27,7 @@ jobs:
       - name: Typecheck
         run: ./node_modules/.bin/tsc --noEmit
       - name: ESLint — remodeled portfolio sources
-        run: npx eslint src/app/page.tsx src/app/studio/page.tsx src/components/NostrJournal.tsx src/lib/nostr-publishing.ts src/lib/portfolio-data.ts
+        run: npx eslint src/app/page.tsx src/app/studio/page.tsx src/components/NostrJournal.tsx src/lib/nostr-publishing.ts src/lib/portfolio-data.ts src/lib/editorial-state.ts
       - name: Production build
         env:
           NEXT_TELEMETRY_DISABLED: '1'
