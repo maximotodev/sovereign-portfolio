@@ -28,8 +28,10 @@ export default function Studio(){
    if(!signer)throw Error("NIP-07 signer not available.");
    const livePubkey=await signer.getPublicKey();
    if(livePubkey!==IDENTITY.pubkey)throw Error("Active signer does not match Maximoto's verified public key.");
-   const event=await signer.signEvent(makeEvent());
-   if(event.pubkey!==IDENTITY.pubkey||event.kind!==30023||!verifyEvent(event)||event.tags.find(t=>t[0]==="d")?.[1]!==slug||event.content!==body)throw Error("Signer output did not pass integrity, author, or payload checks.");
+   const expected=makeEvent();
+   const event=await signer.signEvent(expected);
+   const sameTags=JSON.stringify(event.tags)===JSON.stringify(expected.tags);
+   if(event.pubkey!==IDENTITY.pubkey||event.kind!==expected.kind||event.created_at!==expected.created_at||!verifyEvent(event)||!sameTags||event.content!==expected.content)throw Error("Signer output did not pass integrity, author, or exact payload checks.");
    const results=await Promise.allSettled(pool.publish(RELAYS,event));
    const accepted=results.flatMap((r,i)=>r.status==="fulfilled"?[RELAYS[i]]:[]);
    if(!accepted.length)throw Error("No relay confirmed publication. The signed event may need to be republished.");
