@@ -11,7 +11,7 @@ import { Shield } from "lucide-react";
 export const metadata: Metadata = {
   title: "Maximoto | Sovereign Engineer",
   description:
-    "Full Stack Portfolio featuring Bitcoin, Nostr, and AI integrations.",
+    "AI/ML, Bitcoin, Nostr, FIPS, and FOSS engineering. Open-source projects and verified Plebeian Apps proof of work.",
 };
 
 export default function Home() {
