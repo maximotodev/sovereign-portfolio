@@ -1,7 +1,7 @@
 "use client";
 
 import {useMemo,useState} from "react";
-import {ArrowRight,ArrowUpRight,BookOpen,Check,CheckCircle2,Copy,Database,GitBranch,Layers3,Network,ShieldAlert,ShieldCheck,Workflow,XCircle} from "lucide-react";
+import {ArrowRight,ArrowUpRight,BookOpen,CheckCircle2,Copy,Database,GitBranch,Layers3,Network,ShieldAlert,ShieldCheck,Workflow,XCircle} from "lucide-react";
 import {SYSTEM_CASES,getSystemCase,systemBrief,type SystemCase,type SystemId,type SystemNode} from "@/lib/system-cases";
 
 type Lens="system"|"risk"|"proof";
@@ -55,7 +55,7 @@ export default function SystemsLab(){
  <div className="sl-model-left"><div className="sl-model-caption"><Layers3 size={15}/> COMPONENTS / CLICK TO INSPECT</div><div className="sl-flow" role="group" aria-label="Inspect system components">{item.nodes.map((n,i)=><div className="sl-flow-group" key={n.id}><button type="button" className={"sl-flow-node "+(selected===i?"is-current":"")} aria-pressed={selected===i} onClick={()=>setSelected(i)}><span className="sl-flow-step">0{i+1}</span><span className="sl-flow-name">{n.label}</span><span className="sl-flow-kind">{n.kind}</span><ArrowRight size={17}/></button>{i<item.nodes.length-1&&<div className="sl-flow-connector" aria-hidden="true"><span/><ArrowRight size={15}/><span/></div>}</div>)}</div><div className="sl-flow-disclaimer"><ShieldAlert size={14}/> All diagrams are architectural illustrations, not live network telemetry.</div></div>
  <div className="sl-model-right"><div className="sl-inspect-head"><span>INSPECTOR / {lens.toUpperCase()}</span><span>NODE {String(selected+1).padStart(2,"0")}</span></div><NodeInfo key={node.id+"-"+lens} node={node} lens={lens}/><div className="sl-inspect-bottom"><p><strong>Design decision</strong>{item.designDecision}</p><p><strong>Constraint</strong>{item.constraint}</p></div></div>
  </div>
- <div className="sl-evidence"><div className="sl-evidence-head"><div><BookOpen size={16}/><span>PRIMARY EVIDENCE</span></div><span>{item.evidence.length} SOURCES · VERIFY IN CONTEXT</span></div><div className="sl-evidence-links">{item.evidence.map((e,i)=><a href={e.href} key={e.href} target="_blank" rel="noopener noreferrer"><span>0{i+1}</span><span><strong>{e.title}</strong><small>{e.context}</small></span><ArrowUpRight size={16}/></a>)}</div></div>
+ <div className="sl-evidence"><div className="sl-evidence-head"><div><BookOpen size={16}/><span>PRIMARY EVIDENCE</span></div><a className="sl-label" href="/api/architecture" target="_blank" rel="noopener noreferrer">AGENT-READABLE JSON ↗</a><span>{item.evidence.length} SOURCES · VERIFY IN CONTEXT</span></div><div className="sl-evidence-links">{item.evidence.map((e,i)=><a href={e.href} key={e.href} target="_blank" rel="noopener noreferrer"><span>0{i+1}</span><span><strong>{e.title}</strong><small>{e.context}</small></span><ArrowUpRight size={16}/></a>)}</div></div>
  {item.id==="bitcoin"&&<QuorumLab/>}
  <div className="sl-case-footer"><div><ShieldCheck size={15}/><span>NO AUTONOMOUS ACTIONS · SOURCES BEFORE CLAIMS · HUMAN APPROVAL</span></div><button type="button" onClick={copyBrief}><Copy size={14}/>{copied?"COPIED TO CLIPBOARD":"COPY AGENT-READY BRIEF"}</button></div>
  </div>
