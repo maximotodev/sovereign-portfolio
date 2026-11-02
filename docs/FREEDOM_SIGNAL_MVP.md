@@ -1,6 +1,6 @@
-# Freedom Signal — Newsletter MVP
+# Newstr — Newsletter MVP
 
-Freedom Signal is a weekly, human-signed Nostr long-form publication from Maximoto. This implementation intentionally remains **small**: one template, an editable TL;DR, deterministic structural checks, explicit NIP-07 approval and a source-verified archive.
+Newstr is a weekly, human-signed Nostr long-form publication from Maximoto. This implementation intentionally remains **small**: one template, an editable TL;DR, deterministic structural checks, explicit NIP-07 approval and a source-verified archive.
 
 ## Implementation
 
@@ -14,7 +14,7 @@ Freedom Signal is a weekly, human-signed Nostr long-form publication from Maximo
 
 ## Naming
 
-The NIP-23 addressable `d` tag is `freedom-signal-<issue-number>-<YYYY-MM-DD>` (e.g. `freedom-signal-001-2026-11-06`). Keep it unchanged when editing/revising the same issue. Number and date are intended to be unique, but the MVP does not reserve names or check for collisions on remote relays.
+The NIP-23 addressable `d` tag is `newstr-<issue-number>-<YYYY-MM-DD>` (e.g. `newstr-001-2026-11-06`). Keep it unchanged when editing/revising the same issue. Number and date are intended to be unique, but the MVP does not reserve names or check for collisions on remote relays.
 
 ## Manual rehearsal (do not publish the test fixture)
 
