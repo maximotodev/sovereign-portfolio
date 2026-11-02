@@ -1,6 +1,8 @@
 "use client";
 import { useState, useRef } from "react";
 import { AgentReview } from "@/components/editorial/AgentReview";
+import { NewstrComposer } from "@/components/editorial/FreedomSignalComposer";
+import { newsletterChecks, newstrTags } from "@/lib/freedom-signal";
 import { draftSha256 } from "@/lib/editorial-state";
 import ReactMarkdown from "react-markdown";
 import { makeDraft, validateDraft, copyDraft, snapshotEqual, type EditorialSnapshot } from "@/lib/editorial-state";
@@ -25,13 +27,17 @@ export default function Studio(){
  const checks=[{label:"Article title",valid:title.trim().length>=5&&title.length<=160},{label:"Stable identifier",valid:slug.length>0},{label:"Body content",valid:body.trim().length>=40&&body.length<=MAX},{label:"Summary",valid:summary.trim().length>=20&&summary.length<=280},{label:"NIP-07 identity matches Maximoto",valid:pubkey===IDENTITY.pubkey}];
  const draft=makeDraft(title,slug,summary,body);
  const reviewed=review!==null && snapshotEqual(draft,review) && review.approvedPubkey===IDENTITY.pubkey;
- const ready=checks.every(c=>c.valid)&&ack&&reviewed;
+ const isNewsletter=slug.startsWith("newstr-")||/^newstr/i.test(title);
+ const issueChecks=isNewsletter?newsletterChecks(draft):[];
+ const newsletterReady=issueChecks.every(check=>check.valid);
+ const ready=checks.every(c=>c.valid)&&newsletterReady&&ack&&reviewed;
  function invalidate(){setReview(null);setAck(false);setReceipt(null);}
+ function applyTemplate(next:ReturnType<typeof makeDraft>){setTitle(next.title);setSummary(next.summary);setBody(next.content);setIdentifier(next.identifier);invalidate();setNotice("Unsigned newsletter draft loaded. Verify sources and approve again before signing.");}
  function acceptAgent(next:ReturnType<typeof makeDraft>){setTitle(next.title);setSummary(next.summary);setBody(next.content);setIdentifier(next.identifier);invalidate();setNotice("Agent proposal applied to UNSIGNED draft. You must complete a new review.");}
- async function approveReview(){if(!checks.every(c=>c.valid)){setNotice("Complete all checks and verify your Nostr signer before reviewing.");return;}const sha256=await draftSha256(draft);setReview({...copyDraft(draft),reviewedAt:new Date().toISOString(),approvedPubkey:IDENTITY.pubkey,sha256});setAck(false);setNotice("Review snapshot captured. Confirm and sign only if the content below is correct.");}
+ async function approveReview(){if(!checks.every(c=>c.valid)||!newsletterReady){setNotice("Complete all checks and verify your Nostr signer before reviewing.");return;}const sha256=await draftSha256(draft);setReview({...copyDraft(draft),reviewedAt:new Date().toISOString(),approvedPubkey:IDENTITY.pubkey,sha256});setAck(false);setNotice("Review snapshot captured. Confirm and sign only if the content below is correct.");}
  function exportDraft(){const blob=new Blob([JSON.stringify(draft,null,2)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=(slug||"nostr-article")+".draft.json";a.click();URL.revokeObjectURL(url);setNotice("Unsigned draft exported to local file.");}
  async function importDraft(file:File){if(file.size>150000){setNotice("Draft exceeds size limit.");return;}try{const value:unknown=JSON.parse(await file.text());if(!validateDraft(value)){setNotice("Invalid draft schema.");return;}setTitle(value.title);setIdentifier(value.identifier);setSummary(value.summary);setBody(value.content);invalidate();setNotice("Unsigned draft imported. Review and approve again before publishing.");}catch{setNotice("Could not parse draft file.");}}
- const makeEvent=(source=review)=>{if(!source)throw Error("A reviewed snapshot is required.");const now=Math.floor(Date.now()/1000);return {kind:30023,created_at:now,tags:[["d",source.identifier],["title",source.title.trim()],["summary",source.summary.trim()],["published_at",String(now)]],content:source.content};};
+ const makeEvent=(source=review)=>{if(!source)throw Error("A reviewed snapshot is required.");const now=Math.floor(Date.now()/1000);return {kind:30023,created_at:now,tags:[["d",source.identifier],["title",source.title.trim()],["summary",source.summary.trim()],["published_at",String(now)],...newstrTags(source.identifier)],content:source.content};};
  async function connect(){setNotice("");try{if(!window.nostr)throw Error("No NIP-07 browser signer detected. Install a compatible signer or use a supported external CMS.");const k=await window.nostr.getPublicKey();setPubkey(k);if(k!==IDENTITY.pubkey)setNotice("Signer identity mismatch. Switch the extension to Maximoto's published key.");else setNotice("Signer identity verified. Nothing has been signed.");}catch(e){setNotice(e instanceof Error?e.message:"Signer unavailable.");}}
  async function copyEvent(){try{await navigator.clipboard.writeText(JSON.stringify({kind:30023,created_at:null,tags:[["d",slug],["title",title.trim()],["summary",summary.trim()]],content:body},null,2));setNotice("Unsigned NIP-23 template copied. No keys or signatures exported.");}catch{setNotice("Clipboard unavailable.");}}
  async function publish(){
@@ -43,6 +49,7 @@ export default function Studio(){
    const livePubkey=await signer.getPublicKey();
    if(livePubkey!==IDENTITY.pubkey)throw Error("Active signer does not match Maximoto's verified public key.");
    if((await draftSha256(draft))!==review.sha256)throw Error("Reviewed draft integrity check failed.");
+   if(isNewsletter&&!newsletterChecks(review).every(check=>check.valid))throw Error("Newsletter readiness checks changed. Review again.");
    const expected=makeEvent(review);
    const event=await signer.signEvent(expected);
    const sameTags=JSON.stringify(event.tags)===JSON.stringify(expected.tags);
@@ -59,6 +66,7 @@ export default function Studio(){
  }
  return <main className="cp-root cp-studio"><div className="cp-grain" aria-hidden="true"/><div className="cp-wrap"><header className="cp-head"><Link href="/" className="cp-brand"><span className="cp-mark">M<span>✳</span></span><span>MAXIMOTO <small>/ EDITORIAL NODE</small></span></Link><Link href="/" className="cp-header-link"><ArrowLeft size={15}/> BACK TO WORK</Link></header>
  <div className="cp-studio-hero"><div className="cp-eyebrow"><span className="cp-dot"/> PRIVATE AUTHORING WORKSPACE / HUMAN-IN-THE-LOOP</div><h1>Ideas are cheap.<br/><em>Sign the work.</em></h1><p>A Nostr-native editorial workbench. Draft offline in your browser, check readiness, then explicitly authorize your own NIP-07 signer. No private keys are requested or stored. This is a focused editor—not a replacement for Bitkarrot&apos;s organizational CMS.</p><div className="cp-note"><LockKeyhole size={17}/> Content remains in browser component state until you sign and publish it. Reloading discards the draft. Export before leaving.</div></div>
+ <NewstrComposer draft={draft} onReplace={applyTemplate} onMessage={setNotice}/>
  <div className="cp-studio-grid"><div className="cp-editor">
  <div className="cp-panel-heading"><span>01 / DOCUMENT COMPOSER</span><span>LOCAL DRAFT</span></div>
  <label htmlFor="story-title">ARTICLE TITLE</label><input id="story-title" maxLength={160} value={title} onChange={e=>{setTitle(e.target.value);invalidate();}} placeholder="A case for sovereign software"/>
@@ -78,7 +86,7 @@ export default function Studio(){
  </div><aside className="cp-review"><div className="cp-panel-heading"><span>02 / REVIEW & AUTHORITY</span><span>DEFAULT DENY</span></div><div className="cp-studio-aside-intro"><Bot size={23}/><h2>Agentic by design.<br/><em>Human by default.</em></h2><p>Agents may suggest structure, improve readability, and propose references. They cannot bypass ownership, approval, or the signer. AI-generated text is untrusted until reviewed.</p></div><div className="cp-checks">{checks.map(c=><div key={c.label} className={c.valid?"is-good":""}>{c.valid?<CheckCircle2 size={15}/>:<span className="cp-open-circle"/>}{c.label}</div>)}</div>
  <button className="cp-connect" onClick={connect}><KeyRound size={17}/>{pubkey===IDENTITY.pubkey?"VERIFIED SIGNER CONNECTED":"VERIFY NIP-07 SIGNER"}</button>
  <p className="cp-pubkey">{pubkey?pubkey.slice(0,16)+"…"+pubkey.slice(-10):"No signer connected"}</p>
- <button className="cp-connect" style={{marginBottom:18}} onClick={approveReview} disabled={!checks.every(c=>c.valid)}>FREEZE CURRENT DRAFT FOR REVIEW</button>
+ <button className="cp-connect" style={{marginBottom:18}} onClick={approveReview} disabled={!checks.every(c=>c.valid)||!newsletterReady}>FREEZE CURRENT DRAFT FOR REVIEW</button>
  {review&&<div className="cp-note" style={{margin:"0 0 18px"}}>REVIEWED · {review.reviewedAt} · {review.title} · SHA-256 {review.sha256.slice(0,16)}… Edits invalidate approval.</div>}
  <label className="cp-approve"><input type="checkbox" checked={ack} onChange={e=>setAck(e.target.checked)}/><span>I reviewed the frozen snapshot and explicitly authorize its public, irreversible distribution to configured Nostr relays.</span></label>
  <button className="cp-publish" disabled={!ready||busy} onClick={publish}><Send size={16}/>{busy?"PUBLISHING…":"SIGN & PUBLISH TO NOSTR"} <ArrowUpRight size={15}/></button>

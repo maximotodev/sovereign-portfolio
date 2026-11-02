@@ -41,7 +41,7 @@ export default function Home() {
           </Link>
           <nav className={styles.nav} aria-label="Primary navigation">
             <a href="#work">Work</a>
-            <a href="#writing">Writing</a>
+            <Link href="/newsletter">Newsletter</Link>
             <Link href="/systems">Systems</Link>
           </nav>
           <a className={styles.profileLink} href={IDENTITY.nostr} target="_blank" rel="noopener noreferrer">
@@ -150,7 +150,10 @@ export default function Home() {
               <h2 id="writing-heading">Words I can sign.</h2>
               <p className={styles.writingIntro}>Long-form writing on Nostr. Portable identity, signed events, independent readers.</p>
             </div>
-            <a className={styles.inlineLink} href={IDENTITY.nostr} target="_blank" rel="noopener noreferrer">Read on YakiHonne <ArrowUpRight size={15} aria-hidden="true" /></a>
+            <div className={styles.writingLinks}>
+              <Link className={styles.inlineLink} href="/newsletter">Newstr archive <ArrowUpRight size={15} aria-hidden="true" /></Link>
+              <a className={styles.inlineLink} href={IDENTITY.nostr} target="_blank" rel="noopener noreferrer">Read on YakiHonne <ArrowUpRight size={15} aria-hidden="true" /></a>
+            </div>
           </div>
           <NostrJournal compact className={styles.notes} />
           <div className={styles.nostrIdentity}>
@@ -177,6 +180,7 @@ export default function Home() {
             <a href={IDENTITY.nostr} target="_blank" rel="noopener noreferrer">Nostr</a>
             <a href={IDENTITY.ngit} target="_blank" rel="noopener noreferrer">ngit</a>
             <Link href="/studio">Editorial Studio</Link>
+            <Link href="/newsletter">Newstr</Link>
           </nav>
           <span className={styles.footerEnd}>© {new Date().getFullYear()} MAXIMOTO · OPEN BY DESIGN</span>
         </footer>
