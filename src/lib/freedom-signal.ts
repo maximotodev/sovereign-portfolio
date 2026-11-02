@@ -132,6 +132,14 @@ function bodyOfSection(content: string, name: string): string | null {
   return lines.slice(start + 1, end < 0 ? undefined : end).join("\n").trim();
 }
 
+export function withoutTldrSection(content: string): string {
+  const lines = content.replace(/\r\n/g, "\n").split("\n");
+  const start = lines.findIndex(line => line.trim().toLowerCase() === "## tl;dr");
+  if (start < 0) return content;
+  const end = lines.findIndex((line, i) => i > start && /^##\s+\S/.test(line));
+  return [...lines.slice(0, start), ...lines.slice(end < 0 ? lines.length : end)].join("\n").trim();
+}
+
 export function readTldrItems(content: string): string[] {
   const section = bodyOfSection(content, "TL;DR");
   if (section === null) return [];
