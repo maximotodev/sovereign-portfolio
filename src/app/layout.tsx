@@ -16,8 +16,18 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Maximoto | Sovereign Engineer",
-  description: "Open-source engineering across AI/ML, Bitcoin, Nostr, FIPS and FOSS. View verified Plebeian Apps contributions.",
+  metadataBase: new URL("https://maximotodev.vercel.app"),
+  title: "Maximoto | Bitcoin, Nostr, FIPS & AI Systems Architect",
+  description: "Explore verifiable proof of work, interactive system architectures and engineering decisions across Bitcoin, Nostr, FIPS mesh networking, decentralized technologies, and AI/ML.",
+  keywords: ["Maximoto", "Bitcoin engineering", "Nostr", "FIPS mesh", "AI/ML architecture", "decentralized systems", "open source"],
+  openGraph: {
+    type: "website",
+    title: "Maximoto | Sovereign Systems Architecture",
+    description: "Inspect architecture, trust boundaries and proof of work for Bitcoin, Nostr, FIPS and agentic systems.",
+    url: "/",
+    siteName: "Maximoto",
+  },
+  twitter: { card: "summary", title: "Maximoto | Sovereign Systems Architecture" },
 };
 
 export default function RootLayout({
