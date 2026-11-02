@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { NewsletterArchive } from "@/components/newsletter/NewsletterArchive";
-import { isNewstrIdentifier } from "@/lib/newstr";
+import { isNewstrIdentifier } from "@/lib/freedom-signal";
 import { notFound } from "next/navigation";
 
 type Props = { params: Promise<{identifier: string}> };
