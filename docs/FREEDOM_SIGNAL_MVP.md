@@ -31,7 +31,7 @@ The NIP-23 addressable `d` tag is `freedom-signal-<issue-number>-<YYYY-MM-DD>` (
 ## Limitations and next steps
 
 - The archive is **client-side, read-only** and queries a bounded amount of recent authored events. It is not yet an SEO-ready server-rendered archive, nor does it guarantee completeness or availability across every relay. Add a signature-verified, cached, indexed server adapter later.
-- The article body currently includes its Markdown TL;DR as well as the highlighted TL;DR summary. Deduplicate presentation in a follow-up design cleanup if readers find it repetitive.
+- The reader presents TL;DR once in a highlighted summary and suppresses the duplicate Markdown heading in the article body. The original signed Markdown is preserved unchanged.
 - The TL;DR editor does not perform automatic text generation or validate external claims. Add optional bounded AI suggestions behind explicit review, server-side limits and citations in a separate PR.
 - Each article's `published_at` tag currently follows the existing Studio behavior (current signing time); a future revision-aware editor should preserve the original first-published timestamp.
 - For eventual email/RSS delivery, use a separate opt-in subscriber service; never equate a Nostr address with email consent.
