@@ -6,7 +6,7 @@ import {SimplePool} from "nostr-tools";
 import {ArrowLeft,ArrowUpRight,CheckCircle2,Radio,ShieldCheck} from "lucide-react";
 import {IDENTITY} from "@/lib/portfolio-data";
 import {RELAYS,selectArticles,type Article} from "@/lib/nostr-publishing";
-import {isFreedomSignalIdentifier,parseIssueIdentifier,readTldrItems} from "@/lib/freedom-signal";
+import {isFreedomSignalIdentifier,parseIssueIdentifier,readTldrItems,withoutTldrSection} from "@/lib/freedom-signal";
 import styles from "./newsletter.module.css";
 
 type ReadStatus="loading"|"ready"|"empty"|"error";
@@ -104,7 +104,7 @@ export function NewsletterArchive({identifier}:{identifier?:string}) {
       <div className={styles.tldrLabel}><span id="tldr-heading">TL;DR — The week in 60 seconds</span><span>{items.length} TAKEAWAYS</span></div>
       <div className={styles.tldrItems}>{items.map((text,i)=><div key={i}><span>{String(i+1).padStart(2,"0")}</span><div className={styles.markdown}><ReactMarkdown skipHtml>{text}</ReactMarkdown></div></div>)}</div>
      </section>}
-     <div className={[styles.articleBody,"prose","prose-invert","max-w-none"].join(" ")}><ReactMarkdown skipHtml>{issue.content}</ReactMarkdown></div>
+     <div className={[styles.articleBody,"prose","prose-invert","max-w-none"].join(" ")}><ReactMarkdown skipHtml>{withoutTldrSection(issue.content)}</ReactMarkdown></div>
      <div className={styles.disclaimer}>This article is a cryptographically verified Nostr publication. A signature confirms authorship, not the accuracy of every linked claim. Follow the sources and judge for yourself.</div>
      <Link href="/newsletter" className={styles.back}>All Freedom Signal issues <ArrowUpRight size={15}/></Link>
     </article>
