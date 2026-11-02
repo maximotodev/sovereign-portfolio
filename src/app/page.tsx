@@ -1,21 +1,186 @@
+import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowDownRight,ArrowUpRight,ArrowRight,Activity,CheckCircle2,Cpu,FileCheck2,GitPullRequest,Globe2,KeyRound,LockKeyhole,Network,Radio,ShieldCheck,Terminal,Zap } from "lucide-react";
-import { EVIDENCE,IDENTITY,PRINCIPLES,VENTURES } from "@/lib/portfolio-data";
+import { ArrowDownRight, ArrowUpRight, ArrowRight, ShieldCheck } from "lucide-react";
 import NostrJournal from "@/components/NostrJournal";
-import SystemsLab from "@/components/SystemsLab";
+import { CopyNpub } from "@/components/CopyNpub";
+import { EVIDENCE, IDENTITY, VENTURES } from "@/lib/portfolio-data";
+import styles from "./homepage.module.css";
 
-export default function Home(){
- return <main className="cp-root"><a className="sl-skip" href="#systems">Skip to systems architecture</a><div className="cp-grain" aria-hidden="true"/><div className="cp-wrap">
-  <header className="cp-head"><Link href="/" className="cp-brand" aria-label="Maximoto home"><span className="cp-mark">M<span>✳</span></span><span>MAXIMOTO <small>/ SYSTEM DESIGN</small></span></Link><div className="cp-head-right"><a href="#systems" className="cp-header-link">SYSTEMS LAB</a><span className="cp-head-live"><span className="cp-dot"/> BUILDING IN PUBLIC</span><a href={IDENTITY.github} target="_blank" rel="noopener noreferrer" className="cp-header-link">GITHUB <ArrowUpRight size={14}/></a><Link href="/studio" className="cp-header-cta">EDITORIAL NODE <ArrowUpRight size={14}/></Link></div></header>
-  <section className="cp-hero" id="home"><div className="cp-hero-top"><span className="cp-eyebrow"><span className="cp-dot"/> SYSTEM ARCHITECT / DECENTRALIZED TECHNOLOGIES</span><span className="cp-hero-location">01—04 / CURRENT SIGNAL</span></div><div className="cp-hero-grid"><div><p className="cp-pretitle">AN OPEN-SOURCE ENGINEER&apos;S PUBLIC LEDGER</p><h1>Build for<br/><em>freedom.</em><br/>Prove the <span>work.</span></h1><p className="cp-hero-description">I design and build <strong>Bitcoin-native systems, Nostr applications, decentralized networking, and AI/ML architectures</strong> — with explicit trust boundaries, verifiable code, and human-governed agents.</p><div className="cp-hero-cta"><a href="#systems" className="cp-primary">EXPLORE SYSTEM DESIGN <ArrowDownRight size={18}/></a><Link href="/studio" className="cp-secondary">OPEN NOSTR STUDIO <ArrowUpRight size={17}/></Link></div></div>
-  <div className="cp-hero-right"><div className="cp-rune" aria-hidden="true"><span className="cp-rune-orbit cp-rune-one"/><span className="cp-rune-orbit cp-rune-two"/><span className="cp-rune-core">M</span><span className="cp-rune-a">✳</span><span className="cp-rune-coordinate">3/4 · BFT</span></div><div className="cp-rune-meta"><span>NO TRUST WITHOUT VERIFICATION</span><span>↗ <span>21ST CENTURY CYPHERPUNK</span></span></div></div></div><div className="cp-hero-bottom"><div>AI / ML</div><div>BITCOIN + LIGHTNING</div><div>NOSTR + FIPS</div><div>FOSS / SECURITY</div><a href="#about">SCROLL TO INSPECT ↓</a></div></section>
-  <section className="cp-thesis" id="about"><div className="cp-thesis-label"><span>00 / THE POSITION</span><span className="cp-tiny-cross">✳</span></div><p>Software should be <em>auditable.</em> Identity should be portable. Agents should be accountable. And the work should speak <strong>for itself.</strong></p><div className="cp-thesis-footer"><span>MAXIMOTO · ENGINEER / MAINTAINER / SECURITY REVIEWER</span><a href={IDENTITY.nostr} target="_blank" rel="noopener noreferrer">NOSTR IDENTITY <ArrowUpRight size={13}/></a></div></section>
-  <section className="cp-section" id="work"><div className="cp-section-top"><span className="cp-kicker"><Network size={13}/> 01 / SELECTED SYSTEMS</span><span className="cp-muted">SHIP / AUDIT / DOCUMENT / REPEAT</span></div><div className="cp-section-intro"><div><h2>Public work.<br/><em>Open architecture.</em></h2><p>Projects at the intersection of financial sovereignty, decentralized identity, and applied AI. Protocol correctness before hype.</p></div><span className="cp-section-asterisk">✳</span></div><div className="cp-ventures">{VENTURES.map(p=><a key={p.index} className={"cp-venture "+(p.highlight?"cp-featured":"")} href={p.url} target="_blank" rel="noopener noreferrer"><div className="cp-venture-head"><span>{p.index} / {p.type}</span><ArrowUpRight size={18}/></div><div className="cp-venture-body"><div className="cp-venture-symbol">{p.highlight?"✳":p.index==="02"?"↗":"⌘"}</div><div><h3>{p.title}</h3><p>{p.text}</p></div></div><div className="cp-venture-tags">{p.tags.map(t=><span key={t}>{t}</span>)}</div></a>)}</div></section>
-  <SystemsLab/>
-  <section className="cp-section cp-evidence" id="evidence"><div className="cp-section-top"><span className="cp-kicker"><GitPullRequest size={13}/> 03 / PROOF OF WORK</span><a href="https://github.com/PlebeianApp/market/pulls?q=author%3Amaximotodev" className="cp-minilink" target="_blank" rel="noopener noreferrer">ALL CONTRIBUTIONS <ArrowUpRight size={14}/></a></div><div className="cp-section-intro"><div><h2>Don&apos;t take my <em>word.</em></h2><p>Follow the commits, PRs, architecture decisions, and reviewed changes. The source is the evidence.</p></div><span className="cp-section-asterisk">↗</span></div><div className="cp-evidence-head"><span>REFERENCE / ARTIFACT</span><span>DOMAIN</span><span>REVIEW SNAPSHOT*</span><span>INSPECT</span></div><div className="cp-evidence-list">{EVIDENCE.map(e=><a href={e.url} key={e.number} target="_blank" rel="noopener noreferrer" className="cp-evidence-row"><div className="cp-evidence-title"><span className="cp-evidence-number">#{e.number}</span><div><h3>{e.title}</h3><p>{e.detail}</p></div></div><div className="cp-evidence-area">{e.area}</div><div className="cp-evidence-status"><CheckCircle2 size={14}/>{e.status}</div><ArrowUpRight size={19}/></a>)}</div><p className="cp-evidence-foot">*STATUS AS VERIFIED ON 2026-10-22. OPEN THE SOURCE LINK FOR LIVE REVIEW STATE. EXPERIMENTAL FIPS / VALIDATOR WORK IS NOT CLAIMED AS PRODUCTION.</p></section>
-  <NostrJournal/>
-  <section className="cp-section cp-process" id="process"><div className="cp-section-top"><span className="cp-kicker"><Cpu size={13}/> 05 / THE OPERATING MODEL</span><span className="cp-muted">HUMAN GOVERNANCE / MACHINE ASSISTANCE</span></div><div className="cp-section-intro"><div><h2>Agentic speed.<br/><em>Maintainer discipline.</em></h2><p>AI helps generate options and uncover regressions. It does not become the authority for security-sensitive decisions or signing.</p></div></div><div className="cp-principles">{PRINCIPLES.map(p=><div className="cp-principle" key={p.id}><span>{p.id}</span><h3>{p.name}</h3><p>{p.detail}</p><span className="cp-principle-sigil">↗</span></div>)}</div></section>
-  <section className="cp-protocol-banner"><div><span className="cp-kicker"><KeyRound size={13}/> NOSTR-NATIVE CMS</span><h2>Write freely.<br/>Publish <em>with keys.</em></h2><p>A dedicated editorial workbench for signed, portable NIP-23 articles. Optional AI assistance never bypasses your signer, your consent, or review.</p><Link href="/studio" className="cp-primary">ENTER EDITORIAL NODE <ArrowUpRight size={18}/></Link></div><div className="cp-stack"><div><span>01</span><span><Terminal size={16}/> DRAFT & REFINE</span><CheckCircle2 size={15}/></div><div><span>02</span><span><FileCheck2 size={16}/> HUMAN REVIEW</span><CheckCircle2 size={15}/></div><div><span>03</span><span><LockKeyhole size={16}/> NIP-07 SIGNATURE</span><KeyRound size={15}/></div><div><span>04</span><span><Radio size={16}/> RELAY DISTRIBUTION</span><Globe2 size={15}/></div><p>SIGNER-BOUND · NO RAW PRIVATE KEY STORAGE</p></div></section>
-  <footer className="cp-footer"><div className="cp-footer-top"><div><span className="cp-kicker"><Zap size={13}/> BUILD SOMETHING THAT LASTS</span><h2>The future is<br/><em>permissionless.</em></h2></div><div className="cp-footer-links"><a target="_blank" rel="noopener noreferrer" href={IDENTITY.github}>GITHUB <ArrowUpRight size={17}/></a><a target="_blank" rel="noopener noreferrer" href={IDENTITY.nostr}>NOSTR / NPUB <ArrowUpRight size={17}/></a><a target="_blank" rel="noopener noreferrer" href={IDENTITY.ngit}>NGIT / GITWORKSHOP <ArrowUpRight size={17}/></a><Link href="/studio">EDITORIAL STUDIO <ArrowUpRight size={17}/></Link></div></div><div className="cp-footer-bottom"><div className="cp-footer-logo">MAXIMOTO<span>✳</span></div><div><span>AI / ML · BITCOIN · NOSTR · FIPS · FOSS</span><span>© {new Date().getFullYear()} MAXIMOTO · VERIFY EVERYTHING</span></div></div></footer>
- </div></main>;
+export const metadata: Metadata = {
+  title: "Maximoto — Building for Freedom",
+  description:
+    "Maximoto is an independent, self-taught engineer building open-source Bitcoin, Nostr and freedom-tech systems. Read the story, explore verifiable contributions, and find signed Nostr writing.",
+  alternates: { canonical: "/" },
+  openGraph: {
+    title: "Maximoto — Building for Freedom",
+    description: "Bitcoin, Nostr, open-source software and a belief that people should control their tools.",
+    type: "website",
+    url: "/",
+  },
+};
+
+const selectedProof = [1407, 1110, 1410]
+  .map(number => EVIDENCE.find(item => item.number === number))
+  .filter((item): item is (typeof EVIDENCE)[number] => Boolean(item));
+
+const interests = [
+  { title: "Bitcoin", description: "Money and settlement you can verify." },
+  { title: "Nostr", description: "An identity that travels with you." },
+  { title: "FIPS", description: "Exploring networks without gatekeepers." },
+  { title: "AI / ML", description: "Useful assistance with humans in control." },
+];
+
+export default function Home() {
+  return (
+    <main className={styles.page}>
+      <a href="#story" className={styles.skip}>Skip to Maximoto&apos;s story</a>
+      <div className={styles.container}>
+        <header className={styles.header}>
+          <Link href="/" className={styles.brand} aria-label="Maximoto, homepage">
+            MAXIMOTO<span aria-hidden="true">.</span>
+          </Link>
+          <nav className={styles.nav} aria-label="Primary navigation">
+            <a href="#work">Work</a>
+            <a href="#writing">Writing</a>
+            <Link href="/systems">Systems</Link>
+          </nav>
+          <a className={styles.profileLink} href={IDENTITY.nostr} target="_blank" rel="noopener noreferrer">
+            Nostr <ArrowUpRight size={14} aria-hidden="true" />
+          </a>
+        </header>
+
+        <section id="story" className={styles.hero} aria-labelledby="hero-title">
+          <p className={styles.eyebrow}><span className={styles.bullet} aria-hidden="true" />INDEPENDENT ENGINEER / FREEDOM TECH</p>
+          <h1 id="hero-title">I&apos;m Maximoto.<br />I build for <em>freedom.</em></h1>
+          <p className={styles.heroLead}>
+            I believe people should own their money, identity, and tools—not rent permission to use them.
+          </p>
+          <p className={styles.heroBody}>
+            Bitcoin led me from curiosity to running my own node and learning how trust can be verified.
+            That path brought me to Nostr, open protocols, and software that puts people back in control.
+          </p>
+          <div className={styles.heroActions}>
+            <a href="#work" className={styles.primaryAction}>Explore my work <ArrowDownRight size={18} aria-hidden="true" /></a>
+            <a href={IDENTITY.nostr} target="_blank" rel="noopener noreferrer" className={styles.textAction}>Find me on Nostr <ArrowUpRight size={16} aria-hidden="true" /></a>
+          </div>
+          <div className={styles.heroIndex}><span>BITCOIN · NOSTR · FOSS · OPEN SYSTEMS</span><span>01 / A DIFFERENT WAY TO BUILD</span></div>
+        </section>
+
+        <section className={styles.story} aria-labelledby="story-heading">
+          <div className={styles.sectionLabel}>01 / THE PERSON</div>
+          <div className={styles.storyContent}>
+            <h2 id="story-heading">Curiosity became a <em>conviction.</em></h2>
+            <div className={styles.storyCopy}>
+              <p>
+                I didn&apos;t take a traditional route into engineering. I spent years in hospitality,
+                working closely with people, before teaching myself to write software.
+                That experience taught me to make technology practical—not just impressive.
+              </p>
+              <p>
+                Today I work across Bitcoin, Nostr, decentralized networking and AI/ML.
+                What connects them is simple: I&apos;m passionate about building systems that are
+                open, auditable and useful without a central gatekeeper.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section className={styles.interests} aria-labelledby="values-heading">
+          <div className={styles.sectionLabel}>02 / WHAT MATTERS</div>
+          <div className={styles.sectionIntro}>
+            <h2 id="values-heading">Freedom tech, not hype.</h2>
+            <Link className={styles.inlineLink} href="/systems">Explore the architecture <ArrowUpRight size={15} aria-hidden="true" /></Link>
+          </div>
+          <div className={styles.interestGrid}>
+            {interests.map(item => (
+              <div className={styles.interest} key={item.title}>
+                <strong>{item.title}</strong>
+                <p>{item.description}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section id="work" className={styles.work} aria-labelledby="work-heading">
+          <div className={styles.sectionLabel}>03 / PROOF OF WORK</div>
+          <div className={styles.sectionIntro}>
+            <h2 id="work-heading">Show the work.</h2>
+            <span className={styles.subtle}>No vanity counters. Just things you can inspect.</span>
+          </div>
+
+          <div className={styles.projects}>
+            {VENTURES.map((project, index) => (
+              <a className={styles.project} key={project.index} href={project.url} target="_blank" rel="noopener noreferrer">
+                <span className={styles.projectNumber}>0{index + 1}</span>
+                <div className={styles.projectText}>
+                  <div className={styles.projectHeading}>
+                    <h3>{project.title}</h3>
+                    {index === 0 && <span className={styles.featured}>FEATURED / PLEBEIAN APPS</span>}
+                  </div>
+                  <p>{project.text}</p>
+                  <span className={styles.projectTags}>{project.tags.join(" / ")}</span>
+                </div>
+                <ArrowUpRight className={styles.projectArrow} size={22} aria-hidden="true" />
+              </a>
+            ))}
+          </div>
+
+          <div className={styles.proof}>
+            <div className={styles.proofIntro}>
+              <ShieldCheck size={18} aria-hidden="true" />
+              <strong>Traceable contributions</strong>
+              <span>Follow the pull request. Read the discussion.</span>
+            </div>
+            <div className={styles.proofLinks}>
+              {selectedProof.map(item => (
+                <a key={item.number} href={item.url} target="_blank" rel="noopener noreferrer">
+                  <span>#{item.number}</span>
+                  <span>{item.title}</span>
+                  <ArrowUpRight size={15} aria-hidden="true" />
+                </a>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="writing" className={styles.writing} aria-labelledby="writing-heading">
+          <div className={styles.sectionLabel}>04 / WRITTEN IN THE OPEN</div>
+          <div className={styles.sectionIntro}>
+            <div>
+              <h2 id="writing-heading">Words I can sign.</h2>
+              <p className={styles.writingIntro}>Long-form writing on Nostr. Portable identity, signed events, independent readers.</p>
+            </div>
+            <a className={styles.inlineLink} href={IDENTITY.nostr} target="_blank" rel="noopener noreferrer">Read on YakiHonne <ArrowUpRight size={15} aria-hidden="true" /></a>
+          </div>
+          <NostrJournal compact className={styles.notes} />
+          <div className={styles.nostrIdentity}>
+            <div>
+              <span className={styles.monoLabel}>NOSTR IDENTITY / NIP-05</span>
+              <p>{IDENTITY.nip05}</p>
+            </div>
+            <CopyNpub />
+          </div>
+        </section>
+
+        <section className={styles.closing} aria-label="Closing statement">
+          <p>The future I care about is one where more people can <em>choose, verify and leave.</em></p>
+          <Link href="/systems" className={styles.inlineLink}>How I think about systems <ArrowRight size={16} aria-hidden="true" /></Link>
+        </section>
+
+        <footer className={styles.footer}>
+          <div>
+            <strong>MAXIMOTO<span>.</span></strong>
+            <p>Independent software engineer. Building in the open.</p>
+          </div>
+          <nav className={styles.footerLinks} aria-label="Social and project links">
+            <a href={IDENTITY.github} target="_blank" rel="noopener noreferrer">GitHub</a>
+            <a href={IDENTITY.nostr} target="_blank" rel="noopener noreferrer">Nostr</a>
+            <a href={IDENTITY.ngit} target="_blank" rel="noopener noreferrer">ngit</a>
+            <Link href="/studio">Editorial Studio</Link>
+          </nav>
+          <span className={styles.footerEnd}>© {new Date().getFullYear()} MAXIMOTO · OPEN BY DESIGN</span>
+        </footer>
+      </div>
+    </main>
+  );
 }
