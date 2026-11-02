@@ -1,27 +1,27 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
-  createFreedomSignalDraft, makeIssueIdentifier, parseIssueIdentifier,
-  freedomSignalTags, isFreedomSignalIdentifier, nextFridayLocal,
+  createNewstrDraft, makeIssueIdentifier, parseIssueIdentifier,
+  newstrTags, isNewstrIdentifier, nextFridayLocal,
   readTldrItems, replaceTldrItems, withoutTldrSection, markdownSourceUrls, newsletterChecks,
   publicHttpsSource,
-} from "../src/lib/freedom-signal.ts";
+} from "../src/lib/newstr.ts";
 
 const date="2026-11-06";
-const issue=createFreedomSignalDraft(1,date);
+const issue=createNewstrDraft(1,date);
 test("issue identifiers use stable NIP-23 d-tags and real calendar dates",()=>{
- assert.equal(issue.identifier,"freedom-signal-001-2026-11-06");
+ assert.equal(issue.identifier,"newstr-001-2026-11-06");
  assert.deepEqual(parseIssueIdentifier(issue.identifier),{issueNumber:1,weekEnding:date});
- assert.equal(isFreedomSignalIdentifier(issue.identifier),true);
- assert.equal(parseIssueIdentifier("freedom-signal-001-2026-02-30"),null);
- assert.equal(parseIssueIdentifier("freedom-signal-000-2026-11-06"),null);
+ assert.equal(isNewstrIdentifier(issue.identifier),true);
+ assert.equal(parseIssueIdentifier("newstr-001-2026-02-30"),null);
+ assert.equal(parseIssueIdentifier("newstr-000-2026-11-06"),null);
  assert.throws(()=>makeIssueIdentifier(-1,date));
  assert.throws(()=>makeIssueIdentifier(1,"2026-12-99"));
  assert.equal(nextFridayLocal(new Date(2026,10,2)),date);
- assert.deepEqual(freedomSignalTags(issue.identifier),[
-  ["t","freedom-signal"],["t","bitcoin"],["t","nostr"],["t","freedom-tech"],
+ assert.deepEqual(newstrTags(issue.identifier),[
+  ["t","newstr"],["t","bitcoin"],["t","nostr"],["t","freedom-tech"],
  ]);
- assert.deepEqual(freedomSignalTags("ordinary-article"),[]);
+ assert.deepEqual(newstrTags("ordinary-article"),[]);
 });
 test("template includes all seven sections and starts with unfinished checks",()=>{
  assert.match(issue.content,/## TL;DR/);
