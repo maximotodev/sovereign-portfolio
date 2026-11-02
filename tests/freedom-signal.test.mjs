@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import {
   createFreedomSignalDraft, makeIssueIdentifier, parseIssueIdentifier,
   freedomSignalTags, isFreedomSignalIdentifier, nextFridayLocal,
-  readTldrItems, replaceTldrItems, markdownSourceUrls, newsletterChecks,
+  readTldrItems, replaceTldrItems, withoutTldrSection, markdownSourceUrls, newsletterChecks,
   publicHttpsSource,
 } from "../src/lib/freedom-signal.ts";
 
@@ -41,6 +41,8 @@ test("TL;DR editor enforces 3–5 items and preserves all following sections",()
  const body=replaceTldrItems(issue.content,list);
  assert.deepEqual(readTldrItems(body),list);
  assert.match(body,/## The Signal/);
+ assert.doesNotMatch(withoutTldrSection(body), /## TL;DR/);
+ assert.match(withoutTldrSection(body), /## The Signal/);
  assert.match(body,/## Further Reading/);
  assert.throws(()=>replaceTldrItems(issue.content,["one","two"]));
  assert.throws(()=>replaceTldrItems(issue.content,Array(6).fill("a")));
