@@ -21,7 +21,7 @@ function useIssues(){
        const events=await pool.querySync(RELAYS,
          {authors:[IDENTITY.pubkey],kinds:[30023],limit:100},{maxWait:6500});
        if(!active)return;
-       const list=selectArticles(events).filter(a=>isFreedomSignalIdentifier(a.identifier));
+       const list=selectArticles(events,100).filter(a=>isFreedomSignalIdentifier(a.identifier));
        setIssues(list);
        setStatus(list.length?"ready":"empty");
      }catch{
