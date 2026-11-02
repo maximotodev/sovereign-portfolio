@@ -1,5 +1,5 @@
 /**
- * Freedom Signal — a portable NIP-23 newsletter format.
+ * Newstr — a portable NIP-23 newsletter format.
  *
  * This module deliberately has no model calls, publication actions, relay
  * connections, or secret access. Validation checks structure and URL syntax,
@@ -7,7 +7,7 @@
  */
 import type { EditorialDraft } from "./editorial-state";
 
-export const FREEDOM_SIGNAL_TAG = "freedom-signal";
+export const NEWSTR_TAG = "newstr";
 export const NEWSLETTER_HEADERS = [
   "TL;DR",
   "The Signal",
@@ -25,7 +25,7 @@ export type NewsletterCheck = {
   detail: string;
   valid: boolean;
 };
-const issuePattern = /^freedom-signal-(\d{3,4})-(\d{4}-\d{2}-\d{2})$/;
+const issuePattern = /^newstr-(\d{3,4})-(\d{4}-\d{2}-\d{2})$/;
 
 function realDate(iso: string): boolean {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(iso)) return false;
@@ -44,7 +44,7 @@ export function parseIssueIdentifier(value: string): IssueMetadata | null {
 export function makeIssueIdentifier(issueNumber: number, weekEnding: string): string {
   if (!Number.isSafeInteger(issueNumber) || issueNumber < 1 || issueNumber > 9999 ||
       !realDate(weekEnding)) throw new Error("Invalid issue number or week-ending date.");
-  return "freedom-signal-" + String(issueNumber).padStart(3, "0") + "-" + weekEnding;
+  return "newstr-" + String(issueNumber).padStart(3, "0") + "-" + weekEnding;
 }
 
 export function nextFridayLocal(now: Date = new Date()): string {
@@ -59,16 +59,16 @@ function formatWeekEnding(iso: string): string {
   return date.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric", timeZone: "UTC" });
 }
 
-export function createFreedomSignalDraft(issueNumber: number, weekEnding: string): EditorialDraft {
+export function createNewstrDraft(issueNumber: number, weekEnding: string): EditorialDraft {
   const identifier = makeIssueIdentifier(issueNumber, weekEnding);
   const number = String(issueNumber).padStart(3, "0");
   return {
     version: 1,
-    title: "Freedom Signal — Issue #" + number,
+    title: "Newstr — Issue #" + number,
     identifier,
     summary: "A weekly dispatch on Bitcoin, Nostr, AI/ML and freedom tech — issue #" + number + ".",
     content: [
-      "# Freedom Signal — Issue #" + number,
+      "# Newstr — Issue #" + number,
       "",
       "*Week ending " + formatWeekEnding(weekEnding) + " · Maximoto*",
       "",
@@ -109,18 +109,18 @@ export function createFreedomSignalDraft(issueNumber: number, weekEnding: string
       "",
       "---",
       "",
-      "*Freedom Signal is researched with AI assistance and published only after human review and a Nostr signature.*",
+      "*Newstr is researched with AI assistance and published only after human review and a Nostr signature.*",
     ].join("\n"),
   };
 }
 
-export function isFreedomSignalIdentifier(value: string): boolean {
+export function isNewstrIdentifier(value: string): boolean {
   return parseIssueIdentifier(value) !== null;
 }
 
-export function freedomSignalTags(identifier: string): string[][] {
-  return isFreedomSignalIdentifier(identifier)
-    ? [["t", FREEDOM_SIGNAL_TAG], ["t", "bitcoin"], ["t", "nostr"], ["t", "freedom-tech"]]
+export function newstrTags(identifier: string): string[][] {
+  return isNewstrIdentifier(identifier)
+    ? [["t", NEWSTR_TAG], ["t", "bitcoin"], ["t", "nostr"], ["t", "freedom-tech"]]
     : [];
 }
 
@@ -193,7 +193,7 @@ export function newsletterChecks(draft: EditorialDraft): NewsletterCheck[] {
   const tldrLinksPresent = tldr.every(item => markdownSourceUrls(item).some(publicHttpsSource));
   const missingSections = NEWSLETTER_HEADERS.filter(name => bodyOfSection(draft.content, name) === null);
   return [
-    { id: "issue", label: "Issue metadata", detail: "A unique issue number and YYYY-MM-DD week-ending date", valid: metadata !== null && draft.title.toLowerCase().includes("freedom signal") && draft.title.includes("#" + String(metadata?.issueNumber ?? 0).padStart(3, "0")) },
+    { id: "issue", label: "Issue metadata", detail: "A unique issue number and YYYY-MM-DD week-ending date", valid: metadata !== null && draft.title.toLowerCase().includes("newstr") && draft.title.includes("#" + String(metadata?.issueNumber ?? 0).padStart(3, "0")) },
     { id: "sections", label: "Complete issue structure", detail: "TL;DR, news, Bitcoin, Nostr, AI, workshop, and reading", valid: missingSections.length === 0 },
     { id: "tldr", label: "TL;DR with citations", detail: "3–5 concise takeaways, each linking to an HTTPS source", valid: tldr.length >= 3 && tldr.length <= 5 && tldr.every(item => item.length <= 350) && tldrLinksPresent },
     { id: "reading", label: "Further-reading sources", detail: "At least three distinct HTTPS links to check manually", valid: new Set(sources.filter(publicHttpsSource)).size >= 3 },
