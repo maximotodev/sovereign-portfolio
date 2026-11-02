@@ -5,7 +5,7 @@ import {
   newstrTags, isNewstrIdentifier, nextFridayLocal,
   readTldrItems, replaceTldrItems, withoutTldrSection, markdownSourceUrls, newsletterChecks,
   publicHttpsSource,
-} from "../src/lib/newstr.ts";
+} from "../src/lib/freedom-signal.ts";
 
 const date="2026-11-06";
 const issue=createNewstrDraft(1,date);
