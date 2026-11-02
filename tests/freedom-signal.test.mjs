@@ -63,7 +63,16 @@ test("a completed issue passes structural checks without claiming fact checking"
   "**AI:** [Test reference](https://github.com/maximotodev/sovereign-portfolio/pull/5)",
  ]);
  const completed=updated
-  .replace(/\[\[TODO:[^\]]+\]\]/g,"Illustrative commentary and context with [cited sources](https://github.com/PlebeianApp/market/pull/1410).");
+  .replace(/\[\[TODO:[^\]]+\]\]/g,"Illustrative commentary and context with [cited sources](https://github.com/PlebeianApp/market/pull/1410).")
+  .replace(/## Further Reading[\s\S]*?---/,[
+    "## Further Reading",
+    "",
+    "- [Consensus](https://github.com/PlebeianApp/market/pull/1407)",
+    "- [Messaging](https://github.com/PlebeianApp/market/pull/1110)",
+    "- [Deployment](https://github.com/PlebeianApp/market/pull/1410)",
+    "",
+    "---",
+  ].join("\n"));
  const checks=newsletterChecks({...issue,content:completed});
  assert.equal(checks.length,6);
  assert.deepEqual(checks.filter(c=>!c.valid),[]);
