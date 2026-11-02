@@ -1,8 +1,8 @@
 "use client";
 import { useState, useRef } from "react";
 import { AgentReview } from "@/components/editorial/AgentReview";
-import { NewstrComposer } from "@/components/editorial/NewstrComposer";
-import { newsletterChecks, newstrTags } from "@/lib/newstr";
+import { NewstrComposer } from "@/components/editorial/FreedomSignalComposer";
+import { newsletterChecks, newstrTags } from "@/lib/freedom-signal";
 import { draftSha256 } from "@/lib/editorial-state";
 import ReactMarkdown from "react-markdown";
 import { makeDraft, validateDraft, copyDraft, snapshotEqual, type EditorialSnapshot } from "@/lib/editorial-state";
