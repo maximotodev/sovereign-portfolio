@@ -6,7 +6,7 @@ import {SimplePool} from "nostr-tools";
 import {ArrowLeft,ArrowUpRight,CheckCircle2,Radio,ShieldCheck} from "lucide-react";
 import {IDENTITY} from "@/lib/portfolio-data";
 import {RELAYS,selectArticles,type Article} from "@/lib/nostr-publishing";
-import {isFreedomSignalIdentifier,parseIssueIdentifier,readTldrItems,withoutTldrSection} from "@/lib/freedom-signal";
+import {isNewstrIdentifier,parseIssueIdentifier,readTldrItems,withoutTldrSection} from "@/lib/newstr";
 import styles from "./newsletter.module.css";
 
 type ReadStatus="loading"|"ready"|"empty"|"error";
@@ -21,7 +21,7 @@ function useIssues(){
        const events=await pool.querySync(RELAYS,
          {authors:[IDENTITY.pubkey],kinds:[30023],limit:100},{maxWait:6500});
        if(!active)return;
-       const list=selectArticles(events,100).filter(a=>isFreedomSignalIdentifier(a.identifier));
+       const list=selectArticles(events,100).filter(a=>isNewstrIdentifier(a.identifier));
        setIssues(list);
        setStatus(list.length?"ready":"empty");
      }catch{
@@ -39,7 +39,7 @@ function LoadingState({status}:{status:ReadStatus}){
   <>Checking Nostr relays and verifying article signatures…</>:
  status==="error"?
   <>The relays could not be reached. Try again later or visit <a href={IDENTITY.nostr} target="_blank" rel="noopener noreferrer">Maximoto&apos;s Nostr profile</a>.</>:
- <>No signed Freedom Signal issues were found on the configured relays yet. The archive does not generate placeholder publications.</>}
+ <>No signed Newstr issues were found on the configured relays yet. The archive does not generate placeholder publications.</>}
  </div>;
 }
 function Header(){
@@ -50,7 +50,7 @@ function Header(){
 }
 function Footer(){
  return <footer className={styles.footer}>
-  <span>FREEDOM SIGNAL / MAXIMOTO</span>
+  <span>NEWSTR / MAXIMOTO</span>
   <span>INDEPENDENT WRITING · HUMAN-SIGNED NIP-23</span>
  </footer>;
 }
@@ -69,7 +69,7 @@ export function NewsletterArchive({identifier}:{identifier?:string}) {
   {index ? <>
    <section className={styles.hero}>
     <p className={styles.eyebrow}><Radio size={14}/> WEEKLY DISPATCH · BITCOIN / NOSTR / AI / FREEDOM TECH</p>
-    <h1>Freedom <em>Signal.</em></h1>
+    <h1>Newstr<em>.</em></h1>
     <p>A weekly look at the protocols, people and ideas making the internet more open. Researched with assistance. Verified and signed by Maximoto.</p>
     <div className={styles.heroFoot}><span>TL;DR FIRST · 5–7 MINUTE READS</span><span>NOTHING PUBLISHED WITHOUT HUMAN APPROVAL</span></div>
    </section>
@@ -106,7 +106,7 @@ export function NewsletterArchive({identifier}:{identifier?:string}) {
      </section>}
      <div className={[styles.articleBody,"prose","prose-invert","max-w-none"].join(" ")}><ReactMarkdown skipHtml>{withoutTldrSection(issue.content)}</ReactMarkdown></div>
      <div className={styles.disclaimer}>This article is a cryptographically verified Nostr publication. A signature confirms authorship, not the accuracy of every linked claim. Follow the sources and judge for yourself.</div>
-     <Link href="/newsletter" className={styles.back}>All Freedom Signal issues <ArrowUpRight size={15}/></Link>
+     <Link href="/newsletter" className={styles.back}>All Newstr issues <ArrowUpRight size={15}/></Link>
     </article>
    }
   </>}
