@@ -6,7 +6,7 @@ import {SimplePool} from "nostr-tools";
 import {ArrowLeft,ArrowUpRight,CheckCircle2,Radio,ShieldCheck} from "lucide-react";
 import {IDENTITY} from "@/lib/portfolio-data";
 import {RELAYS,selectArticles,type Article} from "@/lib/nostr-publishing";
-import {isNewstrIdentifier,parseIssueIdentifier,readTldrItems,withoutTldrSection} from "@/lib/newstr";
+import {isNewstrIdentifier,parseIssueIdentifier,readTldrItems,withoutTldrSection} from "@/lib/freedom-signal";
 import styles from "./newsletter.module.css";
 
 type ReadStatus="loading"|"ready"|"empty"|"error";
