@@ -4,9 +4,9 @@ import { useState } from "react";
 import Link from "next/link";
 import { BookOpen, CalendarDays, CheckCircle2, CircleAlert, FilePlus2, ListChecks, RefreshCw } from "lucide-react";
 import type { EditorialDraft } from "@/lib/editorial-state";
-import { createFreedomSignalDraft, nextFridayLocal, newsletterChecks, parseIssueIdentifier, readTldrItems, replaceTldrItems } from "@/lib/freedom-signal";
+import { createNewstrDraft, nextFridayLocal, newsletterChecks, parseIssueIdentifier, readTldrItems, replaceTldrItems } from "@/lib/newstr";
 
-export function FreedomSignalComposer({
+export function NewstrComposer({
   draft,
   onReplace,
   onMessage,
@@ -19,20 +19,20 @@ export function FreedomSignalComposer({
   const [ending, setEnding] = useState(() => nextFridayLocal());
   const [expanded, setExpanded] = useState(false);
   const [tldr, setTldr] = useState<string[]>([]);
-  const newsletter = draft.identifier.startsWith("freedom-signal-") || /^freedom signal/i.test(draft.title);
+  const newsletter = draft.identifier.startsWith("newstr-") || /^newstr/i.test(draft.title);
   const metadata = parseIssueIdentifier(draft.identifier);
   const checks = newsletterChecks(draft);
   const completed = checks.filter(check => check.valid).length;
 
   function newIssue() {
     try {
-      const value = createFreedomSignalDraft(number, ending);
+      const value = createNewstrDraft(number, ending);
       if ((draft.title.trim() || draft.content.trim()) &&
           !window.confirm("Replace the current UNSIGNED draft? Export it first if needed.")) return;
       onReplace(value);
       setExpanded(true);
       setTldr(readTldrItems(value.content).map(item => item.replace(/^[-*]\s*/, "")));
-      onMessage("Freedom Signal template loaded. Every TODO and source must be reviewed before signing.");
+      onMessage("Newstr template loaded. Every TODO and source must be reviewed before signing.");
     } catch (error) {
       onMessage(error instanceof Error ? error.message : "Invalid issue details.");
     }
@@ -56,7 +56,7 @@ export function FreedomSignalComposer({
       <div className="fs-composer-head">
         <div>
           <span className="fs-eyebrow"><BookOpen size={14}/> WEEKLY NOSTR PUBLICATION</span>
-          <h2 id="fs-composer-title">Freedom Signal</h2>
+          <h2 id="fs-composer-title">Newstr</h2>
           <p>Research with agents. Edit with care. Publish only with your own Nostr signature.</p>
         </div>
         <Link href="/newsletter" className="fs-small-link">View archive ↗</Link>
