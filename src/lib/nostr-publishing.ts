@@ -14,10 +14,10 @@ export function parseArticle(input:unknown, now=Math.floor(Date.now()/1000)):Art
  const summary=(e.tags.find(t=>t[0]==="summary")?.[1]||e.content).replace(/[#*_>\r\n]/g," ").replace(/\s+/g," ").slice(0,260);
  return {id:e.id,identifier:d[0][1],title,summary,content:e.content,createdAt:e.created_at,url:"https://njump.me/"+nip19.naddrEncode({kind:30023,pubkey:e.pubkey,identifier:d[0][1],relays:RELAYS})};
 }
-export function selectArticles(input:unknown[]):Article[]{
+export function selectArticles(input:unknown[], maxArticles=20):Article[]{
  const found=new Map<string,Article>();
  for(const item of input.slice(0,400)){const a=parseArticle(item);if(!a)continue;const old=found.get(a.identifier);if(!old||a.createdAt>old.createdAt||(a.createdAt===old.createdAt&&a.id>old.id))found.set(a.identifier,a);}
- return [...found.values()].sort((a,b)=>b.createdAt-a.createdAt||b.id.localeCompare(a.id)).slice(0,20);
+ return [...found.values()].sort((a,b)=>b.createdAt-a.createdAt||b.id.localeCompare(a.id)).slice(0,Math.min(100,Math.max(1,maxArticles)));
 }
 export function cleanSlug(value:string):string {
  return value.toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9-]+/g,"-").replace(/^-+|-+$/g,"").slice(0,80);
