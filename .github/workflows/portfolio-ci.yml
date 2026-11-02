@@ -7,6 +7,7 @@ on:
     branches:
       - feat/cypherpunk-agentic-nostr-portfolio-2026-10
       - refactor/editorial-yakihonne-buzz-plan-2026-10
+      - feat/systems-lab-ai-architecture-2026-11
   workflow_dispatch:
 
 permissions:
@@ -27,9 +28,9 @@ jobs:
       - name: Typecheck
         run: ./node_modules/.bin/tsc --noEmit
       - name: ESLint — remodeled portfolio sources
-        run: npx eslint src/app/page.tsx src/app/studio/page.tsx src/components/NostrJournal.tsx src/lib/nostr-publishing.ts src/lib/portfolio-data.ts src/lib/editorial-state.ts src/components/editorial/AgentReview.tsx
+        run: npx eslint src/app/page.tsx src/app/studio/page.tsx src/components/NostrJournal.tsx src/lib/nostr-publishing.ts src/lib/portfolio-data.ts src/lib/editorial-state.ts src/components/editorial/AgentReview.tsx src/components/SystemsLab.tsx src/lib/system-cases.ts src/app/api/architecture/route.ts
       - name: Editorial contract tests
-        run: node --experimental-strip-types --test tests/editorial-contracts.test.mjs
+        run: node --experimental-strip-types --test tests/editorial-contracts.test.mjs tests/systems-cases.test.mjs
       - name: Production build
         env:
           NEXT_TELEMETRY_DISABLED: '1'

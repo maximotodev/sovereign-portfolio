@@ -1,23 +1,22 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-// 1. Setup Professional Fonts
-const spaceGrotesk = Space_Grotesk({
-  subsets: ["latin"],
-  variable: "--font-space",
-  weight: ["300", "400", "500", "600", "700"],
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-mono",
-  weight: ["400", "500"],
-});
+// Build-safe system font stacks are defined in globals.css.
+// Avoid next/font/google Turbopack module generation during deployment.
 
 export const metadata: Metadata = {
-  title: "Maximoto | Sovereign Engineer",
-  description: "Open-source engineering across AI/ML, Bitcoin, Nostr, FIPS and FOSS. View verified Plebeian Apps contributions.",
+  metadataBase: new URL("https://maximotodev.vercel.app"),
+  title: "Maximoto | Bitcoin, Nostr, FIPS & AI Systems Architect",
+  description: "Explore verifiable proof of work, interactive system architectures and engineering decisions across Bitcoin, Nostr, FIPS mesh networking, decentralized technologies, and AI/ML.",
+  keywords: ["Maximoto", "Bitcoin engineering", "Nostr", "FIPS mesh", "AI/ML architecture", "decentralized systems", "open source"],
+  openGraph: {
+    type: "website",
+    title: "Maximoto | Sovereign Systems Architecture",
+    description: "Inspect architecture, trust boundaries and proof of work for Bitcoin, Nostr, FIPS and agentic systems.",
+    url: "/",
+    siteName: "Maximoto",
+  },
+  twitter: { card: "summary", title: "Maximoto | Sovereign Systems Architecture" },
 };
 
 export default function RootLayout({
@@ -28,7 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark" data-scroll-behavior="smooth">
       <body
-        className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} font-sans antialiased bg-neutral-950`}
+        className="antialiased bg-neutral-950"
       >
         {/* 2. Global Background Grid Texture */}
         <div className="fixed inset-0 z-[-1] h-full w-full bg-neutral-950 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px]"></div>
