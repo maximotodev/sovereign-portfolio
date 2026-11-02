@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { BookOpen, CalendarDays, CheckCircle2, CircleAlert, FilePlus2, ListChecks, RefreshCw } from "lucide-react";
 import type { EditorialDraft } from "@/lib/editorial-state";
-import { createNewstrDraft, nextFridayLocal, newsletterChecks, parseIssueIdentifier, readTldrItems, replaceTldrItems } from "@/lib/newstr";
+import { createNewstrDraft, nextFridayLocal, newsletterChecks, parseIssueIdentifier, readTldrItems, replaceTldrItems } from "@/lib/freedom-signal";
 
 export function NewstrComposer({
   draft,
