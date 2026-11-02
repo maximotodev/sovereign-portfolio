@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { BookOpen, CalendarDays, CheckCircle2, CircleAlert, FilePlus2, ListChecks, RefreshCw } from "lucide-react";
 import type { EditorialDraft } from "@/lib/editorial-state";
 import { createFreedomSignalDraft, nextFridayLocal, newsletterChecks, parseIssueIdentifier, readTldrItems, replaceTldrItems } from "@/lib/freedom-signal";
@@ -58,7 +59,7 @@ export function FreedomSignalComposer({
           <h2 id="fs-composer-title">Freedom Signal</h2>
           <p>Research with agents. Edit with care. Publish only with your own Nostr signature.</p>
         </div>
-        <a href="/newsletter" className="fs-small-link">View archive ↗</a>
+        <Link href="/newsletter" className="fs-small-link">View archive ↗</Link>
       </div>
       <div className="fs-create-grid">
         <label>ISSUE NUMBER
