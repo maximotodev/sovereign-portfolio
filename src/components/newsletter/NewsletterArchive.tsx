@@ -8,6 +8,7 @@ import {IDENTITY} from "@/lib/portfolio-data";
 import {RELAYS,selectArticles,type Article} from "@/lib/nostr-publishing";
 import {isNewstrIdentifier,parseIssueIdentifier,readTldrItems,withoutTldrSection} from "@/lib/freedom-signal";
 import styles from "./newsletter.module.css";
+import {SiteNavigation} from "@/components/layout/SiteNavigation";
 
 type ReadStatus="loading"|"ready"|"empty"|"error";
 function useIssues(){
@@ -42,12 +43,6 @@ function LoadingState({status}:{status:ReadStatus}){
  <>No signed Newstr issues were found on the configured relays yet. The archive does not generate placeholder publications.</>}
  </div>;
 }
-function Header(){
- return <header className={styles.header}>
-  <Link href="/" className={styles.brand}>MAXIMOTO<span>.</span></Link>
-  <nav aria-label="Newsletter navigation"><Link href="/newsletter">Issues</Link><Link href="/studio">Studio</Link><a href={IDENTITY.nostr} target="_blank" rel="noopener noreferrer">Nostr ↗</a></nav>
- </header>;
-}
 function Footer(){
  return <footer className={styles.footer}>
   <span>NEWSTR / MAXIMOTO</span>
@@ -61,7 +56,7 @@ export function NewsletterArchive({identifier}:{identifier?:string}) {
  const metadata=issue?parseIssueIdentifier(issue.identifier):null;
  const items=issue?readTldrItems(issue.content):[];
  return <main className={styles.page}><div className={styles.wrap}>
-  <Header/>
+  <SiteNavigation active="newsletter"/>
   <div className={styles.breadcrumb}>
     <Link href="/"><ArrowLeft size={14}/> Portfolio</Link>
     {identifier&&<Link href="/newsletter"><ArrowLeft size={14}/> All issues</Link>}
@@ -70,8 +65,8 @@ export function NewsletterArchive({identifier}:{identifier?:string}) {
    <section className={styles.hero}>
     <p className={styles.eyebrow}><Radio size={14}/> WEEKLY DISPATCH · BITCOIN / NOSTR / AI / FREEDOM TECH</p>
     <h1>Newstr<em>.</em></h1>
-    <p>A weekly look at the protocols, people and ideas making the internet more open. Researched with assistance. Verified and signed by Maximoto.</p>
-    <div className={styles.heroFoot}><span>TL;DR FIRST · 5–7 MINUTE READS</span><span>NOTHING PUBLISHED WITHOUT HUMAN APPROVAL</span></div>
+    <p>A weekly field note on Bitcoin, Nostr, AI and open systems. The TL;DR comes first. Every claim invites verification.</p>
+    <div className={styles.heroFoot}><span>TL;DR FIRST · INDEPENDENT SOURCES</span><span>NO AUTONOMOUS PUBLICATION</span></div>
    </section>
    <section className={styles.list} aria-labelledby="issue-list-heading">
     <div className={styles.sectionHeading}><h2 id="issue-list-heading">Signed issues</h2><span>RETRIEVED FROM NOSTR · SIGNATURE VERIFIED</span></div>
