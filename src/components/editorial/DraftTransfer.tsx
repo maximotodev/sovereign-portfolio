@@ -27,7 +27,7 @@ export function DraftTransfer({
  }
  async function copyJson(){
    try{await navigator.clipboard.writeText(json);setLocalStatus("Unsigned draft JSON copied. Paste it into a file or save it securely.");}
-   catch{setOpen(true);setMode("json");setPaste(json);setLocalStatus("Clipboard blocked. The JSON is selected below for manual copying.");}
+   catch{setOpen(true);setMode("json");setPaste(json);setLocalStatus("Clipboard blocked. The JSON is displayed in the paste editor below for manual copying.");}
  }
  function saveLocal(){
    try{
