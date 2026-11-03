@@ -191,9 +191,19 @@ export default function Studio(){
            <div><span className={styles.mono}>01 / COMPOSE</span><h2 id="write-title">Your next dispatch.</h2><p>Start a Newstr issue, import an existing draft, or write directly. Everything stays unsigned until you approve it.</p></div>
            <div className={styles.panelStatus}><CheckCircle2 size={17}/> {wordCount} WORDS</div>
          </div>
-         <details className={styles.toolDisclosure} open>
+         <details className={styles.toolDisclosure}>
            <summary><BookOpen size={18}/> Newstr issue template <span>ISSUE NUMBER · DATE · TL;DR</span></summary>
            <NewstrComposer draft={draft} onReplace={replaceDraft} onMessage={setNotice}/>
+         </details>
+         <details className={styles.toolDisclosure}>
+           <summary><ClipboardCheck size={18}/> Import or recover a draft <span>NO DOWNLOAD REQUIRED</span></summary>
+           <div className={styles.importControls}>
+             <button type="button" onClick={downloadDraft}><Download size={15}/> Download JSON draft</button>
+             <button type="button" onClick={()=>fileInput.current?.click()}><FileJson size={15}/> Import JSON file</button>
+             <input type="file" accept=".json,application/json" aria-label="Import article draft JSON" hidden ref={fileInput}
+               onChange={e=>{const f=e.target.files?.[0];if(f)void importFile(f);e.target.value="";}}/>
+           </div>
+           <DraftTransfer draft={draft} onReplace={replaceDraft} onMessage={setNotice}/>
          </details>
          <section className={styles.editor} aria-label="Article editor">
            <div className={styles.editorTop}><strong>Article</strong><div className={styles.editorSwitch}>
@@ -215,16 +225,6 @@ export default function Studio(){
            </div>
            <div className={styles.editorFooter}><span>{body.length.toLocaleString()} / {MAX.toLocaleString()} CHARACTERS</span><button type="button" onClick={()=>void copyEvent()}><FileJson size={15}/> Copy NIP-23 template</button></div>
          </section>
-         <details className={styles.toolDisclosure}>
-           <summary><ClipboardCheck size={18}/> Import or recover a draft <span>NO DOWNLOAD REQUIRED</span></summary>
-           <div className={styles.importControls}>
-             <button type="button" onClick={downloadDraft}><Download size={15}/> Download JSON draft</button>
-             <button type="button" onClick={()=>fileInput.current?.click()}><FileJson size={15}/> Import JSON file</button>
-             <input type="file" accept=".json,application/json" aria-label="Import article draft JSON" hidden ref={fileInput}
-               onChange={e=>{const f=e.target.files?.[0];if(f)void importFile(f);e.target.value="";}}/>
-           </div>
-           <DraftTransfer draft={draft} onReplace={replaceDraft} onMessage={setNotice}/>
-         </details>
          <details className={styles.toolDisclosure}>
            <summary><BookOpen size={18}/> AI-assisted editorial review <span>OPTIONAL · NO AUTONOMOUS ACTIONS</span></summary>
            <AgentReview draft={draft} onAccept={replaceDraft}/>
