@@ -1,10 +1,9 @@
 "use client";
 
 import {useRef,useState} from "react";
-import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import {SimplePool,verifyEvent,type Event} from "nostr-tools";
-import {ArrowLeft,ArrowRight,ArrowUpRight,BookOpen,Check,CheckCircle2,ClipboardCheck,Download,ExternalLink,Eye,FileJson,KeyRound,LockKeyhole,PenLine,Radio,ShieldCheck} from "lucide-react";
+import {ArrowRight,ArrowUpRight,BookOpen,Check,CheckCircle2,ClipboardCheck,Download,ExternalLink,Eye,FileJson,KeyRound,LockKeyhole,PenLine,Radio,ShieldCheck} from "lucide-react";
 import {AgentReview} from "@/components/editorial/AgentReview";
 import {NewstrComposer} from "@/components/editorial/FreedomSignalComposer";
 import {DraftTransfer} from "@/components/editorial/DraftTransfer";
@@ -13,6 +12,7 @@ import {cleanSlug,RELAYS} from "@/lib/nostr-publishing";
 import {newsletterChecks,newstrTags} from "@/lib/freedom-signal";
 import {IDENTITY} from "@/lib/portfolio-data";
 import styles from "./studio-v3.module.css";
+import {SiteNavigation} from "@/components/layout/SiteNavigation";
 
 type Signer={getPublicKey:()=>Promise<string>;signEvent:(event:{kind:number;created_at:number;tags:string[][];content:string})=>Promise<Event>};
 declare global{interface Window{nostr?:Signer}}
@@ -163,10 +163,7 @@ export default function Studio(){
  return <main className={styles.page}>
    <a href="#studio-workspace" className={styles.skip}>Skip to editorial workspace</a>
    <div className={styles.wrap}>
-     <header className={styles.header}>
-       <Link href="/" className={styles.brand} aria-label="Maximoto homepage">MAXIMOTO<span>.</span></Link>
-       <div className={styles.headerLinks}><Link href="/newsletter">Newstr archive <ArrowUpRight size={15}/></Link><Link href="/"><ArrowLeft size={15}/> Portfolio</Link></div>
-     </header>
+     <SiteNavigation active="studio"/>
      <section className={styles.hero} aria-labelledby="studio-title">
        <div className={styles.kicker}><PenLine size={14}/> SOVEREIGN EDITORIAL STUDIO / NEWSTR</div>
        <div className={styles.heroTop}>
