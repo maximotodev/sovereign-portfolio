@@ -67,3 +67,29 @@
 
 .writingLinks{display:flex;gap:20px;align-items:center;flex-wrap:wrap}
 @media(max-width:640px){.writingLinks{gap:15px}}
+
+
+/* Shared visual language — story-led, editorial, and deliberately sparse. */
+.page{--paper:#e9e7df;--muted:#a9a59c;--line:#39392f;--burnt:#ed8b44}
+.page :global(a:focus-visible),.page :global(button:focus-visible){outline:2px solid var(--burnt);outline-offset:4px}
+.hero{padding-top:106px}
+.hero h1{font-size:clamp(59px,8.6vw,122px)}
+.story,.interests,.work,.writing{padding:90px 0}
+.storyCopy{color:#bcb8ae}
+.newsletterFeature{display:flex;flex-direction:column;gap:28px;padding:34px 38px;margin:20px 0 28px;background:#181a15;border:1px solid #464338;transition:background .16s,border-color .16s}
+.newsletterFeature:hover{background:#23241e;border-color:var(--burnt)}
+.featureNumber,.featureBottom{font-family:var(--font-mono),monospace;letter-spacing:.07em}
+.featureNumber{color:var(--burnt);font-size:10px}
+.featureTitle{font-size:clamp(30px,4vw,55px);font-weight:570;line-height:1.1;letter-spacing:-.06em}
+.featureTitle em{font-family:Georgia,serif;color:var(--burnt);font-weight:400}
+.featureBottom{border-top:1px solid #48453b;padding-top:19px;display:flex;justify-content:space-between;align-items:center;gap:14px;font-size:10px;color:#bdb8a9;line-height:1.8}
+.featureBottom svg{flex-shrink:0;color:var(--burnt)}
+.page :global(.minimal-nostr-journal .cp-journal-meta){color:#b3aea1}
+.page :global(.minimal-nostr-journal .cp-journal-shell){background:transparent}
+.page :global(.minimal-nostr-journal .cp-journal-item){background:transparent;border-color:var(--line)}
+.page :global(.minimal-nostr-journal .cp-journal-text h3){font-weight:570;letter-spacing:-.04em}
+.page :global(.minimal-nostr-journal .cp-journal-text>p){color:#b3b0a6}
+.page :global(.minimal-nostr-journal .cp-journal-actions button),.page :global(.minimal-nostr-journal .cp-journal-actions a){color:var(--burnt)}
+@media(max-width:760px){.hero{padding-top:78px}.story,.interests,.work,.writing{padding:68px 0}}
+@media(max-width:640px){.newsletterFeature{padding:25px 19px;gap:22px}.featureBottom{font-size:9px}.hero h1{font-size:clamp(55px,12vw,76px)}}
+@media(prefers-reduced-motion:reduce){.newsletterFeature{transition:none}}
