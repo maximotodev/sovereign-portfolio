@@ -5,6 +5,7 @@ import NostrJournal from "@/components/NostrJournal";
 import { CopyNpub } from "@/components/CopyNpub";
 import { EVIDENCE, IDENTITY, VENTURES } from "@/lib/portfolio-data";
 import styles from "./homepage.module.css";
+import {SiteNavigation} from "@/components/layout/SiteNavigation";
 
 export const metadata: Metadata = {
   title: "Maximoto — Building for Freedom",
@@ -35,19 +36,7 @@ export default function Home() {
     <main className={styles.page}>
       <a href="#story" className={styles.skip}>Skip to Maximoto&apos;s story</a>
       <div className={styles.container}>
-        <header className={styles.header}>
-          <Link href="/" className={styles.brand} aria-label="Maximoto, homepage">
-            MAXIMOTO<span aria-hidden="true">.</span>
-          </Link>
-          <nav className={styles.nav} aria-label="Primary navigation">
-            <a href="#work">Work</a>
-            <Link href="/newsletter">Newsletter</Link>
-            <Link href="/systems">Systems</Link>
-          </nav>
-          <a className={styles.profileLink} href={IDENTITY.nostr} target="_blank" rel="noopener noreferrer">
-            Nostr <ArrowUpRight size={14} aria-hidden="true" />
-          </a>
-        </header>
+        <SiteNavigation active="home"/>
 
         <section id="story" className={styles.hero} aria-labelledby="hero-title">
           <p className={styles.eyebrow}><span className={styles.bullet} aria-hidden="true" />INDEPENDENT ENGINEER / FREEDOM TECH</p>
@@ -60,7 +49,7 @@ export default function Home() {
             That path brought me to Nostr, open protocols, and software that puts people back in control.
           </p>
           <div className={styles.heroActions}>
-            <a href="#work" className={styles.primaryAction}>Explore my work <ArrowDownRight size={18} aria-hidden="true" /></a>
+            <a href="#work" className={styles.primaryAction}>Explore the work <ArrowDownRight size={18} aria-hidden="true" /></a>
             <a href={IDENTITY.nostr} target="_blank" rel="noopener noreferrer" className={styles.textAction}>Find me on Nostr <ArrowUpRight size={16} aria-hidden="true" /></a>
           </div>
           <div className={styles.heroIndex}><span>BITCOIN · NOSTR · FOSS · OPEN SYSTEMS</span><span>01 / A DIFFERENT WAY TO BUILD</span></div>
@@ -147,14 +136,19 @@ export default function Home() {
           <div className={styles.sectionLabel}>04 / WRITTEN IN THE OPEN</div>
           <div className={styles.sectionIntro}>
             <div>
-              <h2 id="writing-heading">Words I can sign.</h2>
-              <p className={styles.writingIntro}>Long-form writing on Nostr. Portable identity, signed events, independent readers.</p>
+              <h2 id="writing-heading">Independent writing.<br/>Signed by me.</h2>
+              <p className={styles.writingIntro}>Newstr is my weekly dispatch on Bitcoin, Nostr, AI and freedom tech. Read the essentials first, then inspect the sources. The writing belongs to its author, not a platform.</p>
             </div>
             <div className={styles.writingLinks}>
               <Link className={styles.inlineLink} href="/newsletter">Newstr archive <ArrowUpRight size={15} aria-hidden="true" /></Link>
               <a className={styles.inlineLink} href={IDENTITY.nostr} target="_blank" rel="noopener noreferrer">Read on YakiHonne <ArrowUpRight size={15} aria-hidden="true" /></a>
             </div>
           </div>
+          <Link href="/newsletter" className={styles.newsletterFeature}>
+            <span className={styles.featureNumber}>THE WEEKLY DISPATCH / NEWSTR</span>
+            <span className={styles.featureTitle}>Bitcoin. Nostr. AI.<br/><em>One clear signal.</em></span>
+            <span className={styles.featureBottom}>Five takeaways. Primary sources. Human-signed writing. <ArrowUpRight size={22} aria-hidden="true"/></span>
+          </Link>
           <NostrJournal compact className={styles.notes} />
           <div className={styles.nostrIdentity}>
             <div>
