@@ -4,7 +4,7 @@ import {useRef,useState} from "react";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import {SimplePool,verifyEvent,type Event} from "nostr-tools";
-import {ArrowLeft,ArrowRight,ArrowUpRight,BookOpen,Check,CheckCircle2,ClipboardCheck,Download,ExternalLink,Eye,EyeOff,FileJson,KeyRound,LockKeyhole,PenLine,Radio,ShieldCheck} from "lucide-react";
+import {ArrowLeft,ArrowRight,ArrowUpRight,BookOpen,Check,CheckCircle2,ClipboardCheck,Download,ExternalLink,Eye,FileJson,KeyRound,LockKeyhole,PenLine,Radio,ShieldCheck} from "lucide-react";
 import {AgentReview} from "@/components/editorial/AgentReview";
 import {NewstrComposer} from "@/components/editorial/FreedomSignalComposer";
 import {DraftTransfer} from "@/components/editorial/DraftTransfer";
