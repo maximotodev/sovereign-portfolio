@@ -33,3 +33,27 @@
 .disclaimer{border-top:1px solid var(--line);margin-top:55px;padding-top:25px;font-size:10px;line-height:1.8;color:#9c988e;max-width:760px}.back{display:inline-flex;align-items:center;gap:10px;margin-top:30px;font-size:13px}
 .footer{border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;padding:25px 0 45px;color:#8d8a83;font-size:9px}
 @media(max-width:640px){.wrap{padding:0 20px}.header{height:72px}.header nav{gap:12px;font-size:11px}.hero{padding-top:30px}.hero h1{font-size:clamp(58px,12vw,85px)}.heroFoot{padding-top:40px}.sectionHeading{align-items:flex-start;flex-direction:column}.issueRow{grid-template-columns:1fr 20px;gap:13px}.issueMeta{grid-column:1/-1;flex-direction:row}.issueRow h3{font-size:21px}.list{padding:55px 0}.article{padding:40px 0}.tldrLabel{padding:17px 15px}.tldrItems{padding:0 15px}.articleActions{flex-direction:column;align-items:flex-start}.articleHeader h1{font-size:48px}}
+
+
+/* Shared, more spacious editorial language. No dashboard chrome. */
+.page{--paper:#e9e7df;--muted:#b0aca2;--line:#39392f;--accent:#ed8b44}
+.hero{padding-top:65px}
+.hero h1{font-size:clamp(68px,10vw,120px);letter-spacing:-.08em}
+.issueRow{transition:background .16s}
+.issueRow:hover{background:#171913}
+.issueRow h3{letter-spacing:-.045em}
+.articleHeader{max-width:790px}
+.articleHeader h1{max-width:800px}
+.articleBody{font-size:17px;max-width:720px;line-height:1.9}
+.articleBody :global(h2){font-weight:560}
+.articleBody :global(p){color:#d6d1c5}
+.articleBody :global(blockquote){color:#bdb6a7;border-left:2px solid var(--accent);padding-left:18px}
+.articleBody :global(pre){max-width:100%;overflow:auto;background:#1b1c17;border:1px solid #424338;padding:18px}
+.articleBody :global(code){overflow-wrap:anywhere}
+.tldr{max-width:790px;background:#1d1e19;border-color:#46453a}
+.tldrLabel{color:var(--accent);border-color:#46453a}
+.tldrItems>div{border-color:#393b31}
+.footer{margin-top:45px}
+.page :global(a:focus-visible){outline:2px solid var(--accent);outline-offset:4px}
+@media(max-width:760px){.hero{padding-top:36px}.articleBody{font-size:15px;line-height:1.85}.tldrLabel{flex-wrap:wrap;gap:9px}.footer{margin-top:25px}}
+@media(prefers-reduced-motion:reduce){.issueRow{transition:none}}
