@@ -1,6 +1,6 @@
 import {
   LIMITS, makeDraft, validateDraft, type EditorialDraft,
-} from "./editorial-state";
+} from "./editorial-state.ts";
 
 export const LOCAL_DRAFT_KEY = "maximoto.studio.local-draft.v1";
 export const LOCAL_DRAFT_FORMAT = "maximoto.studio.local-draft.v1";
