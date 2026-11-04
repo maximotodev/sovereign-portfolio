@@ -4,6 +4,7 @@ import { ArrowDownRight, ArrowUpRight, ArrowRight, ShieldCheck } from "lucide-re
 import NostrJournal from "@/components/NostrJournal";
 import { CopyNpub } from "@/components/CopyNpub";
 import { EVIDENCE, IDENTITY, VENTURES } from "@/lib/portfolio-data";
+import { CERTIFICATIONS } from "@/lib/data";
 import styles from "./homepage.module.css";
 import {SiteNavigation} from "@/components/layout/SiteNavigation";
 
@@ -132,12 +133,29 @@ export default function Home() {
           </div>
         </section>
 
+        <section id="certifications" className={styles.certifications} aria-labelledby="certifications-heading">
+          <div className={styles.sectionLabel}>04 / VERIFIED LEARNING</div>
+          <div className={styles.sectionIntro}>
+            <h2 id="certifications-heading">Credentials, with receipts.</h2>
+            <span className={styles.subtle}>Independent coursework. Follow the issuer to verify.</span>
+          </div>
+          <div className={styles.certList}>
+            {CERTIFICATIONS.map((cert) => (
+              <a key={cert.id} href={cert.url} target="_blank" rel="noopener noreferrer" className={styles.certRow}>
+                <span className={styles.certYear}>{cert.date.slice(0, 4)}</span>
+                <span className={styles.certDetails}><strong>{cert.name}</strong><small>{cert.organization}</small></span>
+                <ArrowUpRight size={18} aria-hidden="true" />
+              </a>
+            ))}
+          </div>
+        </section>
+
         <section id="writing" className={styles.writing} aria-labelledby="writing-heading">
-          <div className={styles.sectionLabel}>04 / WRITTEN IN THE OPEN</div>
+          <div className={styles.sectionLabel}>05 / WRITTEN IN THE OPEN</div>
           <div className={styles.sectionIntro}>
             <div>
               <h2 id="writing-heading">Independent writing.<br/>Signed by me.</h2>
-              <p className={styles.writingIntro}>Newstr is my weekly dispatch on Bitcoin, Nostr, AI and freedom tech. Read the essentials first, then inspect the sources. The writing belongs to its author, not a platform.</p>
+              <p className={styles.writingIntro}>Newstr brings together my existing engineering essays and weekly writing about Bitcoin, Nostr, AI and freedom tech. New Nostr publications carry verifiable signatures; the older essay archive is labeled separately.</p>
             </div>
             <div className={styles.writingLinks}>
               <Link className={styles.inlineLink} href="/newsletter">Newstr archive <ArrowUpRight size={15} aria-hidden="true" /></Link>

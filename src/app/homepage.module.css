@@ -93,3 +93,20 @@
 @media(max-width:760px){.hero{padding-top:78px}.story,.interests,.work,.writing{padding:68px 0}}
 @media(max-width:640px){.newsletterFeature{padding:25px 19px;gap:22px}.featureBottom{font-size:9px}.hero h1{font-size:clamp(55px,12vw,76px)}}
 @media(prefers-reduced-motion:reduce){.newsletterFeature{transition:none}}
+
+
+/* Certifications: restrained evidence-first presentation. */
+.certifications{padding:85px 0;border-top:1px solid var(--line)}
+.certList{margin-top:34px;border-top:1px solid var(--line)}
+.certRow{display:grid;grid-template-columns:76px minmax(0,1fr) 22px;gap:24px;align-items:center;padding:22px 0;border-bottom:1px solid var(--line)}
+.certRow:hover,.certRow:hover svg{color:var(--burnt)}
+.certYear{font:11px var(--font-mono),monospace;color:var(--burnt)}
+.certDetails{min-width:0;display:flex;flex-direction:column;gap:8px}
+.certDetails strong{font-size:17px;font-weight:570;letter-spacing:-.02em}
+.certDetails small{font-size:12px;color:#a8a59b}
+.certRow svg{color:#928f84}
+@media(max-width:640px){
+ .certifications{padding:68px 0}
+ .certRow{grid-template-columns:48px minmax(0,1fr) 18px;gap:12px}
+ .certDetails strong{font-size:14px}
+}

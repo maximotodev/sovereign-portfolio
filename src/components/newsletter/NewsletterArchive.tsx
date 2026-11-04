@@ -5,6 +5,7 @@ import ReactMarkdown from "react-markdown";
 import {SimplePool} from "nostr-tools";
 import {ArrowLeft,ArrowUpRight,CheckCircle2,Radio,ShieldCheck} from "lucide-react";
 import {IDENTITY} from "@/lib/portfolio-data";
+import {POSTS} from "@/lib/data";
 import {RELAYS,selectArticles,type Article} from "@/lib/nostr-publishing";
 import {isNewstrIdentifier,parseIssueIdentifier,readTldrItems,withoutTldrSection} from "@/lib/freedom-signal";
 import styles from "./newsletter.module.css";
@@ -79,6 +80,22 @@ export function NewsletterArchive({identifier}:{identifier?:string}) {
        <ArrowUpRight size={20} aria-hidden="true"/>
       </Link>;
     })}
+   </section>
+   <section className={styles.list} aria-labelledby="essay-list-heading">
+    <div className={styles.sectionHeading}>
+     <h2 id="essay-list-heading">From the archive</h2>
+     <span>ORIGINAL PORTFOLIO ESSAYS · NOT NOSTR-SIGNED</span>
+    </div>
+    {POSTS.filter(post=>post.isPublished).map(post=>
+     <Link href={"/newsletter/essay/"+encodeURIComponent(post.slug)} key={post.slug} className={styles.issueRow}>
+      <div className={styles.issueMeta}><span>ESSAY</span><time dateTime={post.publishedDate}>{post.publishedDate}</time></div>
+      <div>
+       <h3>{post.title}</h3>
+       <p>{post.content.replace(/[#*_>\r\n]/g," ").replace(/\s+/g," ").slice(0,175)}…</p>
+      </div>
+      <ArrowUpRight size={20} aria-hidden="true"/>
+     </Link>
+    )}
    </section>
   </> : <>
    {status==="loading"?<LoadingState status={status}/>:
