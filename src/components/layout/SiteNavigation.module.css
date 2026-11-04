@@ -7,3 +7,11 @@
 .nav a:hover,.brand:hover{color:var(--site-accent)}
 .nav a:focus-visible,.brand:focus-visible{outline:2px solid var(--site-accent);outline-offset:4px}
 @media(max-width:560px){.header{min-height:72px;gap:10px}.brand{font-size:13px}.nav{gap:12px}.nav a{font-size:10px;letter-spacing:-.01em}}
+
+/* Touch and keyboard navigation remains legible at narrow viewports. */
+@media(max-width:560px){
+  .header{flex-wrap:wrap;align-items:center;padding:12px 0 0}
+  .brand{font-size:16px}
+  .nav{width:100%;justify-content:space-between;gap:4px;flex-wrap:wrap}
+  .nav a{font-size:12px;min-height:44px;padding:0 5px}
+}

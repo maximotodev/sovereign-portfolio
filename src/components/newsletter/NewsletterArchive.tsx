@@ -1,5 +1,6 @@
 "use client";
 import {useEffect,useState} from "react";
+import VERIFIED_EVENTS from "@/lib/newstr-verified-events.json";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import {SimplePool} from "nostr-tools";
@@ -12,9 +13,12 @@ import styles from "./newsletter.module.css";
 import {SiteNavigation} from "@/components/layout/SiteNavigation";
 
 type ReadStatus="loading"|"ready"|"empty"|"error";
+type ArchiveFilter="all"|"dispatches"|"essays";
+// Only signed, validated original events can appear in the snapshot.
+const snapshot=selectArticles(VERIFIED_EVENTS,100).filter(a=>isNewstrIdentifier(a.identifier));
 function useIssues(){
- const [issues,setIssues]=useState<Article[]>([]);
- const [status,setStatus]=useState<ReadStatus>("loading");
+ const [issues,setIssues]=useState<Article[]>(snapshot);
+ const [status,setStatus]=useState<ReadStatus>(snapshot.length?"ready":"loading");
  useEffect(()=>{
    let active=true;
    const pool=new SimplePool();
@@ -23,11 +27,11 @@ function useIssues(){
        const events=await pool.querySync(RELAYS,
          {authors:[IDENTITY.pubkey],kinds:[30023],limit:100},{maxWait:6500});
        if(!active)return;
-       const list=selectArticles(events,100).filter(a=>isNewstrIdentifier(a.identifier));
+       const list=selectArticles([...events,...VERIFIED_EVENTS],100).filter(a=>isNewstrIdentifier(a.identifier));
        setIssues(list);
        setStatus(list.length?"ready":"empty");
      }catch{
-       if(active)setStatus("error");
+       if(active)setStatus(snapshot.length?"ready":"error");
      }finally{pool.close(RELAYS);}
    }
    void run();
@@ -52,6 +56,7 @@ function Footer(){
 }
 export function NewsletterArchive({identifier}:{identifier?:string}) {
  const {issues,status}=useIssues();
+ const [filter,setFilter]=useState<ArchiveFilter>("all");
  const issue=identifier?issues.find(item=>item.identifier===identifier):undefined;
  const index=identifier===undefined;
  const metadata=issue?parseIssueIdentifier(issue.identifier):null;
@@ -68,8 +73,13 @@ export function NewsletterArchive({identifier}:{identifier?:string}) {
     <h1>Newstr<em>.</em></h1>
     <p>A weekly field note on Bitcoin, Nostr, AI and open systems. The TL;DR comes first. Every claim invites verification.</p>
     <div className={styles.heroFoot}><span>TL;DR FIRST · INDEPENDENT SOURCES</span><span>NO AUTONOMOUS PUBLICATION</span></div>
+   <div className={styles.filters} role="group" aria-label="Filter Newstr writing">
+    {([{value:"all",label:"All writing"},{value:"dispatches",label:"Signed dispatches"},{value:"essays",label:"Essays"}] as const).map(option=>
+     <button key={option.value} type="button" aria-pressed={filter===option.value} onClick={()=>setFilter(option.value)}>{option.label}</button>
+    )}
+   </div>
    </section>
-   <section className={styles.list} aria-labelledby="issue-list-heading">
+   {filter!=="essays"&&<section className={styles.list} aria-labelledby="issue-list-heading">
     <div className={styles.sectionHeading}><h2 id="issue-list-heading">Signed issues</h2><span>RETRIEVED FROM NOSTR · SIGNATURE VERIFIED</span></div>
     {status!=="ready"?<LoadingState status={status}/>:issues.map(item=>{
       const meta=parseIssueIdentifier(item.identifier);
@@ -80,8 +90,8 @@ export function NewsletterArchive({identifier}:{identifier?:string}) {
        <ArrowUpRight size={20} aria-hidden="true"/>
       </Link>;
     })}
-   </section>
-   <section className={styles.list} aria-labelledby="essay-list-heading">
+   </section>}
+   {filter!=="dispatches"&&<section className={styles.list} aria-labelledby="essay-list-heading">
     <div className={styles.sectionHeading}>
      <h2 id="essay-list-heading">From the archive</h2>
      <span>ORIGINAL PORTFOLIO ESSAYS · NOT NOSTR-SIGNED</span>
@@ -91,12 +101,12 @@ export function NewsletterArchive({identifier}:{identifier?:string}) {
       <div className={styles.issueMeta}><span>ESSAY</span><time dateTime={post.publishedDate}>{post.publishedDate}</time></div>
       <div>
        <h3>{post.title}</h3>
-       <p>{post.content.replace(/[#*_>\r\n]/g," ").replace(/\s+/g," ").slice(0,175)}…</p>
+       <p>{post.content.replace(/[#*_>\r\n]/g," ").replace(/\s+/g," ").slice(0,175)}…</p><p className={styles.readTime}>{Math.max(1,Math.ceil(post.content.trim().split(/\s+/).length/220))} min read</p>
       </div>
       <ArrowUpRight size={20} aria-hidden="true"/>
      </Link>
     )}
-   </section>
+   </section>}
   </> : <>
    {status==="loading"?<LoadingState status={status}/>:
     status==="error"?<LoadingState status={status}/>:

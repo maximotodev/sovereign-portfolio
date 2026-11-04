@@ -57,3 +57,11 @@
 .page :global(a:focus-visible){outline:2px solid var(--accent);outline-offset:4px}
 @media(max-width:760px){.hero{padding-top:36px}.articleBody{font-size:15px;line-height:1.85}.tldrLabel{flex-wrap:wrap;gap:9px}.footer{margin-top:25px}}
 @media(prefers-reduced-motion:reduce){.issueRow{transition:none}}
+
+/* Reader-first filters: simple, keyboard-accessible and visually quiet. */
+.filters{display:flex;gap:8px;flex-wrap:wrap;padding:24px 0 2px}
+.filters button{min-height:44px;padding:9px 14px;border:1px solid var(--line);background:transparent;color:#c8c3b8;font:12px var(--font-mono),monospace}
+.filters button[aria-pressed="true"]{color:#14130f;background:var(--accent);border-color:var(--accent)}
+.filters button:hover:not([aria-pressed="true"]){border-color:var(--accent);color:var(--accent)}
+.filters button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.readTime{font:11px var(--font-mono),monospace!important;color:#a9a498!important;margin-top:12px!important}

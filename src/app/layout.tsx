@@ -2,7 +2,7 @@ import type {Metadata} from "next";
 import "./globals.css";
 
 export const metadata:Metadata={
- metadataBase:new URL("https://maximotodev.vercel.app"),
+ metadataBase:new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://maximotodev.vercel.app"),
  title:"Maximoto | Building for Freedom",
  description:"Independent engineer building Bitcoin, Nostr, FIPS and open-source AI systems. Verifiable projects, systems thinking and human-signed Newstr writing.",
  keywords:["Maximoto","Bitcoin","Nostr","FIPS","freedom tech","open source","AI/ML","Newstr"],

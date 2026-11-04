@@ -4,14 +4,7 @@ on:
   pull_request:
     branches: [main]
   push:
-    branches:
-      - feat/cypherpunk-agentic-nostr-portfolio-2026-10
-      - refactor/editorial-yakihonne-buzz-plan-2026-10
-      - feat/systems-lab-ai-architecture-2026-11
-      - refactor/minimal-cypherpunk-hero-2026-11
-      - feat/freedom-signal-newsletter-mvp-2026-11
-      - refactor/newstr-studio-publishing-flow-2026-11
-      - refactor/newstr-studio-publishing-flow-2026-11
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -20,25 +13,26 @@ permissions:
 jobs:
   compile:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '24'
           cache: npm
       - name: Install locked dependencies
         run: npm ci --no-audit --no-fund
       - name: Typecheck
         run: ./node_modules/.bin/tsc --noEmit
-      - name: ESLint — remodeled portfolio sources
-        run: npx eslint src/app/page.tsx src/app/studio/page.tsx src/components/NostrJournal.tsx src/lib/nostr-publishing.ts src/lib/portfolio-data.ts src/lib/editorial-state.ts src/components/editorial/AgentReview.tsx src/components/SystemsLab.tsx src/lib/system-cases.ts src/app/api/architecture/route.ts src/components/CopyNpub.tsx src/app/systems/page.tsx src/components/layout/SiteNavigation.tsx src/lib/freedom-signal.ts src/lib/studio-draft-transfer.ts src/components/editorial/DraftTransfer.tsx src/components/editorial/FreedomSignalComposer.tsx src/components/newsletter/NewsletterArchive.tsx src/app/newsletter/page.tsx 'src/app/newsletter/[identifier]/page.tsx' src/components/editorial/DraftTransfer.tsx src/lib/studio-draft-transfer.ts
-      - name: Editorial contract tests
-        run: node --experimental-strip-types --test tests/editorial-contracts.test.mjs tests/systems-cases.test.mjs tests/freedom-signal.test.mjs tests/studio-transfer.test.mjs
+      - name: Lint active app and editorial code
+        run: npx eslint src/app src/components/NostrJournal.tsx src/components/CopyNpub.tsx src/components/SystemsLab.tsx src/components/editorial src/components/newsletter src/components/layout/SiteNavigation.tsx src/lib/nostr-publishing.ts src/lib/portfolio-data.ts src/lib/editorial-state.ts src/lib/freedom-signal.ts src/lib/studio-draft-transfer.ts src/lib/system-cases.ts
+      - name: Editorial and architecture tests
+        run: node --experimental-strip-types --test tests/*.test.mjs
       - name: Production build
         env:
           NEXT_TELEMETRY_DISABLED: '1'
-          NEXT_PUBLIC_SUPABASE_URL: https://example.supabase.co
-          SUPABASE_SERVICE_ROLE_KEY: ci-placeholder-never-real
-          HUGGINGFACE_API_KEY: ci-placeholder-never-real
         run: npm run build
+      - name: Static nsite export build
+        env:
+          NEXT_TELEMETRY_DISABLED: '1'
+        run: node scripts/nsite-export.mjs

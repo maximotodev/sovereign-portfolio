@@ -49,7 +49,7 @@ export default async function ArchivedEssayPage({ params }: Props) {
             <ReactMarkdown skipHtml>{post.content}</ReactMarkdown>
           </div>
           <p className={styles.disclaimer}>
-            Archive note: content is preserved from the original portfolio. Newstr's Nostr-signed issues are displayed separately and identified as verified publications.
+            Archive note: content is preserved from the original portfolio. Newstr&apos;s Nostr-signed issues are displayed separately and identified as verified publications.
           </p>
           <Link className={styles.back} href="/newsletter"><ArrowLeft size={14} /> All Newstr writing</Link>
         </article>

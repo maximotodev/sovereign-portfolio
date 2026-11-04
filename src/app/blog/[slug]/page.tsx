@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { POSTS } from "@/lib/data";
 import { notFound } from "next/navigation";
 import ReactMarkdown from "react-markdown";
@@ -16,6 +17,17 @@ export async function generateStaticParams() {
 type Props = {
   params: Promise<{ slug: string }>;
 };
+
+export async function generateMetadata({params}: Props): Promise<Metadata> {
+  const { slug } = await params;
+  const post = POSTS.find(item => item.isPublished && item.slug === slug);
+  if (!post) return { title: "Article not found — Newstr" };
+  return {
+    title: `${post.title} — Newstr | Maximoto`,
+    description: post.content.replace(/[#*_>\\r\\n]/g, " ").slice(0, 155),
+    alternates: { canonical: `/newsletter/essay/${post.slug}` },
+  };
+}
 
 export default async function BlogPost({ params }: Props) {
   // 1. Await the params before accessing properties
