@@ -41,17 +41,16 @@ export default function Home() {
 
         <section id="story" className={styles.hero} aria-labelledby="hero-title">
           <p className={styles.eyebrow}><span className={styles.bullet} aria-hidden="true" />INDEPENDENT ENGINEER / FREEDOM TECH</p>
-          <h1 id="hero-title">I&apos;m Maximoto.<br />I build for <em>freedom.</em></h1>
+          <h1 id="hero-title">I&apos;m Maximoto.<br />I engineer <em>freedom.</em></h1>
           <p className={styles.heroLead}>
-            I believe people should own their money, identity, and tools—not rent permission to use them.
+            I build Bitcoin, Nostr, and AI systems that give people more control over their money, identity, and tools.
           </p>
           <p className={styles.heroBody}>
-            Bitcoin led me from curiosity to running my own node and learning how trust can be verified.
-            That path brought me to Nostr, open protocols, and software that puts people back in control.
+            From running a Bitcoin node to contributing to open-source markets and decentralized protocols, I focus on verifiable engineering—not promises.
           </p>
           <div className={styles.heroActions}>
             <a href="#work" className={styles.primaryAction}>Explore the work <ArrowDownRight size={18} aria-hidden="true" /></a>
-            <a href={IDENTITY.nostr} target="_blank" rel="noopener noreferrer" className={styles.textAction}>Find me on Nostr <ArrowUpRight size={16} aria-hidden="true" /></a>
+            <a href={IDENTITY.github} target="_blank" rel="noopener noreferrer" className={styles.textAction}>Collaborate on GitHub <ArrowUpRight size={16} aria-hidden="true" /></a>
           </div>
           <div className={styles.heroIndex}><span>BITCOIN · NOSTR · FOSS · OPEN SYSTEMS</span><span>01 / A DIFFERENT WAY TO BUILD</span></div>
         </section>
@@ -108,7 +107,7 @@ export default function Home() {
                     {index === 0 && <span className={styles.featured}>FEATURED / PLEBEIAN APPS</span>}
                   </div>
                   <p>{project.text}</p>
-                  <span className={styles.projectTags}>{project.tags.join(" / ")}</span>
+                  <span className={styles.projectTags}>{project.type} · {project.tags.join(" / ")}</span>
                 </div>
                 <ArrowUpRight className={styles.projectArrow} size={22} aria-hidden="true" />
               </a>
@@ -179,7 +178,7 @@ export default function Home() {
 
         <section className={styles.closing} aria-label="Closing statement">
           <p>The future I care about is one where more people can <em>choose, verify and leave.</em></p>
-          <Link href="/systems" className={styles.inlineLink}>How I think about systems <ArrowRight size={16} aria-hidden="true" /></Link>
+          <a href={IDENTITY.github} className={styles.inlineLink} target="_blank" rel="noopener noreferrer">Collaborate on GitHub <ArrowRight size={16} aria-hidden="true" /></a>
         </section>
 
         <footer className={styles.footer}>
@@ -191,7 +190,7 @@ export default function Home() {
             <a href={IDENTITY.github} target="_blank" rel="noopener noreferrer">GitHub</a>
             <a href={IDENTITY.nostr} target="_blank" rel="noopener noreferrer">Nostr</a>
             <a href={IDENTITY.ngit} target="_blank" rel="noopener noreferrer">ngit</a>
-            <Link href="/studio">Editorial Studio</Link>
+            <Link href="/studio">Owner Studio</Link>
             <Link href="/newsletter">Newstr</Link>
           </nav>
           <span className={styles.footerEnd}>© {new Date().getFullYear()} MAXIMOTO · OPEN BY DESIGN</span>
