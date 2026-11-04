@@ -32,3 +32,7 @@ jobs:
         env:
           NEXT_TELEMETRY_DISABLED: '1'
         run: npm run build
+      - name: Static nsite export build
+        env:
+          NEXT_TELEMETRY_DISABLED: '1'
+        run: node scripts/nsite-export.mjs
