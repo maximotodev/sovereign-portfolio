@@ -91,7 +91,7 @@ export function createNewstrDraft(issueNumber: number, weekEnding: string): Edit
       "",
       "## Nostr & Freedom Tech",
       "",
-      "[[TODO: verified NIP, client, FIPS, networking or FOSS development.]]",
+      "[[TODO: verified NIP, client, networking or FOSS development.]]",
       "",
       "## AI / ML",
       "",

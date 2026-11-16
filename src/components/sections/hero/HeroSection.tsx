@@ -34,7 +34,7 @@ export function HeroSection() {
 
       <FadeIn delay={0.2}>
         <p className="text-lg md:text-xl text-neutral-400 max-w-2xl mx-auto leading-relaxed mb-12">
-          Open-source engineering across AI/ML, Bitcoin, Nostr, FIPS, and FOSS. Building verifiable systems with human-reviewed security, decentralized protocols, and practical AI workflows.
+          Open-source engineering across AI/ML, Bitcoin, Nostr, open protocols, and FOSS. Building verifiable systems with human-reviewed security, decentralized protocols, and practical AI workflows.
         </p>
       </FadeIn>
 

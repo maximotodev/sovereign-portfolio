@@ -48,8 +48,8 @@ export default function GithubMetrics() {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <Metric icon={<FolderGit2 className="w-4 h-4" />} label="Public repos" value={stats?.public_repos ?? (error ? "Unavailable" : "Loading")} />
         <Metric icon={<Star className="w-4 h-4" />} label="Stars on owned non-fork repos" value={stars ?? (error ? "Unavailable" : "Loading")} />
-        <a href="https://github.com/PlebeianApp/market/pulls?q=author%3Amaximotodev" target="_blank" rel="noopener noreferrer" className="p-4 border border-neutral-800 bg-neutral-950/50 rounded-lg hover:border-orange-500/50">
-          <div className="flex items-center gap-2 text-orange-400 mb-2"><GitPullRequest className="w-4 h-4" /><span className="text-xs uppercase">Plebeian PRs</span></div>
+        <a href="https://github.com/maximotodev?tab=repositories" target="_blank" rel="noopener noreferrer" className="p-4 border border-neutral-800 bg-neutral-950/50 rounded-lg hover:border-orange-500/50">
+          <div className="flex items-center gap-2 text-orange-400 mb-2"><GitPullRequest className="w-4 h-4" /><span className="text-xs uppercase">Open-source repos</span></div>
           <span className="text-sm text-white font-semibold flex gap-2 items-center">Browse verified work <ExternalLink className="w-3 h-3" /></span>
         </a>
       </div>

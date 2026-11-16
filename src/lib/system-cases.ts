@@ -2,7 +2,7 @@
  * Public, inspectable architecture models, not live telemetry.
  * Each claim links to primary source evidence; project status != an operational guarantee.
  */
-export type SystemId = "bitcoin" | "nostr" | "fips" | "ai";
+export type SystemId = "bitcoin" | "nostr" | "mesh" | "ai";
 export type CaseEvidence = { title: string; href: string; context: string };
 export type SystemNode = {
   id: string;
@@ -35,11 +35,11 @@ export const SYSTEM_CASES: readonly SystemCase[] = [
     label: "BITCOIN / CASHU",
     headline: "Transactions need a final answer.",
     subhead: "An auction architecture separates event propagation, deterministic consensus, and money-moving settlement.",
-    status: "MERGED ADR · WALLET PR OPEN",
-    statusDetail: "Architecture design and security contributions are public; this is not proof of a live production validator network.",
+    status: "ARCHITECTURE STUDY · PROTOTYPE",
+    statusDetail: "This inspectable design study documents trust boundaries; it is not proof of a live production validator network.",
     stack: ["Bitcoin", "Cashu / Coco", "CometBFT / PBTS", "Nostr", "TypeScript"],
-    designDecision: "A Nostr relay distributes intent; it does not decide auction finality. A proposed four-validator CometBFT committee provides the agreement boundary.",
-    constraint: "The 3-of-4 threshold is a conceptual model from ADR-0017. It does not measure the uptime or deployment status of real validators.",
+    designDecision: "A Nostr relay distributes intent; it does not decide auction finality. An illustrative four-validator CometBFT committee provides the agreement boundary.",
+    constraint: "The 3-of-4 threshold is an illustrative conceptual model. It does not measure the uptime or deployment status of real validators.",
     nodes: [
       {
         id: "bidder", label: "Auction client", kind: "APPLICATION",
@@ -71,9 +71,9 @@ export const SYSTEM_CASES: readonly SystemCase[] = [
       },
     ],
     evidence: [
-      { title: "Four-validator BFT architecture · PR #1407", href: "https://github.com/PlebeianApp/market/pull/1407", context: "Merged architecture decision" },
-      { title: "Private claim and custody hardening · PR #1015", href: "https://github.com/PlebeianApp/market/pull/1015", context: "Merged security contribution" },
-      { title: "Coco v2 auction lifecycle · PR #1387", href: "https://github.com/PlebeianApp/market/pull/1387", context: "Open integration PR at last verification" },
+      { title: "SatsRover architecture", href: "https://github.com/maximotodev/sats-rover/blob/main/docs/architecture.md", context: "Independent system-design evidence" },
+      { title: "Cashu protocol specifications", href: "https://github.com/cashubtc/nuts", context: "Upstream protocol specifications" },
+      { title: "CometBFT documentation", href: "https://github.com/cometbft/cometbft/tree/main/docs", context: "Upstream consensus documentation" },
     ],
   },
   {
@@ -124,16 +124,16 @@ export const SYSTEM_CASES: readonly SystemCase[] = [
     ],
   },
   {
-    id: "fips",
+    id: "mesh",
     order: "03",
-    label: "FIPS / MESH",
+    label: "NETWORK / MESH",
     headline: "Networking without a coordinator.",
-    subhead: "FIPS explores encrypted, self-organizing mesh connectivity with cryptographic identities and interchangeable transports.",
+    subhead: "An encrypted, self-organizing mesh can combine cryptographic identities with interchangeable transports.",
     status: "UPSTREAM R&D · EXPLORATION",
-    statusDetail: "Exploration and architectural study. This portfolio does not claim to operate or have shipped a FIPS mesh.",
-    stack: ["FIPS", "secp256k1", "Noise", "UDP / Ethernet / Tor", "IPv6 / Native datagrams"],
-    designDecision: "Separate network connectivity from application consensus. FIPS provides peer identity, encryption and routing; it does not replace CometBFT.",
-    constraint: "FIPS is actively developed and its APIs are not stable. Nostr-mediated peer discovery is optional rather than an always-on dependency.",
+    statusDetail: "Exploration and architectural study. This portfolio does not claim to operate or have shipped a production mesh.",
+    stack: ["secp256k1", "Noise", "UDP / Ethernet / Tor", "IPv6 / Native datagrams"],
+    designDecision: "Separate network connectivity from application consensus. Mesh transport provides peer identity, encryption and routing; it does not replace CometBFT.",
+    constraint: "Transport APIs and discovery mechanisms may change. Nostr-mediated peer discovery is optional rather than an always-on dependency.",
     nodes: [
       {
         id: "identity", label: "Node identity", kind: "TRUST ROOT",
@@ -165,8 +165,8 @@ export const SYSTEM_CASES: readonly SystemCase[] = [
       },
     ],
     evidence: [
-      { title: "FIPS upstream repository", href: "https://github.com/jmcorgan/fips", context: "Upstream project; not claimed as my implementation" },
-      { title: "FIPS architecture and capabilities", href: "https://fips.network/", context: "Official project documentation" },
+      { title: "Noise protocol specification", href: "https://github.com/noiseprotocol/noise_spec", context: "Upstream encryption protocol" },
+      { title: "Tor Project source", href: "https://github.com/torproject", context: "Upstream transport and privacy projects" },
     ],
   },
   {

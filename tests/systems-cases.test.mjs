@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { SYSTEM_CASES, getSystemCase, systemBrief } from "../src/lib/system-cases.ts";
 
 test("four separately scoped architecture models are present", () => {
-  assert.deepEqual(SYSTEM_CASES.map(x => x.id), ["bitcoin", "nostr", "fips", "ai"]);
+  assert.deepEqual(SYSTEM_CASES.map(x => x.id), ["bitcoin", "nostr", "mesh", "ai"]);
   for (const item of SYSTEM_CASES) {
     assert.equal(item.nodes.length, 4);
     assert.equal(new Set(item.nodes.map(x => x.id)).size, item.nodes.length);
@@ -14,17 +14,17 @@ test("four separately scoped architecture models are present", () => {
       assert.ok(node.responsibility && node.trustBoundary && node.failureMode && node.safeguard);
     }
     for (const proof of item.evidence) {
-      assert.match(proof.href, /^https:\/\/(github\.com|nips\.nostr\.com|fips\.network)\//);
+      assert.match(proof.href, /^https:\/\/(github\.com|nips\.nostr\.com)\//);
       assert.ok(proof.context);
     }
   }
 });
-test("FIPS is not described as an application consensus engine", () => {
-  const fips = getSystemCase("fips");
-  assert.ok(fips);
-  assert.match(fips.constraint, /Nostr-mediated.*optional/i);
-  assert.match(fips.designDecision, /does not replace CometBFT/i);
-  assert.match(fips.status, /EXPLORATION/);
+test("mesh transport is not described as an application consensus engine", () => {
+  const mesh = getSystemCase("mesh");
+  assert.ok(mesh);
+  assert.match(mesh.constraint, /Nostr-mediated.*optional/i);
+  assert.match(mesh.designDecision, /does not replace CometBFT/i);
+  assert.match(mesh.status, /EXPLORATION/);
 });
 test("agent-readable architecture brief remains read-only and source-linked", () => {
   const ai = getSystemCase("ai");
