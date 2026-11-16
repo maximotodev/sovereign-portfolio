@@ -4,8 +4,8 @@ import "./globals.css";
 export const metadata:Metadata={
  metadataBase:new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://maximotodev.vercel.app"),
  title:"Maximoto | Building for Freedom",
- description:"Independent engineer building Bitcoin, Nostr, FIPS and open-source AI systems. Verifiable projects, systems thinking and human-signed Newstr writing.",
- keywords:["Maximoto","Bitcoin","Nostr","FIPS","freedom tech","open source","AI/ML","Newstr"],
+ description:"Independent engineer building Bitcoin, Nostr, decentralized networking and open-source AI systems. Verifiable projects, systems thinking and human-signed Newstr writing.",
+ keywords:["Maximoto","Bitcoin","Nostr","open protocols","freedom tech","open source","AI/ML","Newstr"],
  openGraph:{
    type:"website",title:"Maximoto | Building for Freedom",
    description:"Bitcoin, Nostr, open systems and proof of work. Read Newstr and inspect the architecture.",

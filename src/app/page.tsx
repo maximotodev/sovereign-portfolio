@@ -21,14 +21,12 @@ export const metadata: Metadata = {
   },
 };
 
-const selectedProof = [1407, 1110, 1410]
-  .map(number => EVIDENCE.find(item => item.number === number))
-  .filter((item): item is (typeof EVIDENCE)[number] => Boolean(item));
+const selectedProof = EVIDENCE.slice(0, 3);
 
 const interests = [
   { title: "Bitcoin", description: "Money and settlement you can verify." },
   { title: "Nostr", description: "An identity that travels with you." },
-  { title: "FIPS", description: "Exploring networks without gatekeepers." },
+  { title: "Open protocols", description: "Exploring networks without gatekeepers." },
   { title: "AI / ML", description: "Useful assistance with humans in control." },
 ];
 
@@ -104,7 +102,7 @@ export default function Home() {
                 <div className={styles.projectText}>
                   <div className={styles.projectHeading}>
                     <h3>{project.title}</h3>
-                    {index === 0 && <span className={styles.featured}>FEATURED / PLEBEIAN APPS</span>}
+                    {project.highlight && <span className={styles.featured}>FEATURED / OPEN SOURCE</span>}
                   </div>
                   <p>{project.text}</p>
                   <span className={styles.projectTags}>{project.type} · {project.tags.join(" / ")}</span>
@@ -122,8 +120,8 @@ export default function Home() {
             </div>
             <div className={styles.proofLinks}>
               {selectedProof.map(item => (
-                <a key={item.number} href={item.url} target="_blank" rel="noopener noreferrer">
-                  <span>#{item.number}</span>
+                <a key={item.url} href={item.url} target="_blank" rel="noopener noreferrer">
+                  <span>{item.area}</span>
                   <span>{item.title}</span>
                   <ArrowUpRight size={15} aria-hidden="true" />
                 </a>

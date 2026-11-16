@@ -8,7 +8,7 @@ import styles from "./systems.module.css";
 
 export const metadata: Metadata={
   title:"Systems & Architecture | Maximoto",
-  description:"Inspect the trust boundaries, design decisions, threat models and real proof of work behind Bitcoin, Nostr, FIPS and applied AI.",
+  description:"Inspect the trust boundaries, design decisions, threat models and real proof of work behind Bitcoin, Nostr, decentralized networking and applied AI.",
   alternates:{canonical:"/systems"},
 };
 

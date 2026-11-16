@@ -73,8 +73,8 @@ export function Projects() {
         ))}
       </div>
       <div className="mt-12 rounded-2xl border border-orange-500/20 bg-neutral-900/40 p-6 md:p-8">
-        <h3 className="text-2xl font-bold text-white mb-2">Plebeian Apps · Verified Contributions</h3>
-        <p className="text-neutral-400 text-sm mb-6">Public pull requests are the source of truth. Research and experimental FIPS validator work are not presented as production deployments.</p>
+        <h3 className="text-2xl font-bold text-white mb-2">Independent · Verifiable Work</h3>
+        <p className="text-neutral-400 text-sm mb-6">Public repositories and source-linked design notes are the source of truth. Experiments are labeled and are not presented as production deployments.</p>
         <div className="grid md:grid-cols-2 gap-3">
           {PROOF_OF_WORK.map((item) => (
             <a key={item.href} href={item.href} target="_blank" rel="noopener noreferrer" className="p-4 rounded-xl border border-neutral-800 hover:border-orange-500/50 bg-neutral-950/70 transition-colors">

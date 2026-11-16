@@ -11,7 +11,7 @@ const LENSES: {key:Lens;label:string;helper:string}[]=[
  {key:"proof",label:"EVIDENCE",helper:"Source and status"},
 ];
 const concepts: Record<SystemId,string>={
- bitcoin:"Transaction / settlement",nostr:"Identity / publishing",fips:"Mesh / transport",ai:"Inference / approval",
+ bitcoin:"Transaction / settlement",nostr:"Identity / publishing",mesh:"Mesh / transport",ai:"Inference / approval",
 };
 function NodeInfo({node,lens}:{node:SystemNode;lens:Lens}){
  return <div className="sl-node-copy" aria-live="polite">
@@ -46,7 +46,7 @@ export default function SystemsLab(){
  return <section id="systems" className="sl-section" aria-labelledby="systems-heading">
  <div className="cp-section-top"><span className="cp-kicker"><Workflow size={14}/> 02 / SYSTEMS ARCHITECTURE LAB</span><span className="cp-muted">SELECT A DOMAIN → INSPECT THE BOUNDARIES</span></div>
  <div className="sl-heading"><div><p className="sl-label">INTERACTIVE ENGINEERING NOTEBOOK / EVIDENCE-FIRST</p><h2 id="systems-heading">Not just what I build.<br/><em>How I design it.</em></h2><p>Explore the components, trust boundaries and failure modes behind Bitcoin-native commerce, Nostr publishing, encrypted mesh networks and AI-assisted systems.</p></div><div className="sl-heading-mark" aria-hidden="true">⌁</div></div>
- <div className="sl-picker" role="group" aria-label="Select architecture domain">{SYSTEM_CASES.map(x=><button type="button" key={x.id} className={"sl-picker-item "+(active===x.id?"is-active":"")} aria-pressed={active===x.id} onClick={()=>changeSystem(x.id)}><span>{x.order} / {x.label}</span><strong>{x.id==="bitcoin"?"Payments & finality":x.id==="nostr"?"Sovereign publishing":x.id==="fips"?"Encrypted mesh":"Agentic systems"}</strong><ArrowUpRight size={15}/></button>)}</div>
+ <div className="sl-picker" role="group" aria-label="Select architecture domain">{SYSTEM_CASES.map(x=><button type="button" key={x.id} className={"sl-picker-item "+(active===x.id?"is-active":"")} aria-pressed={active===x.id} onClick={()=>changeSystem(x.id)}><span>{x.order} / {x.label}</span><strong>{x.id==="bitcoin"?"Payments & finality":x.id==="nostr"?"Sovereign publishing":x.id==="mesh"?"Encrypted mesh":"Agentic systems"}</strong><ArrowUpRight size={15}/></button>)}</div>
  <div className="sl-console">
  <div className="sl-console-head"><div className="sl-console-lights" aria-hidden="true"><i/><i/><i/></div><span>ARCHITECTURE / {item.id.toUpperCase()}</span><span>SPECIMEN · {item.order}/04</span></div>
  <div className="sl-case-top"><div><span className="sl-label">{concepts[item.id]}</span><h3>{item.headline}</h3><p>{item.subhead}</p></div><div className="sl-status"><span>STATE / SCOPE</span><strong>{item.status}</strong><p>{item.statusDetail}</p></div></div>

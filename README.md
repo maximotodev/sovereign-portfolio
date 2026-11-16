@@ -10,7 +10,7 @@ The site presents selected engineering work with verifiable pull requests, proje
 
 | Surface | Purpose | Where to look |
 | --- | --- | --- |
-| **Portfolio** | Narrative and source-linked open-source contributions, including Plebeian Market PRs | [`src/app/page.tsx`](src/app/page.tsx) |
+| **Portfolio** | Narrative and source-linked independent open-source projects | [`src/app/page.tsx`](src/app/page.tsx) |
 | **Systems Lab** | Interactive architecture case studies: components, trust boundaries, failure scenarios, mitigations and references | [`src/app/systems`](src/app/systems) · [`docs/SYSTEMS_LAB.md`](docs/SYSTEMS_LAB.md) |
 | **Architecture JSON** | Read-only structured case-study data for inspection and reuse; advisory capabilities are not authorization | [`src/app/api/architecture`](src/app/api/architecture) |
 | **Newstr** | Archive of writing with a distinction between legacy essays and cryptographically signed Nostr events | [`src/app/newsletter`](src/app/newsletter) |
@@ -22,7 +22,7 @@ The site presents selected engineering work with verifiable pull requests, proje
 - **Nostr:** Signed kind-30023 articles are checked for event identity/signature/author rather than trusting relay delivery. The checked-in verified-event snapshot starts empty until explicitly refreshed; an empty archive is not evidence of signed publication.
 - **Editorial authorization:** Publishing and signing remain explicit human-driven actions via a signer; an autonomous agent does not receive an `nsec` or blanket wallet/signing authority.
 - **Read boundaries:** Public browsing is read-only. The retired public chat and guestbook API routes are intentionally absent. Browser-security headers include a **report-only** CSP pending browser validation.
-- **Freedom-tech experiments:** FIPS mesh and decentralized auction examples are architectural demonstrations, not claims of a deployed FIPS production network or real-money auction finality.
+- **Freedom-tech experiments:** Decentralized networking and auction examples are architectural demonstrations, not claims of a production network or real-money finality.
 
 See [`docs/SOVEREIGN_PORTFOLIO_RUNBOOK.md`](docs/SOVEREIGN_PORTFOLIO_RUNBOOK.md) for release and trust boundaries and [`docs/NSITE-001.md`](docs/NSITE-001.md) for the manual nsite experiment.
 

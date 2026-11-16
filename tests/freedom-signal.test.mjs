@@ -34,8 +34,8 @@ test("template includes all seven sections and starts with unfinished checks",()
 });
 test("TL;DR editor enforces 3–5 items and preserves all following sections",()=>{
  const list=[
-  "**Bitcoin:** [A cited development](https://github.com/PlebeianApp/market/pull/1407)",
-  "**Nostr:** [Transport evidence](https://github.com/PlebeianApp/market/pull/1110)",
+  "**Bitcoin:** [A cited development](https://github.com/bitcoin/bitcoin/pull/30595)",
+  "**Nostr:** [Transport evidence](https://github.com/nostr-protocol/nips)",
   "**AI:** [Local studio evidence](https://github.com/maximotodev/sovereign-portfolio/pull/5)",
  ];
  const body=replaceTldrItems(issue.content,list);
@@ -49,7 +49,7 @@ test("TL;DR editor enforces 3–5 items and preserves all following sections",()
  assert.throws(()=>replaceTldrItems(issue.content,["a","b","newline\ninjection"]));
 });
 test("source checks are syntactic, exclude insecure and local/example links",()=>{
- assert.equal(publicHttpsSource("https://github.com/PlebeianApp/market/pull/1410"),true);
+ assert.equal(publicHttpsSource("https://github.com/maximotodev/sovereign-portfolio/pull/5"),true);
  for(const url of ["http://github.com/x","https://localhost/a","https://example.com/x",
  "https://127.0.0.1/path","javascript:alert(1)","https://user:pass@github.com/private"]){
   assert.equal(publicHttpsSource(url),false,url);
@@ -58,18 +58,18 @@ test("source checks are syntactic, exclude insecure and local/example links",()=
 });
 test("a completed issue passes structural checks without claiming fact checking",()=>{
  const updated=replaceTldrItems(issue.content,[
-  "**Bitcoin:** [Test reference](https://github.com/PlebeianApp/market/pull/1407)",
-  "**Nostr:** [Test reference](https://github.com/PlebeianApp/market/pull/1110)",
+  "**Bitcoin:** [Test reference](https://github.com/bitcoin/bitcoin/pull/30595)",
+  "**Nostr:** [Test reference](https://github.com/nostr-protocol/nips)",
   "**AI:** [Test reference](https://github.com/maximotodev/sovereign-portfolio/pull/5)",
  ]);
  const completed=updated
-  .replace(/\[\[TODO:[^\]]+\]\]/g,"Illustrative commentary and context with [cited sources](https://github.com/PlebeianApp/market/pull/1410).")
+  .replace(/\[\[TODO:[^\]]+\]\]/g,"Illustrative commentary and context with [cited sources](https://github.com/maximotodev/sovereign-portfolio/pull/5).")
   .replace(/## Further Reading[\s\S]*?---/,[
     "## Further Reading",
     "",
-    "- [Consensus](https://github.com/PlebeianApp/market/pull/1407)",
-    "- [Messaging](https://github.com/PlebeianApp/market/pull/1110)",
-    "- [Deployment](https://github.com/PlebeianApp/market/pull/1410)",
+    "- [Consensus](https://github.com/bitcoin/bitcoin/pull/30595)",
+    "- [Messaging](https://github.com/nostr-protocol/nips)",
+    "- [Deployment](https://github.com/maximotodev/sovereign-portfolio/pull/5)",
     "",
     "---",
   ].join("\n"));

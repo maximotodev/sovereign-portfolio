@@ -30,7 +30,7 @@ test("agent proposals are inert, bounded, and cannot change the NIP-23 address",
  const packet={format:"maximoto.editorial.proposal.v1",baseSha256:hash,
   agent:{name:"A2 reviewer",role:"reviewer"},
   proposal:{title:"A testable manifesto",content:"New proposal body including citations."},
-  rationale:"Better clarity",citations:[{label:"Source",url:"https://github.com/PlebeianApp/market/pull/1410"}],concerns:["Confirm claims"]};
+  rationale:"Better clarity",citations:[{label:"Source",url:"https://github.com/maximotodev/sovereign-portfolio/pull/5"}],concerns:["Confirm claims"]};
  const parsed=parseAgentProposal(packet);
  assert.ok(parsed);
  assert.equal(proposalDiff(original,parsed).length,2);
